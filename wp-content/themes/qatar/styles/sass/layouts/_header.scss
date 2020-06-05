@@ -1,0 +1,154 @@
+.main-header {
+    background-color: $mdc-theme-background;
+    transition: background-color 175ms $mdc-elevation-transition-timing-function;
+    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.1);
+
+    .mdc-top-app-bar {
+        &__row {
+            z-index: 10;
+            transition: all 250ms $mdc-animation-sharp-curve-timing-function;
+        }
+    }
+
+    &__menu-button {
+        width: calcRem(60px);
+        height: calcRem(60px);
+        background: transparent;
+        outline: none;
+        border: 0;
+        padding: 1rem;
+        cursor: pointer;
+
+        > span {
+            position: relative;
+            background: $primary-color;
+            width: 100%;
+            height: calcRem(2px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 400ms $mdc-elevation-transition-timing-function;
+
+            &::before, &::after {
+                content: '';
+                position: absolute;
+                z-index: 1;
+                top: calcRem(-10px);
+                width: 100%;
+                height: calcRem(2px);
+                background: inherit;
+            }
+
+            &::after {
+                top: 10px;
+            }
+        }
+    }
+
+    &__logo {
+        padding: 0 1rem;
+
+        img {
+            display: block;
+            height: calcRem(45px);
+        }
+    }
+
+    &__expanded {
+        display: flex;
+        visibility: hidden;
+        opacity: 0;
+        position: fixed;
+        z-index: 9;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: $primary-color;
+        transition: all 300ms $mdc-animation-deceleration-curve-timing-function;
+    }
+
+    &__logo-expanded, &__nav {
+        flex: 1 1 50%;
+    }
+
+    &__nav {
+        padding: $header-nav-padding;
+        display: flex;
+        flex-direction: column;
+    }
+
+    &--is-open {
+        .main-header {
+            &__menu-button {
+                > span {
+                    transform: rotate(135deg);
+                    background: $light-color;
+
+                    &::before, &::after {
+                        top: 0;
+                        transform: rotate(90deg);
+                    }
+                }
+
+                &:hover {
+                    > span {
+                        transform: rotate(225deg);
+                    }
+                }
+            }
+
+            &__expanded {
+                visibility: visible;
+                opacity: 1;
+            }
+        }
+    }
+
+    &--on-top {
+        background: transparent;
+        box-shadow: none;
+
+        .mdc-top-app-bar {
+            &__row {
+                height: calcRem(84px);
+            }
+        }
+
+        &:not(.main-header--without-hero) {
+            .main-header {
+                &__menu-button {
+                    > span {
+                        background: $light-color;
+                    }
+                }
+            }
+
+            .mdc-button {
+                color: $white-color;
+                border-color: $white-color;
+            }
+        }
+    }
+
+    @include media-breakpoint-down(sm) {
+        &__logo {
+            img {
+                height: calcRem(35px);
+            }
+        }
+        &__logo-expanded {
+            display: none;
+        }
+        &__nav {
+            padding: $header-nav-padding-small;
+        }
+        .mdc-top-app-bar {
+            &__section {
+                > .mdc-button {
+                    display: none;
+                }
+            }
+        }
+    }
+}

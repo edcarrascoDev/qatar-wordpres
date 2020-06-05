@@ -1,0 +1,23 @@
+.link {
+  font-size: calcRem(18px);
+  font-weight: 500;
+  border-bottom: 1.4px solid $primary-color;
+  padding-bottom: calcRem(5px);
+  text-decoration: none !important;
+
+  &--light {
+    color: $white-color;
+    border-color: $white-color;
+    @include on-event() {
+      color: $white-color;
+    }
+  }
+
+  &--secondary {
+    color: $secondary-color;
+    border-color: $secondary-color;
+    @include on-event() {
+      color: $secondary-color;
+    }
+  }
+}

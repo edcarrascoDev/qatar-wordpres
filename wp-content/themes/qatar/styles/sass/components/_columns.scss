@@ -1,0 +1,10 @@
+.column {
+    @include media-breakpoint-up(sm) {
+        column-gap: calcRem(30px);
+        @for $i from 1 through 4 {
+            &--#{$i} {
+                column-count: $i;
+            }
+        }
+    }
+}

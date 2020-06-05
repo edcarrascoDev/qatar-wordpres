@@ -1,0 +1,52 @@
+.menu {
+  margin-bottom: calcRem(80px);
+
+  &-item {
+    opacity: 0;
+    transform: translateX(#{calcRem(50px)});
+    font-family: $title-font-stack;
+    font-size: 2rem;
+    display: block;
+    line-height: 1;
+    letter-spacing: calcRem(2px);
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    transition-duration: 0ms;
+
+    a {
+      color: $light-color;
+      transition: all 150ms ease-in;
+      text-decoration: none !important;
+
+      &:hover {
+        opacity: 0.6;
+      }
+    }
+  }
+
+  .current-menu-item {
+    a {
+      opacity: 0.6;
+    }
+  }
+
+  .main-header--is-open & {
+    .menu-item {
+      opacity: 1;
+      transform: translateX(0);
+      transition-property: all;
+      transition-timing-function: $mdc-animation-sharp-curve-timing-function;
+      @for $i from 1 through 8 {
+        &:nth-child(#{$i}) {
+          transition-duration: $i*250ms;
+          transition-delay: $i*20ms;
+        }
+      }
+    }
+  }
+  @include media-breakpoint-down(sm) {
+    &-item {
+      font-size: 1.7rem;
+    }
+  }
+}

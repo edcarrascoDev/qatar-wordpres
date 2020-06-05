@@ -1,0 +1,24 @@
+// -----------------------------------------------------------------------------
+// This file contains all application-wide Sass functions.
+// -----------------------------------------------------------------------------
+
+/// Returns URL to an image based on its path
+/// @param {String} $path - image path
+/// @return {Url}
+@function image($path) {
+  @return url('./assets/images/' + $path);
+}
+/// Returns URL to an icon based on its path
+/// @param {String} $path - image path
+/// @return {Url}
+@function icon($path) {
+  @return url('../assets/images/icons/' + $path);
+}
+
+/// Returns URL a rem value based on pixel
+/// @param {String} $size - value on pixel
+/// @return {string}
+@function calcRem($size) {
+  $remSize: $size / 16px;
+  @return #{$remSize}rem;
+}

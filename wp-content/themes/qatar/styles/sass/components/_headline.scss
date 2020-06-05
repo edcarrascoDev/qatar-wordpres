@@ -1,0 +1,57 @@
+.headline {
+    font-family: $title-font-stack;
+    letter-spacing: $space-between-titles;
+    text-transform: uppercase;
+    color: $primary-color;
+    margin-bottom: calcRem(20px);
+
+    &--h1 {
+        font-size: calcRem(45px);
+    }
+
+    &--h2 {
+        font-size: calcRem(35px);
+    }
+
+    &--h3 {
+        font-size: calcRem(28px);
+    }
+
+    &--h4 {
+        font-size: calcRem(24px);
+    }
+
+    &--h5 {
+        font-size: calcRem(20px);
+    }
+
+    &--h6 {
+        font-size: calcRem(16px);
+    }
+
+    &--light {
+        color: $light-color;
+    }
+
+    @include media-breakpoint-down(sm) {
+        &--h1 {
+            font-size: calcRem(35px);
+        }
+
+        &--h2 {
+            font-size: calcRem(30px);
+        }
+
+        &--h3 {
+            font-size: calcRem(26px);
+        }
+
+        &--h4 {
+            font-size: calcRem(22px);
+        }
+
+        &--h5 {
+            font-size: calcRem(18px);
+        }
+    }
+}

@@ -1,0 +1,48 @@
+.contact {
+
+    &__info {
+        background: $primary-color;
+        padding: calcRem(40px);
+    }
+
+    &__list {
+        li {
+            padding: calcRem(20px) 0;
+        }
+
+        a, span {
+            color: $white-color;
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem;
+
+            .icon {
+                margin-right: calcRem(15px);
+            }
+
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
+
+    @include media-breakpoint-up(md) {
+        &__container {
+            display: grid;
+            grid-gap: calcRem(30px);
+            grid-template-columns: calcRem(400px) auto;
+        }
+    }
+
+    @include media-breakpoint-down(sm) {
+        &__info {
+            padding: calcRem(25px);
+        }
+
+        &__list {
+            a {
+                font-size: calcRem(14px);
+            }
+        }
+    }
+}

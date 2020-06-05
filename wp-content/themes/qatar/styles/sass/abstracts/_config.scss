@@ -1,0 +1,32 @@
+// -----------------------------------------------------------------------------
+// This file contains all material configuration.
+// -----------------------------------------------------------------------------
+//Material theme
+$mdc-theme-primary: $primary-color;
+$mdc-theme-secondary: $secondary-color;
+$mdc-theme-background: $white-color;
+$mdc-theme-on-background: $text-color;
+$mdc-theme-surface: $white-color;
+$mdc-theme-on-surface: $primary-color;
+
+$mdc-typography-font-family: $text-font-stack;
+
+
+@import "~swiper/css/swiper.min.css";
+@import "~@material/animation/variables";
+@import "~@material/animation/functions";
+@import "~@material/button/mdc-button";
+@import "~@material/top-app-bar/mdc-top-app-bar";
+@import "~@material/typography/mdc-typography";
+@import "~@material/floating-label/mdc-floating-label";
+@import "~@material/textfield/mdc-text-field";
+@import "~@material/line-ripple/mdc-line-ripple";
+@import "~@material/tab-bar/mdc-tab-bar";
+@import "~@material/tab-scroller/mdc-tab-scroller";
+@import "~@material/tab-indicator/mdc-tab-indicator";
+@import "~@material/tab/mdc-tab";
+@import "~@material/list/mdc-list";
+@import "~@material/menu-surface/mdc-menu-surface";
+@import "~@material/menu/mdc-menu";
+@import "~@material/select/mdc-select";
+@import "~@material/layout-grid/mdc-layout-grid";

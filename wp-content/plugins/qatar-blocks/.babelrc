@@ -1,0 +1,10 @@
+{
+  "presets": ["env"],
+  "plugins": [
+    ["babel-plugin-transform-class-properties"],
+    ["transform-object-rest-spread", { "useBuiltIns": true }],
+    ["transform-react-jsx", {
+      "pragma": "wp.element.createElement"
+    }]
+  ]
+}

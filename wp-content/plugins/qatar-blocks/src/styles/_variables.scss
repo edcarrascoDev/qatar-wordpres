@@ -1,0 +1,74 @@
+// -----------------------------------------------------------------------------
+// This file contains all application-wide Sass Variables.
+// -----------------------------------------------------------------------------
+
+
+// =============================================================================
+// Color Variables.
+// =============================================================================
+
+// Main brand color
+/// @type Color
+$primary-color: #20232d !default;
+
+// Secondary color
+/// @type Color
+$secondary-color: #ff3c00  !default;
+
+// Light color
+/// @type Color
+$light-color: #f6f6f6 !default;
+
+// Copy text color
+/// @type Color
+$text-color: #414346 !default;
+
+// Copy title color
+/// @type Color
+$title-color: #333943 !default;
+
+// White color
+/// @type Color
+$white-color: #ffffff !default;
+
+// Dark color
+/// @type Color
+$dark-color: #000000 !default;
+
+
+// =============================================================================
+// Fonts Variables.
+// =============================================================================
+
+
+/// Regular font family
+/// @type List
+$text-font-stack: 'Montserrat', 'Helvetica Neue Light', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif !default;
+
+/// Title font family
+/// @type List
+$title-font-stack: 'Ubuntu', 'Helvetica Neue Light', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif !default;
+
+
+
+// =============================================================================
+// Sizes Variables.
+// =============================================================================
+
+//// Padding, margin and spaces
+$header-nav-padding: 140px 40px 80px 60px;
+$header-nav-padding-small: 140px 40px 30px;
+
+$padding-on-section: 5rem 0;
+$padding-on-section-sm: 4rem 0;
+
+$space-between-titles: 0.25rem;
+
+/// Font Size
+$font-size-medium: 1.2rem;
+
+/// button height
+$button-height: 2.8125rem;
+
+///Product Image height
+$product-image-size: 18rem;

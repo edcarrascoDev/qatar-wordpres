@@ -1,0 +1,15 @@
+/**
+ * Basic typography style for copy text
+ */
+body {
+  color: $text-color;
+  font-family: $text-font-stack;
+  font-size: calcRem(20px);
+  font-weight: 300;
+  letter-spacing: calcRem(0.8px);
+}
+
+p {
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}

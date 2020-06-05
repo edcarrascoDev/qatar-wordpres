@@ -1,0 +1,20 @@
+.separator {
+    margin: 1.25rem 0 2.2rem;
+    display: block;
+    height: 2px;
+    width: calcRem(50px);
+    background: $primary-color;
+
+    &--center {
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    &--secondary {
+        background: $secondary-color;
+    }
+
+    &--white {
+        background: $white-color;
+    }
+}

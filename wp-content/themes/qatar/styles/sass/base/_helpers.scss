@@ -1,0 +1,122 @@
+// -----------------------------------------------------------------------------
+// This file contains CSS helper classes.
+// -----------------------------------------------------------------------------
+
+/**
+ * Hide text while making it readable for screen readers
+ * 1. Needed in WebKit-based browsers because of an implementation bug;
+ *    See: https://code.google.com/p/chromium/issues/detail?id=457146
+ */
+.hide-text {
+    overflow: hidden;
+    padding: 0 !important; /* 1 */
+    text-indent: 101%;
+    white-space: nowrap;
+}
+
+/**
+ * Hide element while making it readable for screen readers
+ * Shamelessly borrowed from HTML5Boilerplate:
+ * https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css#L119-L133
+ */
+.visually-hidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+.on-dark-section {
+    color: $white-color !important;
+}
+
+/**
+ * Align the text
+ */
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-light {
+    color: $white-color;
+}
+
+/**
+ * margin and padding helpers
+ */
+$i: 0;
+@while $i <= 50 {
+    .p-#{$i} {
+        padding: #{$i / 16}rem !important;
+    }
+
+    .py-#{$i} {
+        padding-top: #{$i / 16}rem !important;
+        padding-bottom: #{$i / 16}rem !important;
+    }
+
+    .px-#{$i} {
+        padding-right: #{$i / 16}rem !important;
+        padding-left: #{$i / 16}rem !important;
+    }
+
+    .pt-#{$i} {
+        padding-top: #{$i / 16}rem !important;
+    }
+
+    .pr-#{$i} {
+        padding-right: #{$i / 16}rem !important;
+    }
+
+    .pb-#{$i} {
+        padding-bottom: #{$i / 16}rem !important;
+    }
+
+    .pl-#{$i} {
+        padding-left: #{$i / 16}rem !important;
+    }
+
+    .m-#{$i} {
+        margin: #{$i / 16}rem !important;
+    }
+
+    .my-#{$i} {
+        margin-top: #{$i / 16}rem !important;
+        margin-bottom: #{$i / 16}rem !important;
+    }
+
+    .mx-#{$i} {
+        margin-right: #{$i / 16}rem !important;
+        margin-left: #{$i / 16}rem !important;
+    }
+
+    .mt-#{$i} {
+        margin-top: #{$i / 16}rem !important;
+    }
+
+    .mr-#{$i} {
+        margin-right: #{$i / 16}rem !important;
+    }
+
+    .mb-#{$i} {
+        margin-bottom: #{$i / 16}rem !important;
+    }
+
+    .ml-#{$i} {
+        margin-left: #{$i / 16}rem !important;
+    }
+
+    $i: $i + 5;
+}

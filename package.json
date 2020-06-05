@@ -1,0 +1,11 @@
+{
+  "name": "qatar-wp",
+  "version": "1.0.0",
+  "scripts": {
+    "update-submodules": "git submodule update --remote --merge"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "prettier": "1.19.1"
+  }
+}

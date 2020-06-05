@@ -1,0 +1,20 @@
+.tab {
+
+    &__container {
+        &--hidden {
+            display: none;
+        }
+    }
+
+    &__content {
+        padding-top: 4rem;
+        padding-bottom: 4rem;
+    }
+
+    @include media-breakpoint-up(sm) {
+        &__content {
+            padding-left: calcRem(10px);
+            padding-right: calcRem(10px);
+        }
+    }
+}

@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css?family=Ubuntu:400,700|Montserrat:300,500,700&display=swap');
+@import '~bootstrap/scss/bootstrap';
+
+@import "styles/variables";
+
+.gutenberg {
+    .mainHome {
+        top: 0;
+    }
+}
+
+.block-editor {
+    .toggle {
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
+
+        *:first-child {
+            margin-right: 5px;
+        }
+
+        label {
+            font-size: 13px;
+        }
+    }
+
+    .input {
+        &__group {
+            .label {
+                font-family: $title-font-stack;
+                color: $title-color;
+                font-size: 0.8rem;
+                margin-bottom: 2px;
+                display: block;
+            }
+
+            .block-editor-plain-text, .block-editor-rich-text {
+                padding-left: 10px;
+                padding-right: 10px;
+                border: 1px solid #cccfd1;
+                background: $white-color;
+            }
+        }
+    }
+
+    .features {
+        @media only screen and (min-width: 990px) {
+            &__row {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                grid-gap: 20px;
+            }
+        }
+    }
+
+    .wp-block {
+        max-width: 980px;
+
+        &[data-type="qatar/hero-section"], &[data-type="qatar/single-container"],
+        &[data-type="qatar/cover-container"], &[data-type="qatar/features-container"] {
+            background: #f7f7f7;
+            border: 2px solid #878787;
+            margin-bottom: 20px;
+        }
+
+        &[data-type="qatar/hero-section-slide"], &[data-type="qatar/main-product"],
+        &[data-type="qatar/cover-content"], &[data-type="qatar/title-section"],
+        &[data-type="qatar/feature-item"], &[data-type="qatar/portfolio"],
+        &[data-type="qatar/columns"], &[data-type="qatar/review"], &[data-type="core/paragraph"] {
+            background: #f1f1f1;
+            border: 1px solid #ddd;
+            max-width: 90%;
+            padding: 10px;
+            margin-bottom: 20px;
+
+            > .editor-block-list__block-edit {
+                margin: 0;
+            }
+        }
+
+        .three-columns {
+            > .editor-inner-blocks {
+                > .editor-block-list__layout {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                }
+            }
+        }
+    }
+
+    .editor-styles-wrapper .block-library-list ol, .editor-styles-wrapper .block-library-list ul {
+        padding-left: 0.3em;
+        margin-left: 0.3em;
+    }
+}
