@@ -1,0 +1,36 @@
+.divider {
+    height: calcRem(1px);
+    display: flex;
+    background: $light-grey;
+    width: 100%;
+
+    &--thin {
+        height: calcRem(2px);
+    }
+
+    &--secondary {
+        border: solid calcRem(2px) $secondary-color;
+        background: $secondary-color;
+    }
+
+    &--white {
+        background: $white-color;
+    }
+
+    &--sm {
+        width: calcRem(85px);
+    }
+
+    &--md {
+        width: calcRem(202px);
+    }
+
+    &--lg {
+        width: calcRem(383px);
+    }
+
+    &--center {
+        align-self: center;
+        justify-self: center;
+    }
+}

@@ -1,44 +1,51 @@
-import { REQUESTING_CONTACT_INFORMATION, SET_CONTACT_FORM_FEEDBACK } from './types';
+import {
+    REQUESTING_REVIEW_COMMENT,
+    SET_REVIEW_FORM_FEEDBACK,
+    SET_REVIEW_FORM_SUCCESSFUL,
+} from './types';
 
-export const setContactFormFeedback = message => dispatch => {
+export const setReviewFormFeedback = message => dispatch => {
     dispatch({
-        type: SET_CONTACT_FORM_FEEDBACK,
+        type: SET_REVIEW_FORM_FEEDBACK,
         payload: message,
     });
 };
 
-export const requestContactInformation = request => dispatch => {
+export const requestReviewComment = request => dispatch => {
     dispatch({
-        type: REQUESTING_CONTACT_INFORMATION,
+        type: REQUESTING_REVIEW_COMMENT,
         payload: true,
     });
 
-    fetch(`${wp_qatar_reactjs.rest_url}/request-contact-information`, {
+    fetch(`${wp_qatar_reactjs.wc_rest_url}/products/reviews`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json; charset=utf-8',
+            authorization: `Basic ${wp_qatar_reactjs.consumer_base_code}`,
         },
         body: JSON.stringify(request),
-    })
-        .then(response => response.json())
-        .then(response => {
-            if (response.success) {
-                dispatch({
-                    type: SET_CONTACT_FORM_FEEDBACK,
-                    payload: 'Thank you for your request',
-                });
+    }).then(response => {
+        if (response.ok) {
+            dispatch({
+                type: SET_REVIEW_FORM_SUCCESSFUL,
+                payload: true,
+            });
 
-                window.location.href = request.redirectTo;
-            } else {
-                dispatch({
-                    type: REQUESTING_CONTACT_INFORMATION,
-                    payload: false,
-                });
+            dispatch({
+                type: SET_REVIEW_FORM_FEEDBACK,
+                payload:
+                    'Tu comentario fue recibido y será revisado su veracidad para que sea publicado.',
+            });
+        } else {
+            dispatch({
+                type: REQUESTING_REVIEW_COMMENT,
+                payload: false,
+            });
 
-                dispatch({
-                    type: SET_CONTACT_FORM_FEEDBACK,
-                    payload: 'There was a error while processing your request',
-                });
-            }
-        });
+            dispatch({
+                type: SET_REVIEW_FORM_FEEDBACK,
+                payload: 'Hubo un error en el proceso, por favor inténtalo más tarde',
+            });
+        }
+    });
 };

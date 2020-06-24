@@ -46,6 +46,7 @@ class Redux_Core_Options {
         $this->add_theme_settings();
         $this->add_qatar_options();
         $this->add_forms_options();
+        $this->add_woocommerce_options();
         $this->add_location_options();
     }
 
@@ -194,6 +195,26 @@ class Redux_Core_Options {
         ];
     }
 
+    private function add_woocommerce_options() {
+        $this->sections[] = [
+            'title' => __('Tienda', $this->theme_locale),
+            'desc' => __('Configuración de la tienda', $this->theme_locale),
+            'icon' => 'el el-shopping-cart',
+            'fields' => [
+                [
+                    'id' => 'store_image',
+                    'type' => 'media',
+                    'title' => __('Imagen principal de la tienda', $this->theme_locale),
+                ],
+                [
+                    'id' => 'store_mobile_image',
+                    'type' => 'media',
+                    'title' => __('Imagen principal de la tienda en celulares', $this->theme_locale),
+                ]
+            ]
+        ];
+    }
+
     private function add_forms_options() {
         $this->sections[] = [
             'title' => __('Formularios', $this->theme_locale),
@@ -239,7 +260,17 @@ class Redux_Core_Options {
                     'id' => 'qatar_api_url',
                     'type' => 'text',
                     'title' => 'QATAR API Url'
-                ]
+                ],
+                [
+                    'id' => 'consumer_key',
+                    'type' => 'text',
+                    'title' => 'Clave del cliente',
+                ],
+                [
+                    'id' => 'consumer_secret',
+                    'type' => 'text',
+                    'title' => 'Clave secreta de cliente'
+                ],
             ]
         ];
     }

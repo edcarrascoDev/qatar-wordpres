@@ -213,8 +213,8 @@ class Review extends BaseBlock {
 
         return (
             <div className={'review'}>
-                <div className="review__container">
-                    <div className={`review__description text-${textAligned}`}>
+                <div className="review-section__container">
+                    <div className={`review-section__description text-${textAligned}`}>
                         <RichText.Content
                             className={`headline headline--${headline} ${
                                 isLightText ? 'headline--light ' : ''
@@ -241,12 +241,12 @@ class Review extends BaseBlock {
                         </a>
                     </div>
 
-                    <div className="review__content">
-                        <div className="review__rating">
+                    <div className="review-section__content">
+                        <div className="review-section__rating">
                             <span>{attributes.rating}</span>
                         </div>
 
-                        <div className="review__image">
+                        <div className="review-section__image">
                             <img
                                 src={attributes.imageUrl}
                                 alt={attributes.imageAlt}

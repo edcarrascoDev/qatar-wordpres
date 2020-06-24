@@ -1,7 +1,4 @@
 const initialState = {
-    reviewer: '',
-    reviewer_email: '',
-    rating: '',
-    review: '',
+    quantity: '',
 };
 export default initialState;

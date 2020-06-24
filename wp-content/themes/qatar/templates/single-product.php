@@ -42,17 +42,16 @@ $page_title = get_the_title();
 </script>
 
 <?php get_header(); ?>
-
 <?php while (have_posts()): the_post(); ?>
 
     <div class="single-product">
         <div class="single-product__main">
             <div class="container">
                 <div class="single-product__content">
-                    <div class="single-product__gallery">
+                    <div class="product-gallery single-product__gallery">
 
                         <!--********************./gallery-thumbs********************-->
-                        <div class="swiper-container gallery-thumbs">
+                        <div class="swiper-container product-gallery__thumbs">
                             <div class="swiper-wrapper">
                                 <div class="swiper-slide">
                                     <img src="<?php Theme_Manager::get_instance()->get_assets_image('200_200/rodillo-v2_1.jpg') ?>"
@@ -83,10 +82,10 @@ $page_title = get_the_title();
                         <!--********************./gallery-thumbs********************-->
 
                         <!--********************./gallery-top********************-->
-                        <div class="swiper-container gallery-top">
+                        <div class="swiper-container product-gallery__top">
                             <div class="swiper-wrapper">
                                 <div class="swiper-slide">
-                                    <div class="single-product__image">
+                                    <div class="product-gallery__image">
                                         <img data-src="<?php Theme_Manager::get_instance()->get_assets_image('800_800/rodillo-v2_1.jpg') ?>"
                                              alt=""
                                              class="swiper-lazy"
@@ -95,7 +94,7 @@ $page_title = get_the_title();
                                     <div class="swiper-lazy-preloader swiper-lazy-preloader-black"></div>
                                 </div>
                                 <div class="swiper-slide">
-                                    <div class="single-product__image">
+                                    <div class="product-gallery__image">
                                         <img data-src="<?php Theme_Manager::get_instance()->get_assets_image('800_800/rodillo-v2_2.jpg') ?>"
                                              alt=""
                                              class="swiper-lazy"
@@ -104,7 +103,7 @@ $page_title = get_the_title();
                                     <div class="swiper-lazy-preloader swiper-lazy-preloader-black"></div>
                                 </div>
                                 <div class="swiper-slide">
-                                    <div class="single-product__image">
+                                    <div class="product-gallery__image">
                                         <img data-src="<?php Theme_Manager::get_instance()->get_assets_image('800_800/rodillo-v2_3.jpg') ?>"
                                              alt=""
                                              class="swiper-lazy"
@@ -113,7 +112,7 @@ $page_title = get_the_title();
                                     <div class="swiper-lazy-preloader swiper-lazy-preloader-black"></div>
                                 </div>
                                 <div class="swiper-slide">
-                                    <div class="single-product__image">
+                                    <div class="product-gallery__image">
                                         <img data-src="<?php Theme_Manager::get_instance()->get_assets_image('800_800/rodillo-v2_4.jpg') ?>"
                                              alt=""
                                              class="swiper-lazy"
@@ -122,7 +121,7 @@ $page_title = get_the_title();
                                     <div class="swiper-lazy-preloader swiper-lazy-preloader-black"></div>
                                 </div>
                                 <div class="swiper-slide">
-                                    <div class="single-product__image">
+                                    <div class="product-gallery__image">
                                         <img data-src="<?php Theme_Manager::get_instance()->get_assets_image('800_800/rodillo-v2_5.jpg') ?>"
                                              alt=""
                                              class="swiper-lazy"
@@ -131,7 +130,7 @@ $page_title = get_the_title();
                                     <div class="swiper-lazy-preloader swiper-lazy-preloader-black"></div>
                                 </div>
                                 <div class="swiper-slide">
-                                    <div class="single-product__image">
+                                    <div class="product-gallery__image">
                                         <img data-src="<?php Theme_Manager::get_instance()->get_assets_image('800_800/rodillo-v2_6.jpg') ?>"
                                              alt=""
                                              class="swiper-lazy"

@@ -1,4 +1,5 @@
 import BaseBlock from '../base-block';
+const { registerBlockType } = wp.blocks;
 const { __ } = wp.i18n;
 const { Fragment } = wp.element;
 

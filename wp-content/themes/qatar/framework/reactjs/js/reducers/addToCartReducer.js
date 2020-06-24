@@ -1,8 +1,4 @@
-import {
-    REQUESTING_REVIEW_COMMENT,
-    SET_REVIEW_FORM_FEEDBACK,
-    SET_REVIEW_FORM_SUCCESSFUL,
-} from '../actions/types';
+import { REQUESTING_ADD_TO_CART, SET_ADD_TO_CART_FORM_FEEDBACK } from '../actions/types';
 
 const initialState = {
     requestingInfo: false,
@@ -10,19 +6,17 @@ const initialState = {
     formSuccessful: false,
 };
 
-const reviewUsReducer = (state = initialState, action) => {
+const addToCartReducer = (state = initialState, action) => {
     const { type, payload } = action;
 
     switch (type) {
-        case REQUESTING_REVIEW_COMMENT:
+        case REQUESTING_ADD_TO_CART:
             return { ...state, requestingInfo: payload };
-        case SET_REVIEW_FORM_FEEDBACK:
+        case SET_ADD_TO_CART_FORM_FEEDBACK:
             return { ...state, formFeedback: payload };
-        case SET_REVIEW_FORM_SUCCESSFUL:
-            return { ...state, formSuccessful: payload };
         default:
             return state;
     }
 };
 
-export default reviewUsReducer;
+export default addToCartReducer;

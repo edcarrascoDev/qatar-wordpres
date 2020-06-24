@@ -237,6 +237,7 @@ class ProductInquiryForm extends Component {
         const isValid = formValidity[controlName];
         return isValid ? 'mdc-text-field' : 'mdc-text-field mdc-text-field--invalid';
     }
+
     handleSubmit(value) {
         const {
             requestProductInformation,
@@ -276,7 +277,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(ProductInquiryForm);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductInquiryForm);

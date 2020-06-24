@@ -1,0 +1,43 @@
+.quick-actions {
+    padding-bottom: 1rem;
+    display: flex;
+    border-bottom: 1px solid $light-grey;
+
+    &__description {
+        align-self: flex-end;
+        font-weight: 400;
+    }
+
+    @include media-breakpoint-up(md) {
+        .icon-button {
+            display: none;
+        }
+
+    }
+
+    @include media-breakpoint-down(md) {
+        display: grid;
+        grid-template-areas: "filter search" "description description";
+        grid-column-gap: 20px;
+        grid-row-gap: 30px;
+
+        .spacer {
+            display: none;
+        }
+
+        .icon-button {
+            grid-area: filter;
+            align-self: center;
+            justify-self: center;
+
+        }
+
+        &__content {
+            grid-area: search;
+        }
+
+        &__description {
+            grid-area: description;
+        }
+    }
+}

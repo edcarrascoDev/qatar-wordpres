@@ -1,21 +1,28 @@
-import { REQUESTING_CONTACT_INFORMATION, SET_CONTACT_FORM_FEEDBACK } from '../actions/types';
+import {
+    REQUESTING_REVIEW_COMMENT,
+    SET_REVIEW_FORM_FEEDBACK,
+    SET_REVIEW_FORM_SUCCESSFUL,
+} from '../actions/types';
 
 const initialState = {
     requestingInfo: false,
     formFeedback: '',
+    formSuccessful: false,
 };
 
-const contactUsReducer = (state = initialState, action) => {
+const reviewUsReducer = (state = initialState, action) => {
     const { type, payload } = action;
 
     switch (type) {
-        case REQUESTING_CONTACT_INFORMATION:
+        case REQUESTING_REVIEW_COMMENT:
             return { ...state, requestingInfo: payload };
-        case SET_CONTACT_FORM_FEEDBACK:
+        case SET_REVIEW_FORM_FEEDBACK:
             return { ...state, formFeedback: payload };
+        case SET_REVIEW_FORM_SUCCESSFUL:
+            return { ...state, formSuccessful: payload };
         default:
             return state;
     }
 };
 
-export default contactUsReducer;
+export default reviewUsReducer;

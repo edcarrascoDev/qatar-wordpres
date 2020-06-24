@@ -1,0 +1,40 @@
+.filter {
+    &__title {
+        font-size: 1.4rem;
+        margin-bottom: 1.2rem;
+    }
+
+    &__selected {
+        cursor: pointer;
+        position: relative;
+        display: inline-block;
+        .filter__title {
+            font-size: 1.2rem;
+            padding: 3px 10px;
+            background: $light-grey;
+            font-weight: 400;
+            border-radius: 14px;
+            &::after {
+                content: '\2715';
+                font-size: 0.5rem;
+                position: relative;
+                bottom: 9px;
+                margin-left: 3px;
+            }
+        }
+    }
+    &__list {
+        > li {
+            a {
+                padding-bottom: 1rem;
+                cursor: pointer;
+                display: block;
+
+                &:hover {
+                    color: $secondary-color;
+                    text-decoration: none;
+                }
+            }
+        }
+    }
+}

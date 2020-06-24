@@ -28,7 +28,6 @@ class CategoriesLis extends Component {
 }
 
 const mapStateToProps = state => {
-    console.log(state);
     const { qatar_categories } = state.categories;
     const { qatarOptions } = state.qatarOptions;
 

@@ -5,6 +5,7 @@ require_once 'class-qatar-genetics-api.php';
 require_once 'class-redux-core-options.php';
 require_once 'class-theme-rest-api.php';
 require_once 'class-theme-shortcode.php';
+require_once 'class-theme-woocommerce.php';
 
 class Theme_Manager {
     private static $class_instance;
@@ -39,6 +40,7 @@ class Theme_Manager {
         new Redux_Core_Options($this->theme_locale);
         new Theme_Rest_Api();
         new Theme_Shortcode();
+        new Theme_Woocommerce();
     }
 
     /**
@@ -70,6 +72,47 @@ class Theme_Manager {
         $phone = str_replace(" ", "", $phone);
         return "(" . substr($phone, 0, 3) . ")" . " " . substr($phone, 3, 3) . " " . substr($phone, 6);
     }
+    function add_woo_sidebar() {
+
+        if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+            if( is_woocommerce() ) {
+                remove_action( 'genesis_sidebar', 'genesis_do_sidebar' );
+                remove_action( 'genesis_sidebar_alt', 'genesis_do_sidebar_alt' );
+                add_action( 'genesis_sidebar', 'wpstudio_woo_sidebar' );
+            }
+        }
+
+    }
+
+
+    function register_sidebar() {
+        register_sidebar(
+            array(
+                'id'            => 'woocommerce_sidebar',
+                'name'          => __( 'Sidebar primario', THEME_LOCALE ),
+                'description'   => __( 'Este sidebar será usado para woocommerce.' ),
+                'before_widget' => '<aside id="%1$s" class="widget %2$s">',
+                'after_widget'  => '</aside>',
+                'before_title'  => '<h3 class="headline headline--h5">',
+                'after_title'   => '</h3>',
+            )
+        );
+    }
+
+
+    function register_shop_sidebar() {
+        register_sidebar(
+            array(
+                'id'            => 'shop',
+                'name'          => __( 'Sidebar woocommerce', THEME_LOCALE ),
+                'description'   => __( 'Este sidebar será usado para woocommerce.' ),
+                'before_widget' => '<aside id="%1$s" class="widget %2$s">',
+                'after_widget'  => '</aside>',
+                'before_title'  => '<h3 class="headline headline--h5">',
+                'after_title'   => '</h3>',
+            )
+        );
+    }
 
     /**
      * Register Required Theme Hooks
@@ -77,187 +120,12 @@ class Theme_Manager {
     private function theme_hooks() {
         add_action('after_setup_theme', [$this, 'theme_setup']);
 
-        add_action('init', [$this, 'register_query_vars'], 10);
-        add_action('init', [$this, 'rewrite_rules'], 10);
+        add_action( 'widgets_init', [$this, 'register_sidebar'] );
+        add_action( 'widgets_init', [$this, 'register_shop_sidebar'] );
 
         add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_scripts']);
         add_action('wp_enqueue_scripts', [$this, 'enqueue_front_scripts']);
-
-        add_filter('nav_menu_submenu_css_class', [$this, 'sub_menu_custom_item_class'], 10, 3);
-        add_filter('nav_menu_css_class', [$this, 'menu_item_class'], 10, 4);
-    }
-
-    /**
-     * Register needed query vars for out custom templates
-     */
-    public function register_query_vars() {
-        /**
-         * Pet details Vars
-         */
-        add_rewrite_tag('%single_puppy%', '([^&]+)');
-        add_rewrite_tag('%pet_id%', '([^&]+)');
-        add_rewrite_tag('%pet_location%', '([^&]+)');
-
-        /**
-         * Available Puppies Vars
-         */
-        add_rewrite_tag('%pet_filter%', '([^&]+)');
-        add_rewrite_tag('%pet_filter_type%', '([^&]+)');
-        add_rewrite_tag('%pet_filter_value%', '([^&]+)');
-        add_rewrite_tag('%pet_location%', '([^&]+)');
-        add_rewrite_tag('%pet_type%', '([^&]+)');
-        add_rewrite_tag('%pet_breed%', '([^&]+)');
-        add_rewrite_tag('%pet_gender%', '([^&]+)');
-
-        /**
-         * Breed Details
-         */
-        add_rewrite_tag('%single_breed%', '([^&]+)');
-        add_rewrite_tag('%breed_id%', '([^&]+)');
-    }
-
-    /**
-     * Add rewrite rules for out templates
-     */
-    public function rewrite_rules() {
-        /**
-         * Pet details rewrite rules
-         */
-        add_rewrite_rule(
-            'pet/detail/([^/]*)/([0-9]+)/?',
-            'index.php?single_pet=true&pet_location=$matches[1]&pet_id=$matches[2]',
-            'top'
-        );
-
-        /**
-         * The next one is add the breed to the URL
-         */
-        add_rewrite_rule(
-            'pet/detail/([^/]*)/([^/]*)/([0-9]+)/?',
-            'index.php?single_pet=true&pet_location=$matches[2]&pet_id=$matches[3]',
-            'top'
-        );
-
-        /**
-         * Rewrite rule for breed details
-         */
-        add_rewrite_rule(
-            'breeds/([^/]*)/?',
-            'index.php?single_breed=true&breed_id=$matches[1]',
-            'top'
-        );
-
-        $this->available_puppies_rewrite_rules();
-    }
-
-    public function available_puppies_rewrite_rules() {
-        /**
-         * Location Filter
-         */
-        add_rewrite_rule(
-            'available-puppies/location/([^/]*)/?',
-            'index.php?pet_filter=true&pet_filter_type=location&pet_location=$matches[1]',
-            'top'
-        );
-
-        /**
-         * Breed Filter
-         */
-        add_rewrite_rule(
-            'available-puppies/breed/([^/]*)/?',
-            'index.php?pet_filter=true&pet_filter_type=breed&pet_breed=$matches[1]',
-            'top'
-        );
-
-        /**
-         * Gender Filter
-         */
-        add_rewrite_rule(
-            'available-puppies/gender/([^/]*)/?',
-            'index.php?pet_filter=true&pet_filter_type=gender&pet_gender=$matches[1]',
-            'top'
-        );
-
-        /**
-         * Gender Filter
-         */
-        add_rewrite_rule(
-            'available-puppies/pet-type/([^/]*)/?',
-            'index.php?pet_filter=true&pet_filter_type=type&pet_type=$matches[1]',
-            'top'
-        );
-
-        /**
-         * Multiple Filter
-         */
-        add_rewrite_rule(
-            'available-puppies/([^/]*)/([^/]*)/([^/]*)/([^/]*)/?',
-            'index.php?pet_filter=true&pet_filter_type=multiple&pet_location=$matches[1]&pet_type=$matches[2]&pet_breed=$matches[3]&pet_gender=$matches[4]',
-            'top'
-        );
-
-        /**
-         * Multiple Filter
-         */
-        add_rewrite_rule(
-            'available-puppies/([^/]*)/([^/]*)/([^/]*)/?',
-            'index.php?pet_filter=true&pet_filter_type=multiple&pet_location=$matches[1]&pet_type=$matches[2]&pet_breed=$matches[3]',
-            'top'
-        );
-
-        /**
-         * Multiple Filter
-         */
-        add_rewrite_rule(
-            'available-puppies/([^/]*)/([^/]*)/?',
-            'index.php?pet_filter=true&pet_filter_type=multiple&pet_location=$matches[1]&pet_type=$matches[2]',
-            'top'
-        );
-
-        /**
-         * Multiple Filter
-         */
-        add_rewrite_rule(
-            'available-puppies/([^/]*)/?',
-            'index.php?pet_filter=true&pet_filter_type=multiple&pet_location=$matches[1]',
-            'top'
-        );
-    }
-
-    /**
-     * @return bool
-     */
-    public function is_product_page()
-    {
-        return !!get_query_var('single_product');
-    }
-
-
-    /**
-     * @param $classes
-     * @param $args
-     * @param $depth
-     *
-     * @return array
-     */
-    public function sub_menu_custom_item_class($classes, $args, $depth) {
-        $classes[] = 'mainNav__sub';
-        return $classes;
-    }
-
-    /**
-     * @param $classes
-     * @param $item
-     * @param $args
-     * @param $depth
-     *
-     * @return array
-     */
-    public function menu_item_class($classes, $item, $args, $depth) {
-        if ($depth === 0) {
-            $classes[] = 'mainNav__item';
-        }
-        return $classes;
+        add_action('wp_default_scripts', [$this, 'remove_jquery']);
     }
 
     /**
@@ -303,7 +171,7 @@ class Theme_Manager {
             'theme-style',
             $this->get_theme_url('styles/dist/main.css'),
             null,
-            '2020-04-07'
+            '2020-05-09'
         );
         wp_enqueue_style('theme-style');
 
@@ -311,7 +179,7 @@ class Theme_Manager {
             'font-awesome',
             'https://kit-free.fontawesome.com/releases/latest/css/free.min.css',
             null,
-            '2020-04-07'
+            '2020-50-09'
         );
         wp_enqueue_style('font-awesome');
     }
@@ -344,7 +212,7 @@ class Theme_Manager {
             'main-script-js',
             $this->get_theme_url('styles/dist/main.js'),
             null,
-            '2020-04-07',
+            '2020-05-07',
             true
         );
         wp_enqueue_script('main-script-js');
@@ -362,13 +230,11 @@ class Theme_Manager {
         wp_enqueue_script('theme-script-js');
     }
 
-    public function get_finance_content() {
-        $finance_page = $this->get_theme_option('financing_page');
-        $page = get_post((int)$finance_page);
-        remove_filter('the_content', 'wpautop');
-        $content = apply_filters('the_content', $page->post_content);
-        add_filter('the_content', 'wpautop');
-        return $content;
+    function remove_jquery() {
+        if (!is_admin() && isset($scripts->registered['jquery'])) {
+            $scripts->remove('jquery');
+            $scripts->add('jquery', false, array('jquery-core'), '1.2.1');
+        }
     }
 
     public function get_social_network_url($social_network) {
@@ -418,7 +284,7 @@ class Theme_Manager {
     public function custom_class_by_template($classes) {
         global $template;
 
-        if ( basename( $template ) === 'single-product.php' || basename( $template ) === 'no-hero-template.php' ) {
+        if (basename($template) === 'single-product.php' || basename($template) === 'no-hero-template.php') {
             $classes[] = 'page--without-hero';
         }
         return $classes;
@@ -427,7 +293,7 @@ class Theme_Manager {
     /**
      * @return string
      */
-    function set_content_type(){
+    function set_content_type() {
         return "text/html";
     }
 
@@ -461,6 +327,13 @@ class Theme_Manager {
          * Enable support for Post Thumbnails on posts and pages.
          */
         add_theme_support('post-thumbnails');
+
+        /**
+         * Enable theme support for woocommerce
+         */
+        add_theme_support('woocommerce');
+
+
         add_image_size('blog-thumbnail', 510, 261, true);
         add_image_size('blog-featured-image', 1050, 250, false);
 
@@ -499,11 +372,13 @@ class Theme_Manager {
         /**
          * Add specific class to template without hero
          */
-        add_filter( 'body_class', [$this, 'custom_class_by_template']);
+        add_filter('body_class', [$this, 'custom_class_by_template']);
 
         /**
          * Allow use html into mails
          */
-        add_filter( 'wp_mail_content_type',[$this, 'set_content_type']);
+        add_filter('wp_mail_content_type', [$this, 'set_content_type']);
+
+        add_filter('woocommerce_enqueue_styles', '__return_empty_array');
     }
 }

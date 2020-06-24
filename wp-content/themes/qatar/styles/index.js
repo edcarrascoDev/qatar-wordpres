@@ -44,6 +44,7 @@ window.onload = () => {
             ThemeScript.headerInteractiveOnScroll();
             ThemeScript.heroSlider();
             ThemeScript.productSlider();
+            ThemeScript.singleProductTab();
         },
 
         isMobile: () => {
@@ -131,7 +132,10 @@ window.onload = () => {
         },
 
         getHeaderClassesByBodyClasses: () => {
-            if (body.classList.contains('page--without-hero')) {
+            if (
+                body.classList.contains('page--without-hero') ||
+                (body.classList.contains('woocommerce-page') && !body.classList.contains('archive'))
+            ) {
                 mdcTopAppBar.classList.add('main-header--without-hero');
             }
         },
@@ -177,7 +181,7 @@ window.onload = () => {
         },
 
         productSlider() {
-            const galleryThumbs = new Swiper('.gallery-thumbs', {
+            const galleryThumbs = new Swiper('.product-gallery__thumbs', {
                 direction: 'vertical',
                 spaceBetween: 5,
                 slidesPerView: 4,
@@ -186,7 +190,7 @@ window.onload = () => {
                 watchSlidesProgress: true,
             });
 
-            const galleryTop = new Swiper('.gallery-top', {
+            const galleryTop = new Swiper('.product-gallery__top', {
                 slidesPerView: 1,
                 spaceBetween: 0,
                 navigation: {
@@ -203,6 +207,29 @@ window.onload = () => {
                 preloadImages: false,
                 lazy: true,
             });
+        },
+
+        singleProductTab() {
+            const tabButtons = document.getElementsByClassName('mdc-tab');
+            const tabClass = 'tab__container--';
+
+            if (tabButtons && tabButtons.length > 0) {
+                Array.prototype.forEach.call(tabButtons, tabButton => {
+                    tabButton.addEventListener('click', () => {
+                        const tabToDisplay = document.getElementById(tabButton.dataset.target);
+                        const tabToHide = document.querySelector(`.${tabClass}showed`);
+
+                        tabToHide.classList.add(`${tabClass}hidden`);
+                        tabToHide.classList.remove(`${tabClass}showed`);
+
+                        /**
+                         * Add Active className to the button triggered and target container
+                         */
+                        tabToDisplay.classList.remove(`${tabClass}hidden`);
+                        tabToDisplay.classList.add(`${tabClass}showed`);
+                    });
+                });
+            }
         },
     };
 

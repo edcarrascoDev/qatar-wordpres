@@ -1,0 +1,51 @@
+.sidebar {
+
+    &__filter {
+        margin-bottom: calcRem(50px);
+    }
+
+    &__title {
+        border-bottom: 1px solid $light-grey;
+        padding-bottom: 1rem;
+        margin-bottom: 30px;
+
+        .headline {
+            line-height: 56px;
+            margin-bottom: 0;
+        }
+
+    }
+
+    @include media-breakpoint-up(md) {
+        padding: 0 calcRem(20px) 1rem 0;
+        border-right: 2px solid $light-grey;
+
+        .icon-button, &__actions {
+            display: none;
+        }
+    }
+
+    @include media-breakpoint-down(md) {
+        position: fixed;
+        z-index: 999;
+        background: $white-color;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 30px;
+        max-width: 480px;
+        transition: all 175ms ease-in;
+
+        &__title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        &--close {
+            transform: translateX(-100%);
+            visibility: hidden;
+        }
+    }
+}

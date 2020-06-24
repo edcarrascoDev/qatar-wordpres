@@ -18,5 +18,13 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-?>
-<ul class="products columns-<?php echo esc_attr( wc_get_loop_prop( 'columns' ) ); ?>">
+$is_sidebar = is_active_sidebar( 'woocommerce_sidebar'); ?>
+
+<div class="products <?php echo $is_sidebar ? 'products--has-sidebar' : '' ?>">
+
+<?php if ($is_sidebar): ?>
+<div class="sidebar">
+    <?php dynamic_sidebar('woocommerce_sidebar') ?>
+</div>
+<?php endif; ?>
+<div class="products columns-<?php echo esc_attr( wc_get_loop_prop( 'columns' ) ); ?>">

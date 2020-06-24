@@ -14,6 +14,10 @@
         &--accent {
             font-weight: 500;
         }
+
+        * {
+           margin: 0;
+        }
     }
 
     @include media-breakpoint-up(sm) {

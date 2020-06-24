@@ -45,6 +45,7 @@
 'layouts/contact',
 'layouts/cover',
 'layouts/features',
+'layouts/filter',
 'layouts/footer',
 'layouts/form',
 'layouts/header',
@@ -52,9 +53,13 @@
 'layouts/main-product',
 'layouts/nav-menu',
 'layouts/product',
+'layouts/product-gallery',
 'layouts/products',
+'layouts/quick-actions',
 'layouts/review',
+'layouts/review-section',
 'layouts/section',
+'layouts/sidebar',
 'layouts/social',
 'layouts/tab',
 'layouts/table';
@@ -63,11 +68,13 @@
 @import
 'components/button',
 'components/columns',
+'components/divider',
 'components/separator',
 'components/link',
 'components/list',
 'components/icons',
-'components/headline';
+'components/headline',
+'components/woocommerce';
 
 // 6. Page-specific styles
 @import

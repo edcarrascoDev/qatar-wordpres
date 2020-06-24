@@ -40,6 +40,11 @@ class Theme_Rest_Api {
 			'methods' => 'POST',
 			'callback' => [$this, 'request_product_information']
 		]);
+
+		register_rest_route('qatar/v1', '/request-review-comment', [
+			'methods' => 'POST',
+			'callback' => [$this, 'request_review_comment']
+		]);
 	}
 
 	public function put_endpoints() {}
@@ -55,17 +60,9 @@ class Theme_Rest_Api {
 		return $cached_info;
 	}
 
-	public function get_financing_content() {
-		return [
-			'html' => Theme_Manager::get_instance()->get_finance_content()
-		];
-	}
-
-	/**
-	 * Create or update Lead in Zoho.
-	 *
-	 * @param $request
-	 */
+    /**
+     * @param WP_REST_Request $request
+     */
 	public function request_contact_information(WP_REST_Request $request) {
         $params = $request->get_json_params();
 
@@ -93,11 +90,9 @@ class Theme_Rest_Api {
 	}
 
 
-	/**
-	 * Create or update Lead in Zoho.
-	 *
-	 * @param $request
-	 */
+    /**
+     * @param WP_REST_Request $request
+     */
 	public function request_product_information(WP_REST_Request $request) {
         $params = $request->get_json_params();
 
@@ -125,5 +120,17 @@ class Theme_Rest_Api {
             wp_send_json_error();
         }
 	}
+
+    /**
+     * @param $comment_id
+     */
+	public function request_review_comment($comment_id) {
+        $rating = intval( $_POST['rating'] );
+        if (add_comment_meta( $comment_id, 'rating', $rating )) {
+            wp_send_json_success();
+        } else {
+            wp_send_json_error();
+        }
+    }
 
 }

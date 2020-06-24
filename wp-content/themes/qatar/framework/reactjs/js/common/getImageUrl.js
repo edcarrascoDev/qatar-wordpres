@@ -9,3 +9,12 @@ export const getImageUrl = (imageObject, not_available_image, thumbnail = '500-5
 
     return not_available_image.url;
 };
+export const getProductImage = (imageObject, thumbnail = '500x500') => {
+    if (!!imageObject && imageObject.src) {
+        const { src } = imageObject;
+        return `${src.substring(0, src.length - 4)}-${thumbnail}.${src.substring(
+            src.length - 3,
+            src.length,
+        )}`;
+    }
+};

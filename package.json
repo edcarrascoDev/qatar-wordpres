@@ -2,9 +2,19 @@
   "name": "qatar-wp",
   "version": "1.0.0",
   "scripts": {
-    "update-submodules": "git submodule update --remote --merge"
+    "build": "concurrently --kill-others \"npm run build:styles\" \"npm run build:reactjs\" \"npm run build:blocks\"",
+    "build:blocks": "npm run build --prefix wp-content/plugins/qatar-blocks",
+    "build:reactjs": "npm run build --prefix wp-content/themes/qatar/framework/reactjs",
+    "build:styles": "npm run build --prefix wp-content/themes/qatar/styles",
+    "update-submodules": "git submodule update --remote --merge",
+    "watch": "concurrently --kill-others \"npm run watch:styles\" \"npm run watch:reactjs\" \"npm run watch:blocks\"",
+    "watch:blocks": "npm run watch --prefix wp-content/plugins/qatar-blocks",
+    "watch:reactjs": "npm run watch --prefix wp-content/themes/qatar/framework/reactjs",
+    "watch:styles": "npm run watch --prefix wp-content/themes/qatar/styles"
   },
-  "dependencies": {},
+  "dependencies": {
+    "concurrently": "^5.2.0"
+  },
   "devDependencies": {
     "prettier": "1.19.1"
   }

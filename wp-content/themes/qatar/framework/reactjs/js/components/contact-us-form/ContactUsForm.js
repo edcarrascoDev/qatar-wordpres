@@ -200,7 +200,6 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(
-    mapStateToProps,
-    { requestContactInformation, setContactFormFeedback },
-)(ContactUsForm);
+export default connect(mapStateToProps, { requestContactInformation, setContactFormFeedback })(
+    ContactUsForm,
+);

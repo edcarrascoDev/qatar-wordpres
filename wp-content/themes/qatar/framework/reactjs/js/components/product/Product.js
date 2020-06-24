@@ -41,7 +41,4 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(
-    mapStateToProps,
-    { changeTab },
-)(Product);
+export default connect(mapStateToProps, { changeTab })(Product);

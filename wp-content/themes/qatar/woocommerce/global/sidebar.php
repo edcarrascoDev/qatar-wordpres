@@ -19,6 +19,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-get_sidebar( 'shop' );
+?>
+
+<div class="sidebar">
+    <?php get_sidebar( 'shop' ); ?>
+</div>
+
+<?php
 
 /* Omit closing PHP tag at the end of PHP files to avoid "headers already sent" issues. */

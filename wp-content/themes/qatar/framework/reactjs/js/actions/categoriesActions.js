@@ -1,38 +1,38 @@
 import { saveInLocalStorage, saveInSessionStorage } from '../utils';
-import { CHANGE_CATEGORY, FETCH_CATEGORIES, FETCH_CATEGORIES_SYNC } from './types';
+import { CHANGE_CATEGORY, FETCH_CATEGORIES } from './types';
 
-export const fetchCategories = () => dispatch => {
-    fetch(`${wp_qatar_reactjs.rest_url}/qatar-categories`)
+export const fetchCategories = (parent = 0) => dispatch => {
+    const params = new URLSearchParams({
+        hide_empty: true,
+        parent,
+    });
+
+    const urlRequest = `${wp_qatar_reactjs.wc_rest_url}/products/categories?${params.toString()}`;
+
+    fetch(urlRequest, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json; charset=utf-8',
+            authorization: `Basic ${wp_qatar_reactjs.consumer_base_code}`,
+        },
+    })
         .then(response => response.json())
-        .then(response => {
-            const { categories } = response.data;
-
-            const orderedCategories = categories.sort((a, b) => {
-                if (a.name > b.name) {
-                    return 1;
-                }
-
-                if (a.name < b.name) {
-                    return -1;
-                }
-
-                return 0;
-            });
-
-            saveInLocalStorage('qatar_categories', orderedCategories);
+        .then(data => {
+            console.log(data);
+            saveInLocalStorage('products_categories', data);
 
             dispatch({
                 type: FETCH_CATEGORIES,
-                payload: orderedCategories,
+                payload: data,
             });
         });
 };
 
-export const changeCategory = categories => dispatch => {
-    saveInSessionStorage('selected_categories', categories);
+export const changeCategory = category => dispatch => {
+    saveInSessionStorage('selected_category', category);
 
     dispatch({
         type: CHANGE_CATEGORY,
-        payload: categories,
+        payload: category,
     });
 };
