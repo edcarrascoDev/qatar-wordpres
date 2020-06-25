@@ -47,6 +47,7 @@ class ReactJs_Templates
             ),
             'theme_url' => $this->theme_url,
             'wc_rest_url' => get_rest_url(null, 'wc/v3'),
+            'cocart_rest_url' => get_rest_url(null, 'cocart/v1'),
         ];
 
         wp_localize_script('qatar-reactjs', 'wp_qatar_reactjs', $script_vars);

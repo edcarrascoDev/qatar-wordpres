@@ -122,6 +122,8 @@ function renderAddToCartForm(htmlElement) {
                 minValue={htmlElement.dataset.minValue}
                 maxValue={htmlElement.dataset.maxValue}
                 inputValue={htmlElement.dataset.inputValue}
+                productVariations={htmlElement.dataset.productVariations}
+                attributes={htmlElement.dataset.attributes}
             />
         </Provider>
     );

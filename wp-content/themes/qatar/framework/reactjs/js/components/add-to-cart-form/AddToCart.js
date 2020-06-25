@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Form, Control } from 'react-redux-form';
+import { Form, Control, actions } from 'react-redux-form';
 import { isEmpty, isNumeric } from 'validator';
 
 const required = str => (Number.isInteger(str) ? !isEmpty(str.toString()) : !isEmpty(str));
+
+import { addItemToCart } from '../../actions/addToCartActions';
 
 class AddToCart extends Component {
     constructor(props) {
@@ -12,6 +14,9 @@ class AddToCart extends Component {
             formValidity: {
                 quantity: true,
             },
+            filteredOptions: [],
+            selectedOptions: {},
+            isInStock: true,
         };
     }
 
@@ -29,7 +34,9 @@ class AddToCart extends Component {
     }
 
     render() {
-        const { minValue, maxValue, inputValue, requestingInfo } = this.props;
+        const { minValue, maxValue, inputValue, attributes, requestingInfo } = this.props;
+        const { isInStock } = this.state;
+
         return (
             <Form
                 className="form"
@@ -39,8 +46,30 @@ class AddToCart extends Component {
                 onUpdate={val => this.updateValidity(val)}
                 validators={{
                     quantity: { required, isNumeric },
+                    variation_id: !!attributes ? required : null,
                 }}
             >
+                {!!attributes
+                    ? Object.keys(JSON.parse(attributes)).map(key => {
+                          return (
+                              <div className="form__group" key={key}>
+                                  <div className="mdc-select ">
+                                      <div className="mdc-select__anchor">
+                                          <i className="mdc-select__dropdown-icon" />
+                                          <div className="mdc-select__selected-text" />
+                                          <span className="mdc-floating-label">{key}</span>
+                                          <div className="mdc-line-ripple" />
+                                      </div>
+                                      <div className="mdc-select__menu mdc-menu mdc-menu-surface demo-width-class">
+                                          <ul className="mdc-list">
+                                              {this.getOptions(JSON.parse(attributes)[key], key)}
+                                          </ul>
+                                      </div>
+                                  </div>
+                              </div>
+                          );
+                      })
+                    : null}
                 <div className="single-product__actions">
                     <div className="quantity">
                         <Control.input
@@ -57,18 +86,75 @@ class AddToCart extends Component {
                     <button
                         type="submit"
                         className="mdc-button mdc-button--raised"
-                        disabled={requestingInfo}
+                        disabled={requestingInfo || !isInStock}
                     >
                         Añadir al Carrito
                     </button>
                 </div>
+                {!isInStock ? (
+                    <span>Lo sentimos, no tenemos disponibilidad para esta Variación</span>
+                ) : null}
             </Form>
         );
     }
 
+    getOptions(options, attribute) {
+        return options.map((option, index) => {
+            return (
+                <li
+                    key={index}
+                    onClick={() => this.filterOptions(option, attribute.toLowerCase())}
+                    className="mdc-list-item"
+                    data-value={option}
+                >
+                    {option}
+                </li>
+            );
+        });
+    }
+
+    filterOptions(option, attribute) {
+        const { productVariations, attributes } = this.props;
+        const { filteredOptions, selectedOptions } = this.state;
+
+        const newFilteredOptions = JSON.parse(productVariations)
+            .filter(item => item.attributes[`attribute_${attribute}`] === option)
+            .map(item => {
+                return item.attributes;
+            });
+
+        const newSelectedOptions = { ...selectedOptions, [`attribute_${attribute}`]: option };
+
+        this.setState({
+            filteredOptions: [...filteredOptions, newFilteredOptions],
+            selectedOptions: { ...selectedOptions, [`attribute_${attribute}`]: option },
+        });
+
+        if (Object.keys(newSelectedOptions).length === Object.keys(JSON.parse(attributes)).length) {
+            this.getVariationId(newSelectedOptions);
+        }
+    }
+
+    getVariationId(newSelectedOptions) {
+        const { productVariations, setVariationIdValue } = this.props;
+
+        const variation = JSON.parse(productVariations).find(
+            item => JSON.stringify(item.attributes) === JSON.stringify(newSelectedOptions),
+        );
+
+        if (variation && variation.is_in_stock) {
+            setVariationIdValue(variation.variation_id);
+            this.setState({ isInStock: true });
+        } else {
+            this.setState({ isInStock: false });
+        }
+    }
+
     handleSubmit(val) {
-        const { productId } = this.props;
-        console.log(val);
+        const { productId, addItemToCart } = this.props;
+        const { selectedOptions } = this.state;
+
+        addItemToCart({ ...val, product_id: productId, variation: selectedOptions });
     }
 }
 
@@ -79,4 +165,13 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps)(AddToCart);
+const mapDispatchToProps = dispatch => {
+    return {
+        setVariationIdValue: value => {
+            dispatch(actions.change('addToCartItem.variation_id', value));
+        },
+        addItemToCart: values => dispatch(addItemToCart(values)),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddToCart);
