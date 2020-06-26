@@ -6,6 +6,7 @@ class Theme_Woocommerce {
     public function __construct() {
 
         add_action('woocommerce_before_single_product', [$this, 'change_single_product_layout']);
+        add_action('woocommerce_after_single_product_summary', [$this, 'removeUpsellsProductsFromSingleProduct']);
     }
 
 
@@ -39,6 +40,10 @@ class Theme_Woocommerce {
         add_action('woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 30);
         add_action('woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 40);
         add_action('woocommerce_single_product_summary', 'woocommerce_template_single_sharing', 50);
+    }
+
+    function removeUpsellsProductsFromSingleProduct() {
+        remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
     }
 
     public function iq_get_gallery_image_html($attachment_id, $main_image = false) {

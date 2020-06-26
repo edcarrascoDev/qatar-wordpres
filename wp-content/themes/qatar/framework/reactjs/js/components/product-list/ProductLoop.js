@@ -1,15 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { getProductImage } from '../../common/getImageUrl';
 
 class ProductLoop extends Component {
     render() {
         const { productLoading } = this.props;
-        return (
-            <div className={'products__list'}>
-                {productLoading ? this.renderLoading() : this.renderProducts()}
-            </div>
-        );
+        return <Fragment>{productLoading ? this.renderLoading() : this.renderProducts()}</Fragment>;
     }
 
     renderProducts() {
@@ -97,11 +93,10 @@ class ProductLoop extends Component {
 }
 
 const mapStateToProps = state => {
-    const { product_list, product_loading } = state.productList;
+    const { product_loading } = state.productList;
     const { qatarOptions } = state.qatarOptions;
 
     return {
-        productList: product_list.data,
         productLoading: product_loading,
         noAvailableImage: qatarOptions.not_available_image,
     };

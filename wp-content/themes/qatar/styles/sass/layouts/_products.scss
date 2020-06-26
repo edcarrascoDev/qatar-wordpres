@@ -3,7 +3,12 @@
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         grid-gap: 30px;
+
+        &--no-sidebar {
+            grid-template-columns: repeat(4, 1fr);
+        }
     }
+
 
     @include media-breakpoint-up(md) {
         &__container {

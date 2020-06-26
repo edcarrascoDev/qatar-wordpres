@@ -19,34 +19,39 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+$productsId = '';
+
 if ( $related_products ) : ?>
 
-	<section class="related products">
+	<section class="pb-50">
+        <div class="container">
 
-		<?php
-		$heading = apply_filters( 'woocommerce_product_related_products_heading', __( 'Related products', 'woocommerce' ) );
+            <?php
+                $heading = apply_filters('woocommerce_product_related_products_heading', __('Related products', 'woocommerce'));
 
-		if ( $heading ) :
-			?>
-			<h2><?php echo esc_html( $heading ); ?></h2>
-		<?php endif; ?>
-		
-		<?php woocommerce_product_loop_start(); ?>
+                if ($heading) :
+                    ?>
+                    <h2 class="headline headline--h2  text-center"><?php echo esc_html($heading); ?></h2>
+                <div class="separator separator--center separator--secondary"></div>
+                <?php endif; ?>
 
-			<?php foreach ( $related_products as $related_product ) : ?>
+                <?php
+                $count = 1;
+                foreach ($related_products as $key => $value) {
+                    if ($value === end($related_products) || $count === 4) {
+                        $productsId .= $value->get_id();
+                    } else {
+                        $productsId .= $value->get_id() . ',';
+                    }
 
-					<?php
-					$post_object = get_post( $related_product->get_id() );
-
-					setup_postdata( $GLOBALS['post'] =& $post_object ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited, Squiz.PHP.DisallowMultipleAssignments.Found
-
-					wc_get_template_part( 'content', 'product' );
-					?>
-
-			<?php endforeach; ?>
-
-		<?php woocommerce_product_loop_end(); ?>
-
+                    if ($count === 4) {
+                        break;
+                    }
+                    $count++;
+                }
+            ?>
+            <div class="mt-50" id="reactRelatedProductList" data-products-id="<?php echo $productsId; ?>"></div>
+        </div>
 	</section>
 	<?php
 endif;

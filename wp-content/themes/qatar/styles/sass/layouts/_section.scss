@@ -1,18 +1,23 @@
 .section {
-  display: block;
-  padding: $padding-on-section;
+    display: block;
+    padding: $padding-on-section;
 
-  &--intro {
-    padding-top: 8rem;
-  }
-
-  &--cover {
-    padding: 0;
-  }
-  @include media-breakpoint-down(sm) {
-    padding: $padding-on-section-sm;
-    &--intro {
-      padding-top: 5rem;
+    &--light {
+        background: $light-color;
     }
-  }
+
+    &--intro {
+        padding-top: 8rem;
+    }
+
+    &--cover {
+        padding: 0;
+    }
+
+    @include media-breakpoint-down(sm) {
+        padding: $padding-on-section-sm;
+        &--intro {
+            padding-top: 5rem;
+        }
+    }
 }

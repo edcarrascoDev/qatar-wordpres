@@ -18,37 +18,41 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+$productsId = '';
 
 if ( $upsells ) : ?>
 
-	<section class="up-sells upsells products">
-		<?php
-		$heading = apply_filters( 'woocommerce_product_upsells_products_heading', __( 'You may also like&hellip;', 'woocommerce' ) );
+	<section class="section section--light">
+        <div class="container">
+            <?php
+            $heading = apply_filters('woocommerce_product_upsells_products_heading', __('You may also like&hellip;', 'woocommerce'));
 
-		if ( $heading ) :
-			?>
-			<h2><?php echo esc_html( $heading ); ?></h2>
-		<?php endif; ?>
+            if ($heading) :
+                ?>
+                <h2 class="mb-50"><?php echo esc_html($heading); ?></h2>
+            <?php endif; ?>
 
-		<?php woocommerce_product_loop_start(); ?>
+            <?php
 
-			<?php foreach ( $upsells as $upsell ) : ?>
+            $count = 1;
+            foreach ($upsells as $key => $value) {
+                if ($value === end($upsells) || $count === 4) {
+                    $productsId .= $value->get_id();
+                } else {
+                    $productsId .= $value->get_id() . ',';
+                }
 
-				<?php
-				$post_object = get_post( $upsell->get_id() );
-
-				setup_postdata( $GLOBALS['post'] =& $post_object ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited, Squiz.PHP.DisallowMultipleAssignments.Found
-
-				wc_get_template_part( 'content', 'product' );
-				?>
-
-			<?php endforeach; ?>
-
-		<?php woocommerce_product_loop_end(); ?>
-
+                if ($count === 4) {
+                    break;
+                }
+                $count++;
+            }
+            ?>
+            <div id="reactUpsellsProductList" data-products-id="<?php echo $productsId; ?>"></div>
+        </div>
 	</section>
 
-	<?php
-endif;
+
+<?php endif;
 
 wp_reset_postdata();

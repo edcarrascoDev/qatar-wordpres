@@ -11,6 +11,7 @@ import Product from './components/product/Product';
 import ProductInquiryForm from './components/product-inquiry-form/ProductInquiryForm';
 import ReviewForm from './components/review-form/ReviewForm';
 import ProductList from './components/product-list/ProductList';
+import RelatedProductList from './components/related-product-list/RelatedProductList';
 import AddToCartForm from './components/add-to-cart-form/AddToCart';
 
 const componentContainersById = [
@@ -20,6 +21,8 @@ const componentContainersById = [
     'reactProductDescription',
     'reactReviewForm',
     'reactProductList',
+    'reactRelatedProductList',
+    'reactUpsellsProductList',
     'reactAddToCartForm',
     'reactLoader',
 ];
@@ -46,6 +49,12 @@ componentContainersById.forEach(container => {
                 break;
             case 'reactProductList':
                 renderProductList(htmlContainer);
+                break;
+            case 'reactRelatedProductList':
+                renderRelatedProductList(htmlContainer);
+                break;
+            case 'reactUpsellsProductList':
+                renderUpsellsProductList(htmlContainer);
                 break;
             case 'reactAddToCartForm':
                 renderAddToCartForm(htmlContainer);
@@ -112,6 +121,24 @@ function renderProductList(htmlElement) {
         </Provider>
     );
     ReactDOM.render(ProductListRender, htmlElement);
+}
+
+function renderRelatedProductList(htmlElement) {
+    const relateProductListRender = (
+        <Provider store={store}>
+            <RelatedProductList productsId={htmlElement.dataset.productsId} />
+        </Provider>
+    );
+    ReactDOM.render(relateProductListRender, htmlElement);
+}
+
+function renderUpsellsProductList(htmlElement) {
+    const upsellsProductListRender = (
+        <Provider store={store}>
+            <RelatedProductList productsId={htmlElement.dataset.productsId} />
+        </Provider>
+    );
+    ReactDOM.render(upsellsProductListRender, htmlElement);
 }
 
 function renderAddToCartForm(htmlElement) {

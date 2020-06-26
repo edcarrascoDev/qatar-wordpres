@@ -25,6 +25,7 @@ class ProductList extends Component {
     }
 
     render() {
+        const { productList } = this.props;
         const { sidebarOpen } = this.state;
 
         return (
@@ -50,7 +51,9 @@ class ProductList extends Component {
                     </div>
                 </aside>
                 <div className="content">
-                    <ProductLoop />
+                    <div className={'products__list'}>
+                        <ProductLoop productList={productList} />
+                    </div>
                 </div>
             </div>
         );
@@ -68,8 +71,10 @@ class ProductList extends Component {
 
 const mapStateToProps = state => {
     const { selected_category } = state.categories;
+    const { product_list } = state.productList;
 
     return {
+        productList: product_list,
         selectedCategory: selected_category,
     };
 };
