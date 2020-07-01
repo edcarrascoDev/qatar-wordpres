@@ -74,7 +74,7 @@ const mapStateToProps = state => {
     const { product_list } = state.productList;
 
     return {
-        productList: product_list,
+        productList: product_list.data,
         selectedCategory: selected_category,
     };
 };

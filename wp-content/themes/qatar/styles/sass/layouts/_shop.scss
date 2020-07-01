@@ -1,0 +1,16 @@
+.shop-table {
+
+    &__tr {
+        padding: 10px 0;
+        border-bottom: 1px solid $white-color;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+    }
+
+    &__th {
+    }
+
+    &__td {
+    }
+}

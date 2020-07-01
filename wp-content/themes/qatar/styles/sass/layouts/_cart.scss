@@ -1,0 +1,76 @@
+.cart {
+    padding-top: 9rem;
+
+    &__list-items {
+        margin-bottom: 40px;
+    }
+    &__item {
+        border-bottom: 1px solid  $light-grey;
+        padding: 30px 0;
+        display: grid;
+        grid-gap: 10px;
+        grid-template-columns: 120px 350px auto auto 50px;
+        grid-template-areas: "thumbnail name quantity subtotal remove";
+        align-items: center;
+    }
+
+    &__product {
+        &-thumbnail {
+            grid-area: thumbnail;
+            img {
+                max-width: 100%;
+                max-height: 150px;
+                height: auto;
+            }
+        }
+
+        &-name {
+            grid-area: name;
+        }
+
+        &-quantity {
+            grid-area: quantity;
+            text-align: center;
+        }
+
+        &-subtotal {
+            grid-area: subtotal;
+            text-align: right;
+        }
+
+        &-remove {
+            grid-area: remove;
+        }
+    }
+
+    &__coupon, &__collaterals {
+        padding: 15px 20px;
+    }
+
+    &__collaterals {
+        background: $primary-color;
+        color: $white-color;
+    }
+
+    &__coupon {
+        background: $light-color;
+        margin-bottom: 30px;
+    }
+
+    @include media-breakpoint-up(md) {
+
+        &__container {
+            display: grid;
+            grid-template-columns: auto 320px;
+            grid-gap: 50px;
+        }
+
+        &__actions {
+            text-align: right;
+        }
+
+        &__collaterals {
+            margin-bottom: 30px;
+        }
+    }
+}

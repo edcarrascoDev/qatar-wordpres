@@ -11,7 +11,7 @@
             max-width: calcRem(60px);
             height: 45px;
             text-align: center;
-            border: 0;
+            border: 1px solid $light-grey;
 
             &::-webkit-outer-spin-button,
             &::-webkit-inner-spin-button {
