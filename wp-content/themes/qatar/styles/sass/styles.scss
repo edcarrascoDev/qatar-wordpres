@@ -43,6 +43,7 @@
 // 4. Layout-related sections
 @import
 'layouts/cart',
+'layouts/checkout',
 'layouts/contact',
 'layouts/cover',
 'layouts/features',
@@ -76,6 +77,7 @@
 'components/list',
 'components/icons',
 'components/headline',
+'components/tooltip',
 'components/woocommerce';
 
 // 6. Page-specific styles

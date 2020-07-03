@@ -1,0 +1,20 @@
+.checkout {
+
+    &__order-review, &__forms {
+
+        padding: 30px 50px;
+    }
+
+    &__order-review {
+        background: $light-color;
+        align-self: start;
+    }
+
+    @include media-breakpoint-up(md) {
+        &__container {
+            display: grid;
+            grid-template-columns: auto 500px;
+            grid-gap: 40px;
+        }
+    }
+}

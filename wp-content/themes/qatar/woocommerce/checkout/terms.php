@@ -13,6 +13,7 @@ if ( apply_filters( 'woocommerce_checkout_show_terms', true ) && function_exists
 
 	?>
 	<div class="woocommerce-terms-and-conditions-wrapper">
+        <small>
 		<?php
 		/**
 		 * Terms and conditions hook used to inject content.
@@ -23,6 +24,7 @@ if ( apply_filters( 'woocommerce_checkout_show_terms', true ) && function_exists
 		 */
 		do_action( 'woocommerce_checkout_terms_and_conditions' );
 		?>
+		</small>
 
 		<?php if ( wc_terms_and_conditions_checkbox_enabled() ) : ?>
 			<p class="form-row validate-required">

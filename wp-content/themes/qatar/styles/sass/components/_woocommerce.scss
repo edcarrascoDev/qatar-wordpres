@@ -2,6 +2,9 @@
     background: $light-color;
 }
 .woocommerce {
+    .woocommerce-checkout & {
+        padding: 100px 0;
+    }
     .quantity {
         > label {
             display: none;

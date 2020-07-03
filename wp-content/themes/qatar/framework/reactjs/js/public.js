@@ -13,6 +13,8 @@ import ReviewForm from './components/review-form/ReviewForm';
 import ProductList from './components/product-list/ProductList';
 import RelatedProductList from './components/related-product-list/RelatedProductList';
 import AddToCartForm from './components/add-to-cart-form/AddToCart';
+import CheckoutForm from './components/form-field-filter/FormFieldFilter';
+import FormFieldFilter from './components/form-field-filter/FormFieldFilter';
 
 const componentContainersById = [
     'reactContactForm',
@@ -64,6 +66,20 @@ componentContainersById.forEach(container => {
                 break;
         }
     }
+});
+
+const componentByClassName = ['reactWCFormField'];
+
+componentByClassName.forEach(className => {
+    const htmlContainers = document.getElementsByClassName(className);
+
+    Array.apply(null, { length: htmlContainers.length }).forEach((value, index) => {
+        switch (className) {
+            case 'reactWCFormField':
+                renderFormFieldFilter(htmlContainers.item(index));
+                break;
+        }
+    });
 });
 
 function renderCategories(htmlElement) {
@@ -155,6 +171,19 @@ function renderAddToCartForm(htmlElement) {
         </Provider>
     );
     ReactDOM.render(addToCart, htmlElement);
+}
+
+function renderFormFieldFilter(htmlElement) {
+    const formFieldFilter = (
+        <Provider store={store}>
+            <FormFieldFilter
+                keyValue={htmlElement.dataset.keyValue}
+                args={JSON.parse(htmlElement.dataset.args)}
+                value={htmlElement.dataset.value}
+            />
+        </Provider>
+    );
+    ReactDOM.render(formFieldFilter, htmlElement);
 }
 
 function renderMainLoader(htmlElement) {

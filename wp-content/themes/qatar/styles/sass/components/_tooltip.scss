@@ -1,0 +1,38 @@
+.tooltip {
+    position: relative;
+    display: flex;
+
+    &__trigger {
+        width: 18px;
+        height: 18px;
+        line-height: 18px;
+        text-align: center;
+        border-radius: 50%;
+        background: $primary-color;
+        color: $white-color;
+        font-size: 10px;
+        cursor: default;
+        &:hover {
+            & ~ .tooltip__text {
+                visibility: visible;
+                z-index: 9;
+            }
+        }
+    }
+
+    &__text {
+        padding: 10px;
+        background: $light-grey;
+        border-radius: 10px;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        max-width: 100%;
+        z-index: -1;
+        visibility: hidden;
+        p {
+            font-size: 12px;
+            margin-bottom: 0;
+        }
+    }
+}

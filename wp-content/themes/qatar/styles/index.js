@@ -7,6 +7,7 @@ import { MDCTextField } from '@material/textfield';
 import { MDCSelect } from '@material/select';
 import { MDCLineRipple } from '@material/line-ripple';
 import { MDCTabBar } from '@material/tab-bar';
+
 import Swiper from 'swiper';
 
 window.onload = () => {
@@ -45,6 +46,7 @@ window.onload = () => {
             ThemeScript.heroSlider();
             ThemeScript.productSlider();
             ThemeScript.singleProductTab();
+            ThemeScript.toggleCheckoutShipping();
         },
 
         isMobile: () => {
@@ -115,6 +117,11 @@ window.onload = () => {
                     const button = new MDCLineRipple(item);
                 });
             }
+
+            /**
+             * get Tab bar
+             * @type {Element}
+             */
 
             const mdcTabBar = document.querySelector('.mdc-tab-bar');
 
@@ -230,6 +237,24 @@ window.onload = () => {
                     });
                 });
             }
+        },
+
+        toggleCheckoutShipping() {
+            const checkbox = document.getElementById('ship-to-different-address-checkbox');
+            const shippingContainer = document.querySelector('.shipping_address');
+
+            if (checkbox && shippingContainer) {
+                this.toggleDisplayOnCheckboxTrigger(checkbox, shippingContainer);
+            }
+        },
+
+        toggleDisplayOnCheckboxTrigger(checkboxElement, containerElement) {
+            checkboxElement.addEventListener('change', () => {
+                containerElement.style.display === 'none'
+                    ? (containerElement.style.display =
+                          containerElement.dataset.display || 'initial')
+                    : (containerElement.style.display = 'none');
+            });
         },
     };
 

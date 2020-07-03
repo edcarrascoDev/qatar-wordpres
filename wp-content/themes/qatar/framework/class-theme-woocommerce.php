@@ -7,6 +7,8 @@ class Theme_Woocommerce {
 
         add_action('woocommerce_before_single_product', [$this, 'change_single_product_layout']);
         add_action('woocommerce_after_single_product_summary', [$this, 'removeUpsellsProductsFromSingleProduct']);
+//        add_filter('woocommerce_checkout_fields', [$this, 'custom_remove_wc_checkout_fields']);
+        add_filter('woocommerce_default_address_fields', [$this, 'custom_override_default_address_fields']);
     }
 
 
@@ -43,7 +45,7 @@ class Theme_Woocommerce {
     }
 
     function removeUpsellsProductsFromSingleProduct() {
-        remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
+        remove_action('woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15);
     }
 
     public function iq_get_gallery_image_html($attachment_id, $main_image = false) {
@@ -90,24 +92,24 @@ class Theme_Woocommerce {
     /**
      * Get HTML for ratings.
      *
-     * @since  3.0.0
-     * @param  float $rating Rating being shown.
-     * @param  int   $count  Total number of ratings.
+     * @param float $rating Rating being shown.
+     * @param int $count Total number of ratings.
      * @return string
+     * @since  3.0.0
      */
 
-    function iq_get_rating_html( $rating, $count = 0 ) {
+    function iq_get_rating_html($rating, $count = 0) {
 
 
-        if ( 0 < $rating ) {
-            $label = sprintf( __( 'Rated %s out of 5', 'woocommerce' ), $rating );
+        if (0 < $rating) {
+            $label = sprintf(__('Rated %s out of 5', 'woocommerce'), $rating);
             $i = 1;
             $html = '<span class="review__rating">';
             while ($i <= 5):
                 if ($i <= $rating) {
-                    $html  .= '<i class="fas fa-star" data-rating="'. $rating .'" aria-label="' . esc_attr( $label ) . '"></i>';
+                    $html .= '<i class="fas fa-star" data-rating="' . $rating . '" aria-label="' . esc_attr($label) . '"></i>';
                 } else {
-                    $html  .= '<i class="far fa-star" data-rating="'. $rating .'" aria-label="' . esc_attr( $label ) . '"></i>';
+                    $html .= '<i class="far fa-star" data-rating="' . $rating . '" aria-label="' . esc_attr($label) . '"></i>';
                 }
                 $i++;
             endwhile;
@@ -115,7 +117,40 @@ class Theme_Woocommerce {
 
         $html .= '</span>';
 
-        return apply_filters( 'woocommerce_product_get_rating_html', $html, $rating, $count );
+        return apply_filters('woocommerce_product_get_rating_html', $html, $rating, $count);
     }
 
+    function custom_remove_wc_checkout_fields($fields) {
+        unset($fields['billing']['billing_company']);
+        unset($fields['billing']['billing_country']);
+        unset($fields['billing']['billing_postcode']);
+
+        unset($fields['shipping']['shipping_company']);
+        unset($fields['shipping']['billing_country']);
+        unset($fields['shipping']['shipping_postcode']);
+
+        $fields['billing']['billing_address_1']['column'] = 2;
+
+        return $fields;
+    }
+
+    function custom_override_default_address_fields($address_fields) {
+        unset($address_fields['company']);
+        unset($address_fields['country']);
+        unset($address_fields['postcode']);
+        unset($address_fields['last_name']);
+
+        $address_fields['first_name']['label'] = 'Nombres y Apellidos';
+        $address_fields['state']['label'] = 'Departamento';
+        $address_fields['state']['priority'] = 70;
+        $address_fields['city']['label'] = 'Ciudad';
+        $address_fields['city']['type'] = 'city';
+        $address_fields['city']['priority'] = 80;
+
+        $address_fields['address_1']['label'] = 'Dirección';
+        $address_fields['address_2']['label'] = 'Datos Adicionales (opcional)';
+
+
+        return $address_fields;
+    }
 }

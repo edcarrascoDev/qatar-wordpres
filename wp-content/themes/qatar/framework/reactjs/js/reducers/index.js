@@ -5,6 +5,7 @@ import addToCartReducer from './addToCartReducer';
 import categoriesReducer from './categoriesReducer';
 import contactUsReducer from './contactUsReducer';
 import filtersReducer from './filtersReducer';
+import formFieldFilterReducer from './formFieldFilterReducer';
 import productInquiryFormReducer from './productInquiryFormReducer';
 import productListReducer from './productListReducer';
 import productsReducer from './productsReducer';
@@ -21,6 +22,7 @@ export default combineReducers({
     categories: categoriesReducer,
     contactUs: contactUsReducer,
     filtersItems: filtersReducer,
+    formFieldFilter: formFieldFilterReducer,
     productInquiry: productInquiryFormReducer,
     productList: productListReducer,
     products: productsReducer,
