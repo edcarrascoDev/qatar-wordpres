@@ -9,8 +9,11 @@ class Toolbar extends Component {
         const { totalCount, showingCount, openFilter } = this.props;
         return (
             <div className={'quick-actions'}>
-                <button onClick={event => openFilter(event)} className="icon-button">
-                    <i className="fas fa-filter" />
+                <button
+                    onClick={event => openFilter(event)}
+                    className="icon-button mdc-ripple-upgraded"
+                >
+                    <i className="icon icon--options-outline" />
                 </button>
                 <div className="quick-actions__description">
                     <span>{`Mostrando ${showingCount} de ${totalCount} Productos`}</span>

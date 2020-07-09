@@ -7,7 +7,6 @@ class Theme_Woocommerce {
 
         add_action('woocommerce_before_single_product', [$this, 'change_single_product_layout']);
         add_action('woocommerce_after_single_product_summary', [$this, 'removeUpsellsProductsFromSingleProduct']);
-//        add_filter('woocommerce_checkout_fields', [$this, 'custom_remove_wc_checkout_fields']);
         add_filter('woocommerce_default_address_fields', [$this, 'custom_override_default_address_fields']);
     }
 
@@ -120,20 +119,6 @@ class Theme_Woocommerce {
         return apply_filters('woocommerce_product_get_rating_html', $html, $rating, $count);
     }
 
-    function custom_remove_wc_checkout_fields($fields) {
-        unset($fields['billing']['billing_company']);
-        unset($fields['billing']['billing_country']);
-        unset($fields['billing']['billing_postcode']);
-
-        unset($fields['shipping']['shipping_company']);
-        unset($fields['shipping']['billing_country']);
-        unset($fields['shipping']['shipping_postcode']);
-
-        $fields['billing']['billing_address_1']['column'] = 2;
-
-        return $fields;
-    }
-
     function custom_override_default_address_fields($address_fields) {
         unset($address_fields['company']);
         unset($address_fields['country']);
@@ -152,5 +137,16 @@ class Theme_Woocommerce {
 
 
         return $address_fields;
+    }
+
+    /**
+     * Outputs all queued notices on WC pages.
+     *
+     * @since 3.5.0
+     */
+    function woocommerce_output_all_notices() {
+        echo '<div class="mdc-snackbar"><div class="mdc-snackbar__surface">';
+        wc_print_notices();
+        echo '</div></div>';
     }
 }

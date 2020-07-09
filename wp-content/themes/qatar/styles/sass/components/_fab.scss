@@ -1,0 +1,14 @@
+.mdc-fab {
+    @include mdc-fab-accessible($white-color);
+
+    &:disabled {
+        @include mdc-fab-container-color($light-grey);
+        box-shadow: none;
+        cursor: unset;
+        opacity: 0.6;
+
+        &:hover {
+            @include mdc-fab-container-color($light-grey);
+        }
+    }
+}

@@ -13,7 +13,6 @@ import ReviewForm from './components/review-form/ReviewForm';
 import ProductList from './components/product-list/ProductList';
 import RelatedProductList from './components/related-product-list/RelatedProductList';
 import AddToCartForm from './components/add-to-cart-form/AddToCart';
-import CheckoutForm from './components/form-field-filter/FormFieldFilter';
 import FormFieldFilter from './components/form-field-filter/FormFieldFilter';
 
 const componentContainersById = [

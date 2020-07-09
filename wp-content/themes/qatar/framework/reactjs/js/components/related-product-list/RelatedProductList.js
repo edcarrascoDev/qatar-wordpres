@@ -17,7 +17,7 @@ class relatedProductList extends Component {
 
         return (
             <div className={'products__list products__list--no-sidebar'}>
-                <ProductLoop productList={relatedProducts} />
+                <ProductLoop productsToShow={4} productList={relatedProducts} />
             </div>
         );
     }

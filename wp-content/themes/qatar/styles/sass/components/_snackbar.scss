@@ -1,0 +1,19 @@
+.mdc-snackbar {
+    &.mdc-snackbar {
+        &--error {
+            .mdc-snackbar {
+                &__surface {
+                    background: $warn-color;
+                }
+            }
+        }
+
+        &--success {
+            .mdc-snackbar {
+                &__surface {
+                    background: $success-color;
+                }
+            }
+        }
+    }
+}

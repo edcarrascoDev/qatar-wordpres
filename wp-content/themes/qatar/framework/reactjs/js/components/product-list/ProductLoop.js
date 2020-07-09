@@ -72,8 +72,8 @@ class ProductLoop extends Component {
     }
 
     renderLoading() {
-        const simulatedArray = Array.from(Array(6).keys());
-        return simulatedArray.map(key => {
+        const { productsToShow } = this.props;
+        return Array.from(Array(productsToShow).keys()).map(key => {
             return (
                 <div key={key} className="product product--on-load">
                     <div className="product__loading" />

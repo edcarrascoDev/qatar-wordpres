@@ -1,0 +1,16 @@
+.paginator {
+    display: flex;
+    align-items: center;
+    margin-top: 50px;
+    padding: 25px 0;
+
+     > * {
+         &:not(:last-child) {
+             margin-right: 10px;
+         }
+     }
+
+    @include media-breakpoint-down(sm) {
+        justify-content: space-between;
+    }
+}

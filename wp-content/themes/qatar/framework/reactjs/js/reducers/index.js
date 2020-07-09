@@ -2,6 +2,7 @@ import { createForms } from 'react-redux-form';
 import { combineReducers } from 'redux';
 
 import addToCartReducer from './addToCartReducer';
+import breakpointsReducer from './breakpointsReducer';
 import categoriesReducer from './categoriesReducer';
 import contactUsReducer from './contactUsReducer';
 import filtersReducer from './filtersReducer';
@@ -11,6 +12,7 @@ import productListReducer from './productListReducer';
 import productsReducer from './productsReducer';
 import qatarOptionsReducer from './qatarOptionsReducer';
 import reviewUsReducer from './reviewUsReducer';
+import snackbarReducer from './snackbarReducer';
 
 import contactFormReducer from './contactFormReducer';
 import reviewFormReducer from './reviewFormReducer';
@@ -19,6 +21,7 @@ import addToCartFormReducer from './addToCartFormReducer';
 
 export default combineReducers({
     addToCart: addToCartReducer,
+    breakpoints: breakpointsReducer,
     categories: categoriesReducer,
     contactUs: contactUsReducer,
     filtersItems: filtersReducer,
@@ -28,6 +31,7 @@ export default combineReducers({
     products: productsReducer,
     qatarOptions: qatarOptionsReducer,
     reviewUs: reviewUsReducer,
+    snackbar: snackbarReducer,
     ...createForms({
         contactInfo: contactFormReducer,
         productInfo: productFormReducer,

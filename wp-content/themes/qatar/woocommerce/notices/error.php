@@ -15,19 +15,33 @@
  * @version 3.9.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+if (!defined('ABSPATH')) {
+    exit;
 }
 
-if ( ! $notices ) {
-	return;
+if (!$notices) {
+    return;
 }
 
 ?>
-<ul class="woocommerce-error" role="alert">
-	<?php foreach ( $notices as $notice ) : ?>
-		<li<?php echo wc_get_notice_data_attr( $notice ); ?>>
-			<?php echo wc_kses_notice( $notice['notice'] ); ?>
-		</li>
-	<?php endforeach; ?>
-</ul>
+
+<div class="mdc-snackbar mdc-snackbar--error mdc-snackbar--opened" data-timeout="-1">
+    <div class="mdc-snackbar__surface">
+        <div class="mdc-snackbar__label"
+             role="status"
+             aria-live="polite">
+            <ul role="alert">
+                <?php foreach ($notices as $notice) : ?>
+                    <li<?php echo wc_get_notice_data_attr($notice); ?>>
+                        <?php echo wc_kses_notice($notice['notice']); ?>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+        <div class="mdc-snackbar__actions">
+            <button type="button" class="icon-button icon-button--on-dark mdc-snackbar__action mdc-ripple-upgraded">
+                <i class="icon icon--close-outline icon--invert"></i>
+            </button>
+        </div>
+    </div>
+</div>

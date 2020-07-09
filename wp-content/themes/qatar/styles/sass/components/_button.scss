@@ -59,17 +59,22 @@ a.mdc-button {
 }
 
 .icon-button {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background: rgba(0, 0, 0, 0);
     border: 0;
     width: 50px;
     height: 50px;
-    line-height: 50px;
     outline: none;
     border-radius: 50%;
     transition: all 150ms ease-in;
-    text-align: center;
     text-decoration: none!important;
+    cursor: pointer;
+
+    &--on-dark {
+        color: $white-color;
+    }
 
     span {
         font-size: 2rem;

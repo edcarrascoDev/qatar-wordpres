@@ -1,13 +1,21 @@
 import { saveInLocalStorage } from '../utils';
-import { FETCH_PRODUCT_LIST, FETCH_RELATED_PRODUCT_LIST, PRODUCTS_LOADING } from './types';
+import {
+    FETCH_PRODUCT_LIST,
+    FETCH_RELATED_PRODUCT_LIST,
+    PRODUCTS_LOADING,
+    CHANGE_PRODUCT_PAGE,
+} from './types';
 
-export const fetchProductList = params => dispatch => {
+export const fetchProductList = (
+    params,
+    per_page = wp_qatar_reactjs.products_per_page,
+) => dispatch => {
     dispatch({
         type: PRODUCTS_LOADING,
         payload: true,
     });
 
-    params = { ...params };
+    params = { ...params, per_page };
     const paramsRequest = new URLSearchParams(params);
 
     const urlRequest = `${wp_qatar_reactjs.wc_rest_url}/products?${paramsRequest.toString()}`;
@@ -21,9 +29,11 @@ export const fetchProductList = params => dispatch => {
     })
         .then(response => {
             const total_count = response.headers.get('x-wp-total');
+            const paginator_count = Math.ceil(total_count / per_page);
             return response.json().then(data => ({
                 data,
                 total_count,
+                paginator_count,
             }));
         })
         .then(data => {
@@ -80,4 +90,11 @@ export const fetchRelatedProductList = productsId => dispatch => {
                 payload: false,
             });
         });
+};
+
+export const changeProductPage = page => dispatch => {
+    dispatch({
+        type: CHANGE_PRODUCT_PAGE,
+        payload: page,
+    });
 };

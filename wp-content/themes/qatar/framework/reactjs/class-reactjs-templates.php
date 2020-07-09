@@ -36,8 +36,11 @@ class ReactJs_Templates
         wp_enqueue_script('qatar-reactjs');
 
         $script_vars = [
+            'cart_page' => wc_get_cart_url(),
+            'cocart_rest_url' => get_rest_url(null, 'cocart/v1'),
             'consumer_base_code' => base64_encode($consumer_key . ':' . $consumer_secret),
             'not_available_image' => Theme_Manager::get_instance()->get_theme_option('not_available_image'),
+            'products_per_page' => 9,
             'qatar_api_url' => Theme_Manager::get_instance()->get_theme_option('qatar_api_url'),
             'receipts' => Theme_Manager::get_instance()->get_theme_option('contact_form_receipts'),
             'rest_url' => get_rest_url(null, 'qatar/v1'),
@@ -47,7 +50,6 @@ class ReactJs_Templates
             ),
             'theme_url' => $this->theme_url,
             'wc_rest_url' => get_rest_url(null, 'wc/v3'),
-            'cocart_rest_url' => get_rest_url(null, 'cocart/v1'),
         ];
 
         wp_localize_script('qatar-reactjs', 'wp_qatar_reactjs', $script_vars);

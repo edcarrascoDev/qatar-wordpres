@@ -8,6 +8,7 @@
     "watch": "webpack --mode development --watch"
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-lazy-load-image-component": "^1.4.0",

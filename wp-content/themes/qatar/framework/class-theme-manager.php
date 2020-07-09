@@ -174,14 +174,6 @@ class Theme_Manager {
             '2020-05-09'
         );
         wp_enqueue_style('theme-style');
-
-        wp_register_style(
-            'font-awesome',
-            'https://kit-free.fontawesome.com/releases/latest/css/free.min.css',
-            null,
-            '2020-50-09'
-        );
-        wp_enqueue_style('font-awesome');
     }
 
     /**

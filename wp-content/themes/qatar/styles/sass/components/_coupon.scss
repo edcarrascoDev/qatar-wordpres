@@ -1,0 +1,13 @@
+.coupon {
+    padding: 20px 40px;
+    border: 1px solid $light-color;
+
+    &__form {
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-start;
+        .form__group {
+            margin-right: 15px;
+        }
+    }
+}

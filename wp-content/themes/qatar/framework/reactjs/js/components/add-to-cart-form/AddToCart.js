@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Form, Control, actions } from 'react-redux-form';
 import { isEmpty, isNumeric } from 'validator';
@@ -17,6 +17,7 @@ class AddToCart extends Component {
             filteredOptions: [],
             selectedOptions: {},
             isInStock: true,
+            emptyOptions: false,
         };
     }
 
@@ -35,66 +36,76 @@ class AddToCart extends Component {
 
     render() {
         const { minValue, maxValue, inputValue, attributes, requestingInfo } = this.props;
-        const { isInStock } = this.state;
+        const { isInStock, emptyOptions } = this.state;
 
         return (
-            <Form
-                className="form"
-                model="addToCartItem"
-                onSubmit={val => this.handleSubmit(val)}
-                onSubmitFailed={val => this.updateValidity(val)}
-                onUpdate={val => this.updateValidity(val)}
-                validators={{
-                    quantity: { required, isNumeric },
-                    variation_id: !!attributes ? required : null,
-                }}
-            >
-                {!!attributes
-                    ? Object.keys(JSON.parse(attributes)).map(key => {
-                          return (
-                              <div className="form__group" key={key}>
-                                  <div className="mdc-select ">
-                                      <div className="mdc-select__anchor">
-                                          <i className="mdc-select__dropdown-icon" />
-                                          <div className="mdc-select__selected-text" />
-                                          <span className="mdc-floating-label">{key}</span>
-                                          <div className="mdc-line-ripple" />
-                                      </div>
-                                      <div className="mdc-select__menu mdc-menu mdc-menu-surface demo-width-class">
-                                          <ul className="mdc-list">
-                                              {this.getOptions(JSON.parse(attributes)[key], key)}
-                                          </ul>
+            <Fragment>
+                <Form
+                    className="form"
+                    model="addToCartItem"
+                    onSubmit={val => this.handleSubmit(val)}
+                    onSubmitFailed={val => this.updateValidity(val)}
+                    onUpdate={val => this.updateValidity(val)}
+                    validators={{
+                        quantity: { required, isNumeric },
+                        variation_id: !!attributes ? required : null,
+                    }}
+                >
+                    {!!attributes
+                        ? Object.keys(JSON.parse(attributes)).map(key => {
+                              return (
+                                  <div className="form__group" key={key}>
+                                      <div className="mdc-select">
+                                          <div className="mdc-select__anchor">
+                                              <i className="mdc-select__dropdown-icon" />
+                                              <div className="mdc-select__selected-text" />
+                                              <span className="mdc-floating-label">{key}</span>
+                                              <div className="mdc-line-ripple" />
+                                          </div>
+                                          <div className="mdc-select__menu mdc-menu mdc-menu-surface demo-width-class">
+                                              <ul className="mdc-list">
+                                                  {this.getOptions(
+                                                      JSON.parse(attributes)[key],
+                                                      key,
+                                                  )}
+                                              </ul>
+                                          </div>
                                       </div>
                                   </div>
-                              </div>
-                          );
-                      })
-                    : null}
-                <div className="single-product__actions">
-                    <div className="quantity">
-                        <Control.input
-                            type={'number'}
-                            id="addToCartItem.quantity"
-                            model="addToCartItem.quantity"
-                            disabled={requestingInfo}
-                            defaultValue={inputValue}
-                            min={minValue}
-                            max={maxValue > 0 ? maxValue : null}
-                        />
-                    </div>
+                              );
+                          })
+                        : null}
+                    <div className="single-product__actions">
+                        <div className="quantity">
+                            <Control.input
+                                type={'number'}
+                                id="addToCartItem.quantity"
+                                model="addToCartItem.quantity"
+                                disabled={requestingInfo}
+                                defaultValue={inputValue}
+                                min={minValue}
+                                max={maxValue > 0 ? maxValue : null}
+                            />
+                        </div>
 
-                    <button
-                        type="submit"
-                        className="mdc-button mdc-button--raised"
-                        disabled={requestingInfo || !isInStock}
-                    >
-                        Añadir al Carrito
-                    </button>
-                </div>
-                {!isInStock ? (
-                    <span>Lo sentimos, no tenemos disponibilidad para esta Variación</span>
-                ) : null}
-            </Form>
+                        <button
+                            type="submit"
+                            className="mdc-button mdc-button--raised"
+                            disabled={requestingInfo || !isInStock}
+                        >
+                            Añadir al Carrito
+                        </button>
+                    </div>
+                    {!isInStock ? (
+                        <span>Lo sentimos, no tenemos disponibilidad para esta Variación</span>
+                    ) : null}
+                    {emptyOptions ? (
+                        <span>
+                            Por favor selecciona las opciones de las variantes de este producto
+                        </span>
+                    ) : null}
+                </Form>
+            </Fragment>
         );
     }
 
@@ -151,17 +162,21 @@ class AddToCart extends Component {
     }
 
     handleSubmit(val) {
-        const { productId, addItemToCart } = this.props;
+        const { productId, addItemToCart, attributes } = this.props;
         const { selectedOptions } = this.state;
 
-        addItemToCart({ ...val, product_id: productId, variation: selectedOptions });
+        if (!!attributes && Object.entries(selectedOptions).length === 0) {
+            this.setState({ emptyOptions: true });
+        } else {
+            this.setState({ emptyOptions: false });
+            addItemToCart({ ...val, product_id: productId, variation: selectedOptions });
+        }
     }
 }
 
 const mapStateToProps = state => {
     return {
         requestingInfo: state.addToCart.requestingInfo,
-        formFeedback: state.addToCart.formFeedback,
     };
 };
 

@@ -1,12 +1,13 @@
 import './sass/styles.scss';
 
-import { MDCTopAppBar } from '@material/top-app-bar';
-import { MDCRipple } from '@material/ripple';
 import { MDCFloatingLabel } from '@material/floating-label';
-import { MDCTextField } from '@material/textfield';
-import { MDCSelect } from '@material/select';
 import { MDCLineRipple } from '@material/line-ripple';
+import { MDCRipple } from '@material/ripple';
+import { MDCSnackbar } from '@material/snackbar';
+import { MDCSelect } from '@material/select';
 import { MDCTabBar } from '@material/tab-bar';
+import { MDCTextField } from '@material/textfield';
+import { MDCTopAppBar } from '@material/top-app-bar';
 
 import Swiper from 'swiper';
 
@@ -47,6 +48,7 @@ window.onload = () => {
             ThemeScript.productSlider();
             ThemeScript.singleProductTab();
             ThemeScript.toggleCheckoutShipping();
+            ThemeScript.toggleCouponContainer();
         },
 
         isMobile: () => {
@@ -66,7 +68,19 @@ window.onload = () => {
 
             if (buttonRipple) {
                 Array.prototype.forEach.call(buttonRipple, item => {
-                    const button = new MDCRipple(item);
+                    new MDCRipple(item);
+                });
+            }
+
+            /**
+             * config Fab Button Ripple
+             * @type {Element}
+             */
+            const fabRipple = document.querySelectorAll('.mdc-fab');
+
+            if (fabRipple) {
+                Array.prototype.forEach.call(fabRipple, item => {
+                    new MDCRipple(item);
                 });
             }
 
@@ -125,8 +139,28 @@ window.onload = () => {
 
             const mdcTabBar = document.querySelector('.mdc-tab-bar');
 
-            if (mdcTabBar) {
+            if (!!mdcTabBar) {
                 new MDCTabBar(mdcTabBar);
+            }
+
+            /**
+             * get snack bar
+             * @type {NodeListOf<Element>}
+             */
+            const mdcSnackbars = document.querySelectorAll('.mdc-snackbar');
+
+            if (!!mdcSnackbars) {
+                Array.prototype.forEach.call(mdcSnackbars, mdcSnackbar => {
+                    const snackBar = new MDCSnackbar(mdcSnackbar);
+
+                    if (('timeout' in mdcSnackbar.dataset)) {
+                        snackBar.timeoutMs = Number(mdcSnackbar.dataset.timeout);
+                    }
+
+                    if (mdcSnackbar.classList.contains('mdc-snackbar--opened')) {
+                        snackBar.open();
+                    }
+                });
             }
         },
 
@@ -244,12 +278,22 @@ window.onload = () => {
             const shippingContainer = document.querySelector('.shipping_address');
 
             if (checkbox && shippingContainer) {
-                this.toggleDisplayOnCheckboxTrigger(checkbox, shippingContainer);
+                ThemeScript.toggleDisplayOnNodeElementTrigger(checkbox, shippingContainer);
             }
         },
 
-        toggleDisplayOnCheckboxTrigger(checkboxElement, containerElement) {
-            checkboxElement.addEventListener('change', () => {
+        toggleCouponContainer() {
+            const link = document.querySelector('.show_coupon');
+            const container = document.querySelector('.checkout_coupon');
+
+            if (link && container) {
+                ThemeScript.toggleDisplayOnNodeElementTrigger(link, container);
+            }
+        },
+
+        toggleDisplayOnNodeElementTrigger(nodeElement, containerElement) {
+            const event = nodeElement.matches('[type="checkbox"]') ? 'change' : 'click';
+            nodeElement.addEventListener(event, () => {
                 containerElement.style.display === 'none'
                     ? (containerElement.style.display =
                           containerElement.dataset.display || 'initial')

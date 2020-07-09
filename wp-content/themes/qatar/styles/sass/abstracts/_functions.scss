@@ -12,7 +12,7 @@
 /// @param {String} $path - image path
 /// @return {Url}
 @function icon($path) {
-  @return url('../assets/images/icons/' + $path);
+  @return url('../assets/icons/' + $path);
 }
 
 /// Returns URL a rem value based on pixel
