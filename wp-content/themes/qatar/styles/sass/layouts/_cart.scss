@@ -17,6 +17,9 @@
     &__product {
         &-thumbnail {
             grid-area: thumbnail;
+            > a {
+                display: block;
+            }
             img {
                 max-width: 100%;
                 max-height: 150px;
@@ -35,7 +38,6 @@
 
         &-subtotal {
             grid-area: subtotal;
-            text-align: right;
         }
 
         &-remove {
@@ -55,6 +57,9 @@
     &__coupon {
         background: $light-color;
         margin-bottom: 30px;
+        .coupon {
+            padding: 0;
+        }
     }
 
     @include media-breakpoint-up(md) {
@@ -71,6 +76,46 @@
 
         &__collaterals {
             margin-bottom: 30px;
+        }
+
+        &__product {
+            &-subtotal {
+                text-align: right;
+            }
+        }
+    }
+
+    @include media-breakpoint-down(md) {
+
+        &__item {
+            position: relative;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-areas:
+                    "thumbnail name name"
+                    "thumbnail subtotal quantity";
+            padding-top: 40px;
+        }
+
+        &__product {
+            &-thumbnail {
+                justify-self: center;
+                img {
+                    max-height: 100%;
+                }
+            }
+
+            &-remove {
+                position: absolute;
+                top: 0;
+                right: 0;
+            }
+            &-name {
+                max-width: 100%;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                font-weight: 400;
+            }
         }
     }
 }

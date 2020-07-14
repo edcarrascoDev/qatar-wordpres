@@ -78,6 +78,7 @@ defined('ABSPATH') || exit;
                     );
 
                     $field = wp_parse_args($field, $defaults);
+                    $field['required'] = false;
                     ?>
 
                     <div

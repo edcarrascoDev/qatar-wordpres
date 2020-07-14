@@ -279,6 +279,8 @@ window.onload = () => {
 
             if (checkbox && shippingContainer) {
                 ThemeScript.toggleDisplayOnNodeElementTrigger(checkbox, shippingContainer);
+
+                ThemeScript.setShippingToggleRequiredFields(checkbox, shippingContainer);
             }
         },
 
@@ -298,6 +300,16 @@ window.onload = () => {
                     ? (containerElement.style.display =
                           containerElement.dataset.display || 'initial')
                     : (containerElement.style.display = 'none');
+            });
+        },
+
+        setShippingToggleRequiredFields(checkbox, container) {
+            const inputElements = container.getElementsByTagName('input');
+
+            checkbox.addEventListener('change', () => {
+                Array.prototype.forEach.call(inputElements, inputElement => {
+                    inputElement.required = checkbox.checked;
+                });
             });
         },
     };

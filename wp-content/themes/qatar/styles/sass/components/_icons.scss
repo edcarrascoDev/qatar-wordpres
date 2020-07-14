@@ -49,6 +49,18 @@
         background-image: icon('chevron-forward-outline.svg');
     }
 
+    &--trash-warn-outline {
+        background-image: icon('trash-outline--warn.svg');
+    }
+
+    &--close-circle-outline-warn {
+        background-image: icon('close-circle-outline--warn.svg');
+    }
+
+    &--checkmark-circle-success {
+        background-image: icon('checkmark-circle-outline--success.svg');
+    }
+
     &--invert {
         filter: invert(1);
     }

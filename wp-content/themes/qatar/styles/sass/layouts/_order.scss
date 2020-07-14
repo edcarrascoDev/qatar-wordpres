@@ -1,0 +1,50 @@
+.order {
+    padding-top: 50px;
+
+    &__notice {
+        text-align: center;
+
+        .icon {
+            width: 100px;
+            height: 100px;
+        }
+
+        > p {
+            font-size: 1.5rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+        }
+    }
+
+    &__details {
+        margin: 50px auto 0;
+    }
+
+    &__overview {
+        margin: 0 auto;
+        padding: 30px;
+        background: $light-color;
+    }
+
+    &__overview, &__details {
+        max-width: 550px;
+    }
+
+    &__overview-item {
+        display: flex;
+        font-weight: 400;
+
+        &:not(:last-child) {
+            margin-bottom: 10px;
+        }
+
+        strong {
+            margin-left: auto;
+        }
+    }
+
+    &__actions {
+        text-align: center;
+        margin-top: 50px;
+    }
+}

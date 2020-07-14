@@ -20,6 +20,17 @@
         }
     }
 
+    &--order-details {
+        .table {
+            &__row {
+                justify-content: space-between;
+            }
+            &__column {
+                flex: initial;
+            }
+        }
+    }
+
     @include media-breakpoint-up(sm) {
         &__row {
             display: flex;

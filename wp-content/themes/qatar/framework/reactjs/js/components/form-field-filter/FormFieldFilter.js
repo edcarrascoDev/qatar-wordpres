@@ -11,8 +11,6 @@ class FormFieldFilter extends Component {
 
         const { args, value, keyValue, changeBillingCities, changeShippingCities } = props;
 
-        console.log(args);
-
         this.state = {
             [keyValue]: value || '',
         };
