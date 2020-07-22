@@ -45,9 +45,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php if ( $gateway->has_fields() || $gateway->get_description() ) : ?>
 		<div
                 class="tooltip__container payment_box payment_method_<?php echo esc_attr( $gateway->id ); ?>"
-                <?php if ( ! $gateway->chosen ) : ?>
-                    style="display:none;"
-                <?php endif; ?>
         >
             <div class="tooltip__trigger">
                 <span>?</span>

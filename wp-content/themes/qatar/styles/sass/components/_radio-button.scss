@@ -1,0 +1,12 @@
+.mdc-radio {
+    &.mdc-radio {
+        &--on-dark {
+            @include mdc-radio-unchecked-stroke-color($white-color);
+            ~ {
+                label {
+                    color: $white-color;
+                }
+            }
+        }
+    }
+}

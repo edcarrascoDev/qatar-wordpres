@@ -16,7 +16,9 @@ class Toolbar extends Component {
                     <i className="icon icon--options-outline" />
                 </button>
                 <div className="quick-actions__description">
-                    <span>{`Mostrando ${showingCount} de ${totalCount} Productos`}</span>
+                    <span>{`Mostrando ${showingCount} de ${
+                        !!totalCount ? totalCount : 0
+                    } Productos`}</span>
                 </div>
                 <div className="spacer" />
                 <div className="quick-actions__content">
