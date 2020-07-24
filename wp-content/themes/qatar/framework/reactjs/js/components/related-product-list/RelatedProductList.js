@@ -8,7 +8,6 @@ class relatedProductList extends Component {
         super(props);
 
         const { fetchRelatedProductList, productsId } = this.props;
-        console.log(productsId);
 
         fetchRelatedProductList(productsId);
     }

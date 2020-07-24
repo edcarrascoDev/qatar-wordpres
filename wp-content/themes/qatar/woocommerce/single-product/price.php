@@ -22,6 +22,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 global $product;
 
 ?>
-<div class="single-product__price">
-    <?php echo $product->get_price_html(); ?>
-</div>
+<div id="reactProductPrice" data-default-product-price='<?php echo $product->get_price_html(); ?>'></div>

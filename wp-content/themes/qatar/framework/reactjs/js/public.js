@@ -14,12 +14,14 @@ import ProductList from './components/product-list/ProductList';
 import RelatedProductList from './components/related-product-list/RelatedProductList';
 import AddToCartForm from './components/add-to-cart-form/AddToCart';
 import FormFieldFilter from './components/form-field-filter/FormFieldFilter';
+import ProductPrice from './components/product/ProductPrice';
 
 const componentContainersById = [
     'reactContactForm',
     'reactProductForm',
     'reactCategories',
     'reactProductDescription',
+    'reactProductPrice',
     'reactReviewForm',
     'reactProductList',
     'reactRelatedProductList',
@@ -38,6 +40,9 @@ componentContainersById.forEach(container => {
                 break;
             case 'reactProductDescription':
                 renderProduct(htmlContainer);
+                break;
+            case 'reactProductPrice':
+                renderProductPrice(htmlContainer);
                 break;
             case 'reactContactForm':
                 renderContactUsForm(htmlContainer);
@@ -97,6 +102,15 @@ function renderProduct(htmlElement) {
         </Provider>
     );
     ReactDOM.render(product, htmlElement);
+}
+
+function renderProductPrice(htmlElement) {
+    const productPrice = (
+        <Provider store={store}>
+            <ProductPrice defaultProductPrice={htmlElement.dataset.defaultProductPrice} />
+        </Provider>
+    );
+    ReactDOM.render(productPrice, htmlElement);
 }
 
 function renderContactUsForm(htmlElement) {

@@ -6,6 +6,7 @@ import { isEmpty, isNumeric } from 'validator';
 const required = str => (Number.isInteger(str) ? !isEmpty(str.toString()) : !isEmpty(str));
 
 import { addItemToCart } from '../../actions/addToCartActions';
+import { changeProductVariation } from '../../actions/productsActions';
 
 class AddToCart extends Component {
     constructor(props) {
@@ -37,6 +38,8 @@ class AddToCart extends Component {
     render() {
         const { minValue, maxValue, inputValue, attributes, requestingInfo } = this.props;
         const { isInStock, emptyOptions } = this.state;
+
+        console.log(this.props);
 
         return (
             <Fragment>
@@ -147,11 +150,13 @@ class AddToCart extends Component {
     }
 
     getVariationId(newSelectedOptions) {
-        const { productVariations, setVariationIdValue } = this.props;
+        const { productVariations, setVariationIdValue, changeProductVariation } = this.props;
 
         const variation = JSON.parse(productVariations).find(
             item => JSON.stringify(item.attributes) === JSON.stringify(newSelectedOptions),
         );
+
+        changeProductVariation(variation);
 
         if (variation && variation.is_in_stock) {
             setVariationIdValue(variation.variation_id);
@@ -185,6 +190,7 @@ const mapDispatchToProps = dispatch => {
         setVariationIdValue: value => {
             dispatch(actions.change('addToCartItem.variation_id', value));
         },
+        changeProductVariation: value => dispatch(changeProductVariation(value)),
         addItemToCart: values => dispatch(addItemToCart(values)),
     };
 };
