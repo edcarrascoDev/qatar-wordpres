@@ -6,7 +6,6 @@ class Category extends Component {
     render() {
         const { category, noAvailableImage, siteUrl } = this.props;
         const { name, image, slug } = category;
-        console.log(category);
 
         return (
             <div className="product">
@@ -22,7 +21,7 @@ class Category extends Component {
                         />
                     )}
                 </div>
-                <div className="product__row">
+                <div className="product__row text-center">
                     <h4 className="headline headline--h6">{name}</h4>
                 </div>
                 <div className="spacer" />

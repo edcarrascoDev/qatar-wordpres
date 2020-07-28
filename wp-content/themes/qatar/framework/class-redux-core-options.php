@@ -121,6 +121,11 @@ class Redux_Core_Options {
                     'title' => __('Página de Thank You', $this->theme_locale),
                 ],
                 [
+                    'id' => '404_image',
+                    'type' => 'media',
+                    'title' => __('Imagen de página no encontrada', $this->theme_locale),
+                ],
+                [
                     'id' => 'before_closing_header_scripts',
                     'type' => 'textarea',
                     'title' => __('Before Closing Header Scripts', $this->theme_locale),

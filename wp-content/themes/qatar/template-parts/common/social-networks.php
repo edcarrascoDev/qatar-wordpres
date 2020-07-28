@@ -5,7 +5,7 @@
                class="social__icon social__icon--facebook"
                target="_blank"
             >
-                <i class="fab fa-facebook-f"></i>
+                <i class="icon icon--facebook icon--invert"></i>
             </a>
         </li>
     <?php endif; ?>
@@ -16,7 +16,7 @@
                class="social__icon social__icon--instagram"
                target="_blank"
             >
-                <i class="fab fa-instagram"></i>
+                <i class="icon icon--instagram icon--invert"></i>
             </a>
         </li>
     <?php endif; ?>

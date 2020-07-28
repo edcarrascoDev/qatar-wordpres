@@ -1,61 +1,63 @@
 .social {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 
-  &__item {
-    &:not(:last-child) {
-      margin-right: calcRem(30px);
-    }
-  }
-
-  &__icon {
-    color: $light-color;
-    font-size: 2rem;
-    transition: all 100ms ease-in;
-
-    &:hover {
-      color: $light-color;
-      opacity: 0.6;
-    }
-  }
-
-  .main-header & {
-    .social {
-      &__item {
-        opacity: 0;
-        transition-duration: 0ms;
-      }
-    }
-  }
-
-  .main-header--is-open & {
-    .social {
-      &__item {
-        opacity: 1;
-        transition-property: all;
-        transition-timing-function: $mdc-animation-sharp-curve-timing-function;
-        @for $i from 1 through 8 {
-          &:nth-child(#{$i}) {
-            transition-delay: $i*150ms;
-            transition-duration: $i*350ms;
-          }
+    &__item {
+        &:not(:last-child) {
+            margin-right: calcRem(30px);
         }
-      }
     }
-  }
 
-  .footer & {
-    .social {
-      &__icon {
-        font-size: 1.3rem;
-      }
+    &__icon {
+        transition: all 100ms ease-in;
+
+        .icon {
+            width: 2rem;
+            height: 2rem;
+        }
+
+        &:hover {
+            opacity: 0.6;
+        }
     }
-  }
 
-  @include media-breakpoint-down(sm) {
+    .main-header & {
+        .social {
+            &__item {
+                opacity: 0;
+                transition-duration: 0ms;
+            }
+        }
+    }
+
+    .main-header--is-open & {
+        .social {
+            &__item {
+                opacity: 1;
+                transition-property: all;
+                transition-timing-function: $mdc-animation-sharp-curve-timing-function;
+                @for $i from 1 through 8 {
+                    &:nth-child(#{$i}) {
+                        transition-delay: $i*150ms;
+                        transition-duration: $i*350ms;
+                    }
+                }
+            }
+        }
+    }
+
     .footer & {
-      justify-content: center;
-      margin-bottom: 1rem;
+        .social {
+            &__icon {
+                font-size: 1.3rem;
+            }
+        }
     }
-  }
+
+    @include media-breakpoint-down(sm) {
+        .footer & {
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+    }
 }
