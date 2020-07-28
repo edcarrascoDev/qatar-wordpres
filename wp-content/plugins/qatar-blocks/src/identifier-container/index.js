@@ -2,7 +2,7 @@ import BaseBlock from '../base-block';
 
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
-const { PlainText } = wp.editor;
+const { PlainText } = wp.blockEditor;
 const { Fragment } = wp.element;
 
 class IdentifierContainer extends BaseBlock {

@@ -4,7 +4,7 @@ import getFileButton from '../common/get-file-button';
 const { __ } = wp.i18n;
 
 const { registerBlockType } = wp.blocks;
-const { InspectorControls, PlainText, RichText, MediaUpload } = wp.editor;
+const { InspectorControls, PlainText, RichText, MediaUpload } = wp.blockEditor;
 const { PanelRow, PanelBody, SelectControl, RadioControl, FormToggle } = wp.components;
 
 class Portfolio extends BaseBlock {

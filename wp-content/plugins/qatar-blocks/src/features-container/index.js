@@ -1,7 +1,7 @@
 import BaseBlock from '../base-block';
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
-const { InnerBlocks } = wp.editor;
+const { InnerBlocks } = wp.blockEditor;
 const { select } = wp.data;
 
 const ALLOWED_BLOCKS = ['qatar/feature-item'];

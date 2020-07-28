@@ -49,6 +49,7 @@ window.onload = () => {
             ThemeScript.singleProductTab();
             ThemeScript.toggleCheckoutShipping();
             ThemeScript.toggleCouponContainer();
+            ThemeScript.categoriesSlider();
         },
 
         isMobile: () => {
@@ -225,7 +226,7 @@ window.onload = () => {
             const galleryThumbs = new Swiper('.product-gallery__thumbs', {
                 direction: 'vertical',
                 spaceBetween: 5,
-                slidesPerView: 4,
+                slidesPerView: 4.2,
                 freeMode: true,
                 watchSlidesVisibility: true,
                 watchSlidesProgress: true,
@@ -247,6 +248,23 @@ window.onload = () => {
                 },
                 preloadImages: false,
                 lazy: true,
+            });
+        },
+
+        categoriesSlider() {
+            new Swiper('.categories-slider', {
+                init: true,
+                slidesPerView: 1.2,
+                spaceBetween: 25,
+                breakpoints: {
+                    576: {
+                        slidesPerView: 2,
+                    },
+                    1280: {
+                        slidesPerView: 4,
+                        allowTouchMove: false,
+                    },
+                },
             });
         },
 

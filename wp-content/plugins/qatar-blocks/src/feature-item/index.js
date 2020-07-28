@@ -3,7 +3,7 @@ import getImageButton from '../common/get-image-button';
 
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
-const { InspectorControls, PlainText, RichText, MediaUpload } = wp.editor;
+const { InspectorControls, PlainText, RichText, MediaUpload } = wp.blockEditor;
 const { PanelRow, PanelBody, SelectControl } = wp.components;
 
 class FeatureItem extends BaseBlock {

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { fetchCategories } from '../../actions/categoriesActions';
-import CategoriesLis from './CategoriesList';
+import CategoriesList from './CategoriesList';
 
 class Categories extends Component {
     componentWillMount() {
@@ -12,7 +12,7 @@ class Categories extends Component {
     render() {
         return (
             <section>
-                <CategoriesLis />
+                <CategoriesList />
             </section>
         );
     }

@@ -15,11 +15,13 @@ import RelatedProductList from './components/related-product-list/RelatedProduct
 import AddToCartForm from './components/add-to-cart-form/AddToCart';
 import FormFieldFilter from './components/form-field-filter/FormFieldFilter';
 import ProductPrice from './components/product/ProductPrice';
+import CustomCategoriesSlider from './components/categories/CustomCategoriesSlider';
 
 const componentContainersById = [
     'reactContactForm',
     'reactProductForm',
     'reactCategories',
+    'reactCustomCategories',
     'reactProductDescription',
     'reactProductPrice',
     'reactReviewForm',
@@ -37,6 +39,9 @@ componentContainersById.forEach(container => {
         switch (container) {
             case 'reactCategories':
                 renderCategories(htmlContainer);
+                break;
+            case 'reactCustomCategories':
+                renderCustomCategories(htmlContainer);
                 break;
             case 'reactProductDescription':
                 renderProduct(htmlContainer);
@@ -93,6 +98,15 @@ function renderCategories(htmlElement) {
         </Provider>
     );
     ReactDOM.render(categories, htmlElement);
+}
+
+function renderCustomCategories(htmlElement) {
+    const customCategories = (
+        <Provider store={store}>
+            <CustomCategoriesSlider categoriesId={htmlElement.dataset.categoriesId} />
+        </Provider>
+    );
+    ReactDOM.render(customCategories, htmlElement);
 }
 
 function renderProduct(htmlElement) {

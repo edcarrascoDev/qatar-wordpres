@@ -1,7 +1,7 @@
 import BaseBlock from '../base-block';
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
-const { InspectorControls, PlainText, InnerBlocks } = wp.editor;
+const { InspectorControls, PlainText, InnerBlocks } = wp.blockEditor;
 const { PanelRow, PanelBody, RangeControl } = wp.components;
 const { Fragment } = wp.element;
 

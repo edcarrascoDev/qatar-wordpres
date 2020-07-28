@@ -1,10 +1,11 @@
 import { saveInLocalStorage, saveInSessionStorage } from '../utils';
-import { CHANGE_CATEGORY, FETCH_CATEGORIES } from './types';
+import { CHANGE_CATEGORY, FETCH_CATEGORIES, FETCH_CUSTOM_CATEGORIES } from './types';
 
-export const fetchCategories = (parent = 0) => dispatch => {
+export const fetchCategories = (parent = 0, include = []) => dispatch => {
     const params = new URLSearchParams({
         hide_empty: true,
         parent,
+        include,
     });
 
     const urlRequest = `${wp_qatar_reactjs.wc_rest_url}/products/categories?${params.toString()}`;
@@ -18,13 +19,21 @@ export const fetchCategories = (parent = 0) => dispatch => {
     })
         .then(response => response.json())
         .then(data => {
-            console.log(data);
-            saveInLocalStorage('products_categories', data);
+            if (include.length > 0) {
+                saveInLocalStorage('custom_categories', data);
 
-            dispatch({
-                type: FETCH_CATEGORIES,
-                payload: data,
-            });
+                dispatch({
+                    type: FETCH_CUSTOM_CATEGORIES,
+                    payload: data,
+                });
+            } else {
+                saveInLocalStorage('products_categories', data);
+
+                dispatch({
+                    type: FETCH_CATEGORIES,
+                    payload: data,
+                });
+            }
         });
 };
 

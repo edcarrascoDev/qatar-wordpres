@@ -4,6 +4,7 @@ class Theme_Shortcode {
 
     public function __construct() {
         add_shortcode('portafolio', [$this, 'portfolioShortcode']);
+        add_shortcode('categorias_principales', [$this, 'customCategories']);
     }
 
     public function portfolioShortcode($params) {
@@ -26,6 +27,16 @@ class Theme_Shortcode {
                     <?php echo $linkText; ?>
                 </a>
             </div>
+        <?php return ob_get_clean();
+    }
+
+    public function customCategories() {
+        ob_start();
+
+        $categoriesId = Theme_Manager::get_instance()->get_theme_option('custom_categories');
+        ?>
+
+        <div id="reactCustomCategories" data-categories-id='<?php print_r(json_encode($categoriesId)) ?>'></div>
         <?php return ob_get_clean();
     }
 }

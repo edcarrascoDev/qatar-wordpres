@@ -2,7 +2,7 @@ import BaseBlock from '../base-block';
 import getImageButton from '../common/get-image-button';
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
-const { InspectorControls, PlainText, RichText, MediaUpload } = wp.editor;
+const { InspectorControls, PlainText, RichText, MediaUpload } = wp.blockEditor;
 const { PanelBody, FormToggle, SelectControl } = wp.components;
 
 class HeroVideoSection extends BaseBlock {

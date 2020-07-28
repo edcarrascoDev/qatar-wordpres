@@ -3,7 +3,7 @@ import getImageButton from '../common/get-image-button';
 
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
-const { InspectorControls, PlainText, RichText, MediaUpload } = wp.editor;
+const { InspectorControls, PlainText, RichText, MediaUpload } = wp.blockEditor;
 const { BaseControl, PanelBody, FormToggle, SelectControl } = wp.components;
 
 class HeroSectionSlide extends BaseBlock {
@@ -16,7 +16,7 @@ class HeroSectionSlide extends BaseBlock {
 
     attributes = {
         imageUrl: {
-            attribute: 'src',
+            attribute: 'srcset',
             selector: '.hero__background source',
         },
         imageId: {
@@ -28,11 +28,11 @@ class HeroSectionSlide extends BaseBlock {
             selector: '.hero__background img',
         },
         mobileImageUrl: {
-            attribute: 'srcset',
+            attribute: 'src',
             selector: '.hero__background img',
         },
         mobileImageId: {
-            attribute: 'data-id',
+            attribute: 'id',
             selector: '.hero__background img',
         },
         headline: {
@@ -180,15 +180,19 @@ class HeroSectionSlide extends BaseBlock {
                     <BaseControl label={'Imagen para móviles'}>
                         <MediaUpload
                             onSelect={media => {
-                                setAttributes({ decoratorImageUrl: media.url });
+                                setAttributes({
+                                    mobileImageUrl: media.sizes['header-mobile']
+                                        ? media.sizes['header-mobile'].url
+                                        : media.url,
+                                });
                             }}
                             type={'image'}
-                            value={attributes.mobileImageUrl}
+                            value={attributes.mobileImageId}
                             render={({ open }) =>
                                 getImageButton(
                                     {
                                         imageUrl: attributes.mobileImageUrl,
-                                        placeholder: __('Selecciona una imagen'),
+                                        placeholder: __('Choose an Image for Mobile'),
                                     },
                                     open,
                                 )

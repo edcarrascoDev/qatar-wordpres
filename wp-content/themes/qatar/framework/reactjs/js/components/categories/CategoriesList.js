@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getImageUrl } from '../../common/getImageUrl';
 
-class CategoriesLis extends Component {
+class CategoriesList extends Component {
     render() {
         return <section>{this.categoriesList()}</section>;
     }
@@ -20,7 +20,9 @@ class CategoriesLis extends Component {
                             alt={category.name}
                         />
                     </div>
-                    <h4 className={'headline headline--h6'}>{category.name}</h4>
+                    <div className="product__row">
+                        <h4 className={'headline headline--h6'}>{category.name}</h4>
+                    </div>
                 </div>
             );
         });
@@ -37,4 +39,4 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps)(CategoriesLis);
+export default connect(mapStateToProps)(CategoriesList);

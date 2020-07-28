@@ -21,6 +21,9 @@
             color: $light-color;
             font-size: $font-size-medium;
         }
+        .headline, p {
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+        }
     }
 
     &__background {
@@ -52,6 +55,15 @@
 
             video {
                 filter: brightness(0.5);
+            }
+        }
+
+        &:not(&--dark) {
+            ~ .hero {
+                &__content {
+                    padding: 20px 30px;
+                    background: rgba(0, 0, 0, 0.3);
+                }
             }
         }
     }

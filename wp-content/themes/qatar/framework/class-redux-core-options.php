@@ -210,6 +210,11 @@ class Redux_Core_Options {
                     'id' => 'store_mobile_image',
                     'type' => 'media',
                     'title' => __('Imagen principal de la tienda en celulares', $this->theme_locale),
+                ],
+                [
+                    'id' => 'custom_categories',
+                    'type' => 'multi_text',
+                    'title' => __('Categorías principales', $this->theme_locale),
                 ]
             ]
         ];

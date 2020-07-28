@@ -2,7 +2,7 @@ import BaseBlock from '../base-block';
 import getImageButton from '../common/get-image-button';
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
-const { InspectorControls, PlainText, InnerBlocks, MediaUpload } = wp.editor;
+const { InspectorControls, PlainText, InnerBlocks, MediaUpload } = wp.blockEditor;
 const { PanelRow, PanelBody, BaseControl } = wp.components;
 const { Fragment } = wp.element;
 
