@@ -9,8 +9,6 @@ import { MDCTabBar } from '@material/tab-bar';
 import { MDCTextField } from '@material/textfield';
 import { MDCTopAppBar } from '@material/top-app-bar';
 
-import Swiper from 'swiper';
-
 window.onload = () => {
     let ThemeScript = {};
 

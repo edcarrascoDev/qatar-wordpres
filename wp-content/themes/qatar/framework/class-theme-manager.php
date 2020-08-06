@@ -72,6 +72,7 @@ class Theme_Manager {
         $phone = str_replace(" ", "", $phone);
         return "(" . substr($phone, 0, 3) . ")" . " " . substr($phone, 3, 3) . " " . substr($phone, 6);
     }
+
     function add_woo_sidebar() {
 
         if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
@@ -166,6 +167,10 @@ class Theme_Manager {
      */
     private function enqueue_styles() {
         wp_enqueue_style('main-theme-style', get_stylesheet_uri());
+        wp_dequeue_style( 'wp-block-library' );
+        wp_dequeue_style( 'wp-block-library-theme' );
+        wp_dequeue_style( 'wc-block-style' );
+        wp_dequeue_style( 'storefront-gutenberg-blocks' );
 
         wp_register_style(
             'theme-style',
@@ -174,6 +179,30 @@ class Theme_Manager {
             '2020-05-09'
         );
         wp_enqueue_style('theme-style');
+
+        wp_register_style(
+            'google-font-ubuntu',
+            'https://fonts.googleapis.com/css?family=Ubuntu:400,700&display=swap',
+            null,
+            '1.0.0',
+        );
+        wp_enqueue_style('google-font-ubuntu');
+
+        wp_register_style(
+            'google-font-montserrat',
+            'https://fonts.googleapis.com/css?family=Montserrat:300,500,700&display=swap',
+            null,
+            '1.0.0',
+        );
+        wp_enqueue_style('google-font-montserrat');
+
+        wp_register_style(
+            'swiper-css',
+            'https://unpkg.com/swiper/swiper-bundle.min.css',
+            null,
+            '1.0.0',
+        );
+        wp_enqueue_style('swiper-css');
     }
 
     /**
@@ -185,17 +214,8 @@ class Theme_Manager {
          */
         wp_deregister_script('jquery');
 
-        /**
-         * Scroll Reveal
-         */
-        wp_register_script(
-            'swiper-js',
-            $this->get_theme_url('assets/js/vendor/swiper.min.js'),
-            ['jquery'],
-            null,
-            true
-        );
-        wp_enqueue_script('swiper-js');
+        wp_deregister_script( 'wp-embed' );
+        wp_deregister_script( 'wp-emoji-release' );
 
         /**
          * Main Theme Script
@@ -220,6 +240,22 @@ class Theme_Manager {
             true
         );
         wp_enqueue_script('theme-script-js');
+
+        /**
+         * Register swiper Slider
+         */
+        wp_register_script(
+            'swiper-js',
+            'https://unpkg.com/swiper/swiper-bundle.min.js',
+            null,
+            '6.0.4',
+        );
+        wp_enqueue_script('swiper-js');
+    }
+
+    function remove_unnecessary_css() {
+        wp_dequeue_script('wp-block-library');
+        wp_dequeue_script('wc-block-vendors-style');
     }
 
     function remove_jquery() {

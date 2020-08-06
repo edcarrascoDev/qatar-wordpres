@@ -152,7 +152,7 @@ class CoverContent extends BaseBlock {
                 />
                 <RichText.Content tagName={'p'} value={attributes.content} />
 
-                <a href={attributes.linkText} className={`mdc-button ${buttonClasses}`}>
+                <a href={attributes.linkUrl} className={`mdc-button ${buttonClasses}`}>
                     {attributes.linkText}
                 </a>
             </div>

@@ -170,7 +170,7 @@ class FeatureItem extends BaseBlock {
                     />
                     <RichText.Content tagName={'p'} value={attributes.content} />
 
-                    <a href={attributes.linkText} className="link link--light">
+                    <a href={attributes.linkUrl} className="link link--light">
                         {attributes.linkText}
                     </a>
                 </div>
