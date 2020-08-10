@@ -42,11 +42,15 @@ $attachment_ids = $product->get_gallery_image_ids();
         <div class="swiper-wrapper">
             <?php
                 if ( $product->get_image_id() ) {
-                    $thumb = Theme_Woocommerce::get_instance()->iq_get_gallery_image_html( $post_thumbnail_id );
+                    $thumb = '<div class="swiper-slide">';
+                    $thumb .= Theme_Woocommerce::get_instance()->iq_get_gallery_image_html( $post_thumbnail_id );
+                    $thumb .= '</div>';
 
                     if ($attachment_ids) {
                         foreach( $attachment_ids as $attachment_id ) {
+                            $thumb .= '<div class="swiper-slide">';
                             $thumb .= Theme_Woocommerce::get_instance()->iq_get_gallery_image_html( $attachment_id );
+                            $thumb .= '</div>';
                         }
                     }
                     echo apply_filters( 'woocommerce_single_product_image_thumbnail_html', $thumb, $post_thumbnail_id );
@@ -58,11 +62,15 @@ $attachment_ids = $product->get_gallery_image_ids();
         <div class="swiper-wrapper">
             <?php
                 if ( $product->get_image_id() ) {
-                    $html = Theme_Woocommerce::get_instance()->iq_get_gallery_image_html( $post_thumbnail_id, true );
+                    $html = '<div class="swiper-slide"><div class="product-gallery__image">';
+                    $html .= Theme_Woocommerce::get_instance()->iq_get_gallery_image_html( $post_thumbnail_id, true );
+                    $html .= '<div class="swiper-lazy-preloader swiper-lazy-preloader-black"></div></div></div>';
 
                     if ($attachment_ids) {
                         foreach( $attachment_ids as $attachment_id ) {
+                            $html .= '<div class="swiper-slide"><div class="product-gallery__image">';
                             $html .= Theme_Woocommerce::get_instance()->iq_get_gallery_image_html( $attachment_id, true );
+                            $html .= '<div class="swiper-lazy-preloader swiper-lazy-preloader-black"></div></div></div>';
                         }
                     }
                 } else {

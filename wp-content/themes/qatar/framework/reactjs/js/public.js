@@ -5,14 +5,13 @@ import { Provider } from 'react-redux';
 import Loader from './components/Loader';
 
 import store from './store';
+import AddToCartForm from './components/add-to-cart-form/AddToCart';
 import Categories from './components/categories/Categories';
 import ContactUsForm from './components/contact-us-form/ContactUsForm';
-import Product from './components/product/Product';
 import ProductInquiryForm from './components/product-inquiry-form/ProductInquiryForm';
-import ReviewForm from './components/review-form/ReviewForm';
 import ProductList from './components/product-list/ProductList';
+import ReviewForm from './components/review-form/ReviewForm';
 import RelatedProductList from './components/related-product-list/RelatedProductList';
-import AddToCartForm from './components/add-to-cart-form/AddToCart';
 import FormFieldFilter from './components/form-field-filter/FormFieldFilter';
 import ProductPrice from './components/product/ProductPrice';
 import CustomCategoriesSlider from './components/categories/CustomCategoriesSlider';
@@ -42,9 +41,6 @@ componentContainersById.forEach(container => {
                 break;
             case 'reactCustomCategories':
                 renderCustomCategories(htmlContainer);
-                break;
-            case 'reactProductDescription':
-                renderProduct(htmlContainer);
                 break;
             case 'reactProductPrice':
                 renderProductPrice(htmlContainer);
@@ -107,15 +103,6 @@ function renderCustomCategories(htmlElement) {
         </Provider>
     );
     ReactDOM.render(customCategories, htmlElement);
-}
-
-function renderProduct(htmlElement) {
-    const product = (
-        <Provider store={store}>
-            <Product />
-        </Provider>
-    );
-    ReactDOM.render(product, htmlElement);
 }
 
 function renderProductPrice(htmlElement) {

@@ -76,16 +76,7 @@ class Theme_Woocommerce {
                 $main_image
             )
         ); ?>
-
-        <div class="swiper-slide">
-            <div class="product-gallery__image">
-                <?php echo $image; ?>
-                <?php if ($main_image) : ?>
-                    <div class="swiper-lazy-preloader swiper-lazy-preloader-black"></div>
-                <?php endif; ?>
-            </div>
-        </div>
-        <?php return ob_get_clean();
+        <?php return $image;
     }
 
     /**

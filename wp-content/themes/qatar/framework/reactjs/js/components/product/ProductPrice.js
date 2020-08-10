@@ -5,10 +5,14 @@ import { changeProductVariation } from '../../actions/productsActions';
 class ProductPrice extends Component {
     constructor(props) {
         super(props);
-        const { defaultProductPrice, changeProductVariation } = this.props;
+        const { defaultProductPrice, defaultProductGallery, changeProductVariation } = this.props;
 
-        changeProductVariation({ price_html: defaultProductPrice });
+        changeProductVariation({
+            price_html: defaultProductPrice,
+            variation_gallery_images: defaultProductGallery,
+        });
     }
+
     render() {
         const { productVariation } = this.props;
         return (

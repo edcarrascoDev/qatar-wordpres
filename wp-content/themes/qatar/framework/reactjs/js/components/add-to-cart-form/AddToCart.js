@@ -39,8 +39,6 @@ class AddToCart extends Component {
         const { minValue, maxValue, inputValue, attributes, requestingInfo } = this.props;
         const { isInStock, emptyOptions } = this.state;
 
-        console.log(this.props);
-
         return (
             <Fragment>
                 <Form
