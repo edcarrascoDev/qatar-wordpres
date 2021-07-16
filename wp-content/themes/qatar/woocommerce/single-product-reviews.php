@@ -41,7 +41,7 @@ $customer_verified = wc_customer_bought_product('', get_current_user_id(), $prod
                         <?php if ($rating_count > 0): ?>
                             <div>
                                 <?php echo Theme_Woocommerce::get_instance()->iq_get_rating_html($average); ?>
-                                Basado en <?php echo $rating_count ?> <?php echo $rating_count > 1 ? 'valoraciones' : 'valoración' ?>.
+                                Basado en <?php echo $rating_count ?> <?php echo $rating_count > 1 ? 'calificaciones' : 'calificación' ?>.
                             </div>
                         <?php else : ?>
                             <small>Se el primero en agregar una comentario a este producto</small>

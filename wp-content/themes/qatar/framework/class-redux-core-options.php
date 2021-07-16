@@ -161,6 +161,12 @@ class Redux_Core_Options {
             'icon' => 'el el-map-marker',
             'fields' => [
                 [
+                    'id' => 'footer_location',
+                    'type' => 'multi_text',
+                    'title' => 'Locations',
+                    'desc' => 'Use este formato NOMBRE_DEL_LUGAR|DIRRECCIÓN|CORREO|DÍAS_Y_HORARIOS|TELÉFONO_1|TÉLEFONO_2|FACEBOOK|INSTAGRAM'
+                ],
+                [
                     'id' => 'location_city',
                     'type' => 'text',
                     'title' => 'Ciudad'

@@ -2,9 +2,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { fetchProductList } from '../../actions/productListActions';
-import { changeFilter } from '../../actions/filtersActions';
+import { changeSearchValue } from '../../actions/filtersActions';
 
 class Toolbar extends Component {
+    constructor(props) {
+        super(props);
+
+        this.timeout = 0;
+    }
+
     render() {
         const { totalCount, showingCount, openFilter } = this.props;
         return (
@@ -22,28 +28,29 @@ class Toolbar extends Component {
                 </div>
                 <div className="spacer" />
                 <div className="quick-actions__content">
-                    <div className="mdc-text-field">
+                    <label className="mdc-text-field">
+                        <span className="mdc-floating-label">Buscar</span>
                         <input
                             className={'mdc-text-field__input'}
                             id="searchProduct"
                             placeholder="ej: portabicicletas"
                             onChange={event => this.handleChange(event)}
                         />
-                        <label className="mdc-floating-label" htmlFor="searchProduct">
-                            Buscar
-                        </label>
                         <div className="mdc-line-ripple" />
-                    </div>
+                    </label>
                 </div>
             </div>
         );
     }
 
     handleChange(event) {
-        const { fetchProductList } = this.props;
+        const { fetchProductList, changeSearchValue } = this.props;
         const { value } = event.target;
-
-        fetchProductList({ search: value });
+        if (this.timeout) clearTimeout(this.timeout);
+        this.timeout = setTimeout(() => {
+            changeSearchValue(value);
+            fetchProductList({ search: value });
+        }, 1000);
     }
 }
 
@@ -58,4 +65,6 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps, { fetchProductList, changeFilter })(Toolbar);
+export default connect(mapStateToProps, { fetchProductList, changeSearchValue })(
+    Toolbar,
+);

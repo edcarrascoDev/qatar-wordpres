@@ -28,6 +28,10 @@ if ( ! $short_description ) {
 }
 
 ?>
-<div class="single-product__excerpt mb-45">
+<div class="single-product__excerpt">
 	<?php echo $short_description; // WPCS: XSS ok. ?>
+</div>
+
+<div class="single-product__brand mb-45">
+    <img src="<?php echo Theme_Manager::get_instance()->get_taxonomy_image_by_post_id($post->ID); ?>" alt="">
 </div>

@@ -17,3 +17,11 @@
         }
     }
 }
+
+.MuiSnackbar-root  {
+    &[color='error'] {
+        .MuiSnackbarContent-root {
+            background: $warn-color;
+        }
+    }
+}

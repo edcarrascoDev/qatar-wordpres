@@ -73,6 +73,10 @@ class Theme_Manager {
         return "(" . substr($phone, 0, 3) . ")" . " " . substr($phone, 3, 3) . " " . substr($phone, 6);
     }
 
+    public function get_address_url($address) {
+        return "https://www.google.com/maps/place/" . preg_replace('/\s+/', '+', $address);
+    }
+
     function add_woo_sidebar() {
 
         if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
@@ -127,6 +131,9 @@ class Theme_Manager {
         add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_scripts']);
         add_action('wp_enqueue_scripts', [$this, 'enqueue_front_scripts']);
         add_action('wp_default_scripts', [$this, 'remove_jquery']);
+
+        add_action( 'init',  [$this, 'create_brands_hierarchical_taxonomy'], 0 );
+        add_action( 'rest_api_init', [$this, 'register_rest_field_for_custom_taxonomy_brands'] );
     }
 
     /**
@@ -176,7 +183,7 @@ class Theme_Manager {
             'theme-style',
             $this->get_theme_url('styles/dist/main.css'),
             null,
-            '2020-05-09'
+            '2021-06-17'
         );
         wp_enqueue_style('theme-style');
 
@@ -253,11 +260,9 @@ class Theme_Manager {
         wp_enqueue_script('swiper-js');
     }
 
-    function remove_unnecessary_css() {
-        wp_dequeue_script('wp-block-library');
-        wp_dequeue_script('wc-block-vendors-style');
-    }
-
+    /**
+     * Remove Jquery Library
+     */
     function remove_jquery() {
         if (!is_admin() && isset($scripts->registered['jquery'])) {
             $scripts->remove('jquery');
@@ -265,8 +270,139 @@ class Theme_Manager {
         }
     }
 
+    /**
+     *
+     * create a custom taxonomy name it topics for your posts
+     */
+
+    function create_brands_hierarchical_taxonomy() {
+
+        $labels = [
+            'name' => _x( 'Brands', 'taxonomy general name' ),
+            'singular_name' => _x( 'Marca', 'taxonomy singular name' ),
+            'search_items' =>  __( 'Buscar Marcas' ),
+            'all_items' => __( 'Todas las marcas' ),
+            'parent_item' => __( 'Marca principal' ),
+            'parent_item_colon' => __( 'Marca principal:' ),
+            'edit_item' => __( 'Editar Marca' ),
+            'update_item' => __( 'Actualizar Marca' ),
+            'add_new_item' => __( 'Agregar Nueva Marca' ),
+            'new_item_name' => __( 'Nuevo Nombre de la marca' ),
+            'menu_name' => __( 'Marcas' ),
+        ];
+
+        $capabilities = [
+            'manage_terms'               => 'manage_woocommerce',
+            'edit_terms'                 => 'manage_woocommerce',
+            'delete_terms'               => 'manage_woocommerce',
+            'assign_terms'               => 'manage_woocommerce',
+        ];
+
+
+        $args = [
+            'labels'                     => $labels,
+            'show_in_rest'               => true,
+            'hierarchical'               => true,
+            'public'                     => true,
+            'show_ui'                    => true,
+            'show_admin_column'          => false,
+            'show_in_nav_menus'          => true,
+            'show_tagcloud'              => true,
+            'capabilities'               => $capabilities,
+        ];
+
+        register_taxonomy( 'brands', ['product'], $args );
+        register_taxonomy_for_object_type( 'brands', 'product' );
+
+    }
+
+    /**
+     *
+     *  Register taxonomy API for WC
+     */
+    function register_rest_field_for_custom_taxonomy_brands() {
+
+        register_rest_field('product', "brands", array(
+            'get_callback'    => [$this, 'product_get_callback'],
+            'update_callback'    => [$this, 'product_update_callback'],
+            'schema' => null,
+        ));
+
+    }
+
+
+    /**
+     * @param $post
+     * @param $attr
+     * @param $request
+     * @param $object_type
+     * @return array
+     * Get Taxonomy record in wc REST API
+     */
+
+    function product_get_callback($post, $attr, $request, $object_type) {
+        $terms = [];
+
+        foreach (wp_get_post_terms( $post[ 'id' ],'brands') as $term) {
+            $terms[] = [
+                'id'        => $term->term_id,
+                'name'      => $term->name,
+                'slug'      => $term->slug,
+                'image_src'  => get_taxonomy_image($term->term_id)
+            ];
+        }
+
+        return $terms;
+    }
+
+    public function get_taxonomy_image_by_post_id($post_id) {
+        $term = wp_get_post_terms( $post_id,'brands')[0];
+
+        return get_taxonomy_image($term->term_id);
+    }
+
+    /**
+     * @param $values
+     * @param $post
+     * @param $attr
+     * @param $request
+     * @param $object_type
+     * Update Taxonomy record in wc REST API
+     */
+    function product_update_callback($values, $post, $attr, $request, $object_type) {
+        $postId = $post->get_id();
+        wp_set_object_terms( $postId, $values , 'brands');
+    }
+
     public function get_social_network_url($social_network) {
         return $this->get_theme_option($social_network);
+    }
+
+    /**
+     * Returns the footer options in array
+     * @return array
+     */
+
+    public function get_footer_locations()
+    {
+        $locations_raw = $this->get_theme_option('footer_location');
+        $locations = [];
+
+        foreach ($locations_raw as $location) {
+            $exploded_value = explode('|', $location);
+            $locations[] = [
+                'name' => $exploded_value[0],
+                'address' => isset($exploded_value[1]) ? $exploded_value[1] : '',
+                'email' => isset($exploded_value[2]) ? $exploded_value[2] : '',
+                'open_hours' => isset($exploded_value[3]) ? $exploded_value[3] : '',
+                'phone_1' => isset($exploded_value[4]) ? $exploded_value[4] : '',
+                'phone_2' => isset($exploded_value[5]) ? $exploded_value[5] : '',
+                'facebook' => isset($exploded_value[6]) ? $exploded_value[6] : '',
+                'instagram' => isset($exploded_value[7]) ? $exploded_value[7] : '',
+            ];
+        }
+
+        return $locations;
     }
 
     /**
@@ -317,6 +453,7 @@ class Theme_Manager {
         }
         return $classes;
     }
+
 
     /**
      * @return string

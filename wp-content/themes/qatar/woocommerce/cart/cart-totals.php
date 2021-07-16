@@ -73,10 +73,10 @@ defined( 'ABSPATH' ) || exit;
 			if ( 'itemized' === get_option( 'woocommerce_tax_total_display' ) ) {
 				foreach ( WC()->cart->get_tax_totals() as $code => $tax ) { // phpcs:ignore WordPress.WP.GlobalVariablesOverride.OverrideProhibited
 					?>
-					<div class="shop-table__tr tax-rate tax-rate-<?php echo esc_attr( sanitize_title( $code ) ); ?>">
+					<div  class="shop-table__tr tax-rate tax-rate-<?php echo esc_attr( sanitize_title( $code ) ); ?>">
 						<div class="shop-table__th"> <?php echo esc_html( $tax->label ) . $estimated_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
 						<div class="shop-table__td" data-title="<?php echo esc_attr( $tax->label ); ?>"><?php echo wp_kses_post( $tax->formatted_amount ); ?></div>
-					</div>
+					</div >
 					<?php
 				}
 			} else {

@@ -1,5 +1,5 @@
-import { CHANGE_FILTER, FILTER_SELECTED } from './types';
-import { saveInLocalStorage, saveInSessionStorage } from '../utils';
+import { CHANGE_FILTER, CHANGE_SEARCH_VALUE } from './types';
+import { saveInSessionStorage } from '../utils';
 
 export const changeFilter = filters => dispatch => {
     saveInSessionStorage('selected_filters', filters);
@@ -7,5 +7,13 @@ export const changeFilter = filters => dispatch => {
     dispatch({
         type: CHANGE_FILTER,
         payload: filters,
+    });
+};
+
+
+export const changeSearchValue = value => dispatch => {
+    dispatch({
+        type: CHANGE_SEARCH_VALUE,
+        payload: value,
     });
 };

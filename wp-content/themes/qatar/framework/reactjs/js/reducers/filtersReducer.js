@@ -1,8 +1,9 @@
 import { getFromSessionStorage } from '../utils';
-import { CHANGE_FILTER } from '../actions/types';
+import { CHANGE_FILTER, CHANGE_SEARCH_VALUE } from '../actions/types';
 
 const initialState = {
     selected_filters: getFromSessionStorage('selected_filters') || [],
+    search_value: '',
 };
 
 const filtersReducer = (state = initialState, action) => {
@@ -10,6 +11,8 @@ const filtersReducer = (state = initialState, action) => {
 
     if (type === CHANGE_FILTER) {
         return { ...state, selected_filters: payload };
+    } else if (type === CHANGE_SEARCH_VALUE) {
+        return { ...state,  search_value: payload };
     }
     return state;
 };

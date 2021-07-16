@@ -1,38 +1,66 @@
 .filter {
-    &__title {
-        font-size: 1.4rem;
-        margin-bottom: 1.2rem;
-    }
+    margin-bottom: 30px;
 
-    &__selected {
-        cursor: pointer;
-        position: relative;
-        display: inline-block;
-        .filter__title {
-            font-size: 1.2rem;
-            padding: 3px 10px;
-            background: $light-grey;
-            font-weight: 400;
-            border-radius: 14px;
-            &::after {
-                content: '\2715';
-                font-size: 0.5rem;
-                position: relative;
-                bottom: 9px;
-                margin-left: 3px;
+    .filter {
+        &__title {
+            font-size: 1rem;
+            margin-bottom: 1.2rem;
+        }
+
+        &:not(&__selected) {
+            .filter {
+                &__title {
+                    text-transform: uppercase;
+                }
             }
         }
-    }
-    &__list {
-        > li {
-            a {
-                padding-bottom: 1rem;
-                cursor: pointer;
-                display: block;
 
-                &:hover {
-                    color: $secondary-color;
-                    text-decoration: none;
+        &__selected {
+            cursor: pointer;
+            position: relative;
+            display: inline-block;
+
+            .filter__title {
+                font-size: 0.9rem;
+                padding: 3px 10px;
+                background: $light-grey;
+                font-weight: 400;
+                border-radius: 14px;
+
+                &::after {
+                    content: '\2715';
+                    font-size: 0.5rem;
+                    position: relative;
+                    bottom: 2px;
+                    margin-left: 3px;
+                }
+            }
+        }
+
+        &__price {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+
+            > .mdc-text-field {
+                flex: 1 1 0;
+            }
+        }
+
+        &__list {
+            > li {
+                a {
+                    padding-bottom: 1rem;
+                    cursor: pointer;
+                    font-size: .9rem;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+
+                    &:hover {
+                        color: $secondary-color;
+                        text-decoration: none;
+                    }
                 }
             }
         }

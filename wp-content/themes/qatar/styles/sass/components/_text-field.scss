@@ -1,0 +1,43 @@
+.mdc-text-field {
+
+    &.mdc-text-field {
+        &--compact {
+            height: 40px;
+
+            .mdc-text-field {
+                &__input {
+                    font-size: .9rem;
+                }
+
+                &__affix {
+                    line-height: 40px;
+                    &--prefix {
+                        padding-left: 4px;
+                    }
+                }
+            }
+
+            &.mdc-text-field {
+                &--outlined {
+                    .mdc-text-field {
+                        &__input {
+                            padding: 8px 9px 10px;
+                        }
+                    }
+
+                    &:not(.mdc-text-field--focused) {
+                        .mdc-notched-outline__notch {
+                            border-width: 0.5px;
+                        }
+                    }
+
+                    &.mdc-notched-outline--upgraded, .mdc-notched-outline--upgraded  {
+                        .mdc-floating-label--float-above {
+                            transform: translateY(-26.75px) scale(0.75);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

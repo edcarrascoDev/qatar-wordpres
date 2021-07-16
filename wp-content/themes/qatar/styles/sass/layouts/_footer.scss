@@ -1,57 +1,123 @@
 .footer {
-  padding: 4rem 0 1rem;
-  background: $primary-color;
+    padding: 4rem 0 1rem;
+    background: $primary-color;
 
-  &__logo {
-    margin-bottom: 2rem;
+    &__logo {
+        margin-bottom: 5rem;
 
-    img {
-      max-width: calcRem(250px);
+        img {
+            max-width: calcRem(250px);
+        }
     }
-  }
 
-  &__text {
-    color: $white-color;
-    font-weight: 300;
-    display: block;
-    margin-bottom: 0.5rem;
-  }
-
-  &__copyright {
-    color: $light-color;
-  }
-
-  @include media-breakpoint-up(sm) {
     &__text {
-      font-size: 1.2rem;
+        color: $white-color;
+        font-weight: 300;
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    &__copyright {
+        text-align: center;
+        flex: 1 1 100%;
+        color: $light-color;
+    }
+
+    &__location {
+        h4 {
+            color: $white-color;
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+        }
+
+        div:not(.footer__social) .icon {
+            max-width: 20px;
+        }
+
+        .social {
+            margin-top: 2rem;
+        }
+    }
+
+    &__phones, &__hours, &__address {
+        display: flex;
+        gap: 15px;
+    }
+
+    &__phones {
+
+        a {
+            font-size: 1rem;
+        }
+    }
+
+    &__hours {
+        max-width: 325px;
+
+        span {
+            color: $white-color;
+            font-size: 0.8rem;
+        }
     }
 
     &__row {
-      display: flex;
-      justify-content: space-between;
-
-      &--end {
-        align-items: flex-end;
-        padding: 1.8rem 0;
-      }
+        &--end {
+            border-top: 1px solid $white-color;
+        }
     }
 
-    &__links {
-      text-align: right;
-    }
-  }
+    @include media-breakpoint-up(sm) {
+        &__text {
+            font-size: 1.2rem;
+        }
 
-  @include media-breakpoint-down(sm) {
-    text-align: center;
+        &__row {
+            display: flex;
+            justify-content: space-between;
 
-    &__links {
-      display: none;
+            &--end {
+                align-items: flex-end;
+                padding: 1.8rem 0;
+            }
+        }
+
+        &__links {
+            text-align: right;
+        }
+
+        &__location {
+            .social {
+                margin-top: 2.5rem;
+            }
+        }
     }
 
-    &__logo {
-      img {
-        max-width: 75%;
-      }
+    @include media-breakpoint-down(sm) {
+        text-align: center;
+
+        &__location {
+            margin-bottom: 4rem;
+        }
+
+        &__phones, &__hours, &__address {
+            justify-content: center;
+            .icon {
+                display: none;
+            }
+        }
+
+        &__hours {
+            max-width: 314px;
+        }
+
+        &__links {
+            display: none;
+        }
+
+        &__logo {
+            img {
+                max-width: 75%;
+            }
+        }
     }
-  }
 }

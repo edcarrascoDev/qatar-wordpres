@@ -41,6 +41,7 @@ class AddToCart extends Component {
 
         return (
             <Fragment>
+
                 <Form
                     className="form"
                     model="addToCartItem"

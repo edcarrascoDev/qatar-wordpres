@@ -26,7 +26,6 @@ class SingleContainer extends BaseBlock {
     renderInspector(params) {
         const { attributes, setAttributes } = params;
 
-        console.log(attributes.backgroundColor);
         return (
             <InspectorControls>
                 <PanelBody title={'Otros Ajustes'}>

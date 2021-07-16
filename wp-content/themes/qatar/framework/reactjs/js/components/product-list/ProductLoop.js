@@ -15,6 +15,7 @@ class ProductLoop extends Component {
             return productList.map((product, index) => {
                 const {
                     name,
+                    brands,
                     permalink,
                     images,
                     sale_price,
@@ -42,6 +43,11 @@ class ProductLoop extends Component {
                                     src={noAvailableImage.url}
                                 />
                             )}
+                        </div>
+                        <div className="product__row pb-5">
+                            <span className={'product__brand'}>
+                                {brands.length > 0 ? `${brands[0].name}®` : 'Genérico'}
+                            </span>
                         </div>
                         <div className="product__row">
                             <a href={permalink} className={'product__name'}>

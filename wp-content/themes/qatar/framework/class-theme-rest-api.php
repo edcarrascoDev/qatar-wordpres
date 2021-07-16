@@ -26,6 +26,7 @@ class Theme_Rest_Api {
 
 		register_rest_route('qatar/v1', '/qatar-categories', [
 			'methods' => 'GET',
+			'permission_callback' => true,
 			'callback' => [$this, 'get_qatar_categories']
 		]);
 	}
@@ -33,16 +34,19 @@ class Theme_Rest_Api {
 	public function post_endpoints() {
 		register_rest_route('qatar/v1', '/request-contact-information', [
 			'methods' => 'POST',
+            'permission_callback' => true,
 			'callback' => [$this, 'request_contact_information']
 		]);
 
 		register_rest_route('qatar/v1', '/request-product-information', [
 			'methods' => 'POST',
+            'permission_callback' => true,
 			'callback' => [$this, 'request_product_information']
 		]);
 
 		register_rest_route('qatar/v1', '/request-review-comment', [
 			'methods' => 'POST',
+            'permission_callback' => true,
 			'callback' => [$this, 'request_review_comment']
 		]);
 	}
