@@ -5,6 +5,11 @@ import { changeProductPage, fetchProductList } from '../../actions/productListAc
 class Paginator extends Component {
     constructor(props) {
         super(props);
+        const pages = Array.from(Array(props.paginatorCount).keys());
+
+        this.state = {
+            pages,
+        };
     }
 
     render() {
@@ -36,6 +41,25 @@ class Paginator extends Component {
 
     getPaginatorCount() {
         const { paginatorCount, productPage, isLessThan768 } = this.props;
+        const { pages } = this.state;
+
+        const startItem =
+            productPage <= 3
+                ? 1
+                : productPage > pages[pages.length - 3]
+                ? pages[pages.length - 1] - 4
+                : productPage - 2;
+        const endItem = productPage <= 3 ? 6 : productPage + 3;
+
+        const pagesToShow = paginatorCount > 6 ? pages.slice(startItem, endItem) : pages;
+
+        if (pagesToShow[0] > 1) {
+            pagesToShow.unshift(1);
+        }
+        if (pagesToShow[pagesToShow.length - 1] < pages.length) {
+            pagesToShow.push(pages.length);
+        }
+
         if (isLessThan768) {
             return (
                 <div className="paginator__count">
@@ -43,17 +67,23 @@ class Paginator extends Component {
                 </div>
             );
         }
-        return Array.apply(null, { length: paginatorCount }).map((item, index) => {
+        return pagesToShow.map(page => {
             return (
-                <button
-                    className="mdc-fab mdc-fab--mini"
-                    key={index + 1}
-                    disabled={index + 1 === productPage}
-                    onClick={() => this.goToPage(index + 1)}
-                >
-                    <div className="mdc-fab__ripple" />
-                    <span className="mdc-fab__label">{index + 1}</span>
-                </button>
+                <React.Fragment key={page}>
+                    {pages[pages.length - 1] > pagesToShow[pagesToShow.length - 2] &&
+                    page === pages.length ? (
+                        <span>...</span>
+                    ) : null}
+                    <button
+                        className="mdc-fab mdc-fab--mini"
+                        disabled={page === productPage}
+                        onClick={() => this.goToPage(page)}
+                    >
+                        <div className="mdc-fab__ripple" />
+                        <span className="mdc-fab__label">{page}</span>
+                    </button>
+                    {pagesToShow[1] > 2 && page === 1 ? <span>...</span> : null}
+                </React.Fragment>
             );
         });
     }

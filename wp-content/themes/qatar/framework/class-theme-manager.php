@@ -260,6 +260,20 @@ class Theme_Manager {
         wp_enqueue_script('swiper-js');
     }
 
+    function add_stylesheet_attributes($html) {
+        return str_replace(
+            "rel='stylesheet'",
+            "rel='stylesheet' media=\"print\" onload=\"this.media='all'\"", $html
+        );
+    }
+
+    function defer_parsing_of_js( $url ) {
+        if ( is_user_logged_in() ) return $url; //don't break WP Admin
+        if ( FALSE === strpos( $url, '.js' ) ) return $url;
+        if ( strpos( $url, 'jquery.js' ) ) return $url;
+        return str_replace( ' src', ' defer src', $url );
+    }
+
     /**
      * Remove Jquery Library
      */
@@ -545,5 +559,8 @@ class Theme_Manager {
         add_filter('wp_mail_content_type', [$this, 'set_content_type']);
 
         add_filter('woocommerce_enqueue_styles', '__return_empty_array');
+
+        add_filter( 'style_loader_tag', [$this, 'add_stylesheet_attributes'], 10, 2 );
+        add_filter( 'script_loader_tag', [$this, 'defer_parsing_of_js'], 10 );;
     }
 }
