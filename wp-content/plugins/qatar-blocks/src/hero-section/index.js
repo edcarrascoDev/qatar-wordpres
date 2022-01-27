@@ -74,7 +74,7 @@ class HeroSection extends BaseBlock {
         const classes = `hero ${isExtended ? 'hero--extended' : ''}`;
         return (
             <div className={classes}>
-                <div className={`swiper-container ${numberOfItems > 1 ? 'hero__slider' : null}`}>
+                <div className={`swiper ${numberOfItems > 1 ? 'hero__slider' : null}`}>
                     <div className="swiper-wrapper">
                         <InnerBlocks.Content />
                     </div>

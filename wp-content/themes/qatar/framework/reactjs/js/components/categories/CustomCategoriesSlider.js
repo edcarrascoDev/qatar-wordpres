@@ -14,7 +14,7 @@ class CustomCategoriesSlider extends Component {
     render() {
         const { categories } = this.props;
         return (
-            <div className="categories-slider swiper-container">
+            <div className="categories-slider swiper">
                 <div className="swiper-wrapper">
                     {categories.map(category => {
                         return (

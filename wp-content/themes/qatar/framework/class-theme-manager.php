@@ -205,9 +205,9 @@ class Theme_Manager {
 
         wp_register_style(
             'swiper-css',
-            'https://unpkg.com/swiper/swiper-bundle.min.css',
+            'https://unpkg.com/swiper@7/swiper-bundle.min.css',
             null,
-            '1.0.0',
+            '7.0.0',
         );
         wp_enqueue_style('swiper-css');
     }
@@ -253,9 +253,9 @@ class Theme_Manager {
          */
         wp_register_script(
             'swiper-js',
-            'https://unpkg.com/swiper/swiper-bundle.min.js',
+            'https://unpkg.com/swiper@7/swiper-bundle.min.js',
             null,
-            '6.0.4',
+            '7.0.0',
         );
         wp_enqueue_script('swiper-js');
     }

@@ -30,7 +30,7 @@ class ReactJs_Templates
             'qatar-reactjs',
             $this->get_reactjs_url('js/public.min.js'),
             null,
-            '2021-07-13',
+            '2022-01-27',
             true
         );
         wp_enqueue_script('qatar-reactjs');

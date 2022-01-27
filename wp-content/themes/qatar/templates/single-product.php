@@ -51,7 +51,7 @@ $page_title = get_the_title();
                     <div class="product-gallery single-product__gallery">
 
                         <!--********************./gallery-thumbs********************-->
-                        <div class="swiper-container product-gallery__thumbs">
+                        <div class="swiper product-gallery__thumbs">
                             <div class="swiper-wrapper">
                                 <div class="swiper-slide">
                                     <img src="<?php Theme_Manager::get_instance()->get_assets_image('200_200/rodillo-v2_1.jpg') ?>"
@@ -82,7 +82,7 @@ $page_title = get_the_title();
                         <!--********************./gallery-thumbs********************-->
 
                         <!--********************./gallery-top********************-->
-                        <div class="swiper-container product-gallery__top">
+                        <div class="swiper product-gallery__top">
                             <div class="swiper-wrapper">
                                 <div class="swiper-slide">
                                     <div class="product-gallery__image">

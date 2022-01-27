@@ -38,7 +38,7 @@ $wrapper_classes   = apply_filters(
 $attachment_ids = $product->get_gallery_image_ids();
 ?>
 <div class="<?php echo esc_attr( implode( ' ', array_map( 'sanitize_html_class', $wrapper_classes ) ) ); ?>" data-columns="<?php echo esc_attr( $columns ); ?>">
-    <div class="swiper-container product-gallery__thumbs">
+    <div class="swiper product-gallery__thumbs">
         <div class="swiper-wrapper">
             <?php
                 if ( $product->get_image_id() ) {
@@ -58,7 +58,7 @@ $attachment_ids = $product->get_gallery_image_ids();
             ?>
         </div>
     </div>
-	<div class="swiper-container product-gallery__top">
+	<div class="swiper product-gallery__top">
         <div class="swiper-wrapper">
             <?php
                 if ( $product->get_image_id() ) {
