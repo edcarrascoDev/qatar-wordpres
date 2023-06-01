@@ -3,11 +3,13 @@
  * Plugin Name: WooCommerce
  * Plugin URI: https://woocommerce.com/
  * Description: An eCommerce toolkit that helps you sell anything. Beautifully.
- * Version: 4.2.0
+ * Version: 7.7.2
  * Author: Automattic
  * Author URI: https://woocommerce.com
  * Text Domain: woocommerce
  * Domain Path: /i18n/languages/
+ * Requires at least: 6.0
+ * Requires PHP: 7.3
  *
  * @package WooCommerce
  */
@@ -32,6 +34,9 @@ if ( ! class_exists( 'WooCommerce', false ) ) {
 	include_once dirname( WC_PLUGIN_FILE ) . '/includes/class-woocommerce.php';
 }
 
+// Initialize dependency injection.
+$GLOBALS['wc_container'] = new Automattic\WooCommerce\Container();
+
 /**
  * Returns the main instance of WC.
  *
@@ -40,6 +45,17 @@ if ( ! class_exists( 'WooCommerce', false ) ) {
  */
 function WC() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
 	return WooCommerce::instance();
+}
+
+/**
+ * Returns the WooCommerce object container.
+ * Code in the `includes` directory should use the container to get instances of classes in the `src` directory.
+ *
+ * @since  4.4.0
+ * @return \Automattic\WooCommerce\Container The WooCommerce object container.
+ */
+function wc_get_container() {
+	return $GLOBALS['wc_container'];
 }
 
 // Global for backwards compatibility.

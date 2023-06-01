@@ -2,36 +2,47 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { ENABLE_REVIEW_RATING } from '@woocommerce/block-settings';
+import { getSetting } from '@woocommerce/settings';
 import LoadMoreButton from '@woocommerce/base-components/load-more-button';
-import ReviewSortSelect from '@woocommerce/base-components/review-sort-select';
-import ReviewList from '@woocommerce/base-components/review-list';
+import {
+	ReviewList,
+	ReviewSortSelect,
+} from '@woocommerce/base-components/reviews';
 import withReviews from '@woocommerce/base-hocs/with-reviews';
 
 /**
  * Block rendered in the frontend.
+ *
+ * @param {Object}                                             props                 Incoming props for the component.
+ * @param {Object}                                             props.attributes      Incoming block attributes.
+ * @param {function(any):any}                                  props.onAppendReviews Function called when appending review.
+ * @param {function(any):any}                                  props.onChangeOrderby
+ * @param {Array}                                              props.reviews
+ * @param {'most-recent' | 'highest-rating' | 'lowest-rating'} props.sortSelectValue
+ * @param {number}                                             props.totalReviews
  */
 const FrontendBlock = ( {
 	attributes,
 	onAppendReviews,
 	onChangeOrderby,
 	reviews,
+	sortSelectValue,
 	totalReviews,
 } ) => {
-	const { orderby } = attributes;
-
 	if ( reviews.length === 0 ) {
 		return null;
 	}
 
+	const reviewRatingsEnabled = getSetting( 'reviewRatingsEnabled', true );
+
 	return (
-		<Fragment>
-			{ attributes.showOrderby !== 'false' && ENABLE_REVIEW_RATING && (
+		<>
+			{ attributes.showOrderby !== 'false' && reviewRatingsEnabled && (
 				<ReviewSortSelect
-					defaultValue={ orderby }
+					value={ sortSelectValue }
 					onChange={ onChangeOrderby }
+					readOnly
 				/>
 			) }
 			<ReviewList attributes={ attributes } reviews={ reviews } />
@@ -45,7 +56,7 @@ const FrontendBlock = ( {
 						) }
 					/>
 				) }
-		</Fragment>
+		</>
 	);
 };
 
