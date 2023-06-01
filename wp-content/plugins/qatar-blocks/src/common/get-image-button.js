@@ -1,4 +1,4 @@
-const { Button } = wp.components;
+const { Button } = '@wordpress/components';
 
 const getImageButton = (params, event) => {
     const { imageUrl, placeholder } = params;

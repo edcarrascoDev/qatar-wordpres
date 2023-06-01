@@ -1,4 +1,4 @@
-import './editor-common.scss';
+import './index.scss';
 
 import './columns';
 

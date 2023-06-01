@@ -1,25 +1,24 @@
 import BaseBlock from '../base-block';
-const { registerBlockType } = wp.blocks;
+import { registerBlockType } from '@wordpress/blocks';
 const { __ } = wp.i18n;
-const { Fragment } = wp.element;
 
 class PortfolioShortcode extends BaseBlock {
-    title = __('Portafolio');
-    category = 'qatar';
-    parent = ['qatar/single-container'];
-    supports = {
-        align: ['full'],
-    };
-    edit(params) {
-        return (
-            <Fragment>
-                <h2>Portafolio</h2>
-            </Fragment>
-        );
-    }
+  title = __('Portafolio');
+  category = 'qatar';
+  parent = ['qatar/single-container'];
+  supports = {
+    align: ['full'],
+  };
+  edit = params => {
+    return (
+      <>
+        <h2>Portafolio</h2>
+      </>
+    );
+  };
 
-    save(params) {
-        return <Fragment>[portafolio]</Fragment>;
-    }
+  save = params => {
+    return <>[portafolio]</>;
+  };
 }
 registerBlockType('qatar/portfolio-shortcode', new PortfolioShortcode());

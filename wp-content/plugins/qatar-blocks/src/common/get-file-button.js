@@ -1,4 +1,4 @@
-const { Button } = wp.components;
+const { Button } = '@wordpress/components';
 
 const getFileButton = (params, event) => {
     const { fileName, placeholder } = params;
