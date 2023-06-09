@@ -1,6 +1,6 @@
 import BaseBlock from '../base-block';
 
-const { __ } = wp.i18n;
+import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
 import { InspectorControls, PlainText, RichText } from '@wordpress/block-editor';
 import {
@@ -10,15 +10,12 @@ import {
   RadioControl,
   FormToggle,
 } from '@wordpress/components';
+import { ContainerBlock } from '../container-block';
+import { UTILS } from '../utils';
 
 class TitleSection extends BaseBlock {
   title = __('Encabezado');
-  category = 'qatar';
   parent = ['qatar/single-container', 'qatar/columns', 'core/column'];
-  supports = {
-    align: ['full'],
-  };
-
   attributes = {
     headline: {
       default: 'h2',
@@ -35,46 +32,38 @@ class TitleSection extends BaseBlock {
       default: 'center',
     },
   };
-
-  constructor() {
-    super();
-  }
-
-  edit = params => {
-    const { attributes, setAttributes, className } = params;
-    return (
-      <>
-        <div className={className}>
-          <div className="input__group">
-            <label htmlFor="title" className={'label'}>
-              Título
-            </label>
-            <RichText
-              value={attributes.title}
-              multine={'br'}
-              id={'title'}
-              onChange={content => setAttributes({ title: content })}
-              placeholder={__('Título')}
-            />
-          </div>
-          <div className="input__group">
-            <label htmlFor="content" className={'label'}>
-              Descripción
-            </label>
-            <RichText
-              id={'content'}
-              multine={'br'}
-              value={attributes.content}
-              tagName={'span'}
-              onChange={content => setAttributes({ content: content })}
-              placeholder={__('Descripción')}
-            />
-          </div>
+  edit = ({ attributes, setAttributes, className }) => (
+    <ContainerBlock title={this.title}>
+      <div className={className}>
+        <div className={UTILS.FORM_GROUP}>
+          <label htmlFor="title" className={'label'}>
+            Título
+          </label>
+          <RichText
+            value={attributes.title}
+            multine={'br'}
+            id={'title'}
+            onChange={content => setAttributes({ title: content })}
+            placeholder={__('Título')}
+          />
         </div>
-        {this.renderInspector(params)}
-      </>
-    );
-  };
+        <div className={UTILS.FORM_GROUP}>
+          <label htmlFor="content" className={'label'}>
+            Descripción
+          </label>
+          <RichText
+            id={'content'}
+            multine={'br'}
+            value={attributes.content}
+            tagName={'span'}
+            onChange={content => setAttributes({ content: content })}
+            placeholder={__('Descripción')}
+          />
+        </div>
+      </div>
+      {this.renderInspector({ attributes, setAttributes })}
+    </ContainerBlock>
+  );
 
   renderInspector = ({ attributes, setAttributes }) => (
     <InspectorControls>
@@ -92,7 +81,7 @@ class TitleSection extends BaseBlock {
         </PanelRow>
 
         <PanelRow>
-          <div className="input__group">
+          <div className={UTILS.FORM_GROUP}>
             <label htmlFor="headline">Seleccionar tipo de encabezado (título)</label>
             <SelectControl
               id={'headline'}
@@ -128,7 +117,7 @@ class TitleSection extends BaseBlock {
         </PanelRow>
       </PanelBody>
       <PanelBody title={'Otros Ajustes'}>
-        <div className="input__group">
+        <div className={UTILS.FORM_GROUP}>
           <label htmlFor="separatorClasses" className={'label'}>
             Classes para el separador
           </label>
@@ -143,8 +132,7 @@ class TitleSection extends BaseBlock {
     </InspectorControls>
   );
 
-  save = params => {
-    const { attributes } = params;
+  save = ({ attributes }) => {
     const { headline, isLightText, textAligned, separatorClasses } = attributes;
 
     const classes = {

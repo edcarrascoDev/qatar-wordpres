@@ -1,17 +1,19 @@
 import BaseBlock from '../base-block';
-import getImageButton from '../common/get-image-button';
-const { __ } = wp.i18n;
+import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
-import { InspectorControls, PlainText, RichText, MediaUpload } from '@wordpress/block-editor';
+import {
+  InspectorControls,
+  PlainText,
+  RichText,
+  MediaPlaceholder,
+  __experimentalLinkControl as LinkControl,
+} from '@wordpress/block-editor';
 import { PanelBody, FormToggle, SelectControl } from '@wordpress/components';
+import { ImagePreview, UTILS } from '../utils';
+import { ContainerBlock } from '../container-block';
 
 class HeroVideoSection extends BaseBlock {
   title = __('Sección principal con Video');
-  category = 'qatar';
-  supports = {
-    align: ['full'],
-  };
-
   attributes = {
     videoUrl: {
       attribute: 'src',
@@ -21,6 +23,7 @@ class HeroVideoSection extends BaseBlock {
       attribute: 'id',
       selector: '.hero__background video',
     },
+    videoData: {},
     headline: {
       default: 'h2',
     },
@@ -28,42 +31,25 @@ class HeroVideoSection extends BaseBlock {
       default: false,
     },
     title: {},
+    linkText: {},
+    urlObject: {},
     content: {},
     nextSectionId: {},
   };
 
-  constructor() {
-    super();
-  }
-
-  selectVideo(media, params) {
-    const { setAttributes } = params;
-    setAttributes({
-      videoId: media.id,
-      videoUrl: media.url,
-    });
-  }
-
-  edit = params => {
-    const { attributes, setAttributes } = params;
-
+  edit = ({ attributes, setAttributes }) => {
     return (
-      <div className={'hero'}>
-        <MediaUpload
-          onSelect={media => this.selectVideo(media, params)}
-          type={'video'}
-          value={attributes.videoId}
-          render={({ open }) =>
-            getImageButton(
-              {
-                videoUrl: attributes.videoUrl,
-                placeholder: __('Selecciona un Video'),
-              },
-              open,
-            )
-          }
-        />
-        <div className="input__group">
+      <ContainerBlock title={this.title}>
+        <div className={UTILS.FORM_GROUP}>
+          <MediaPlaceholder
+            onSelect={el => setAttributes({ videoData: el, videoUrl: el.url, videoId: el.id })}
+            allowedTypes={['video']}
+            multiple={false}
+            mediaPreview={<ImagePreview url={attributes.videoData?.image?.src} />}
+            labels={{ title: '', instructions: '' }}
+          />
+        </div>
+        <div className={UTILS.FORM_GROUP}>
           <label htmlFor="title" className={'label'}>
             Título
           </label>
@@ -74,7 +60,7 @@ class HeroVideoSection extends BaseBlock {
             placeholder={__('Título')}
           />
         </div>
-        <div className="input__group">
+        <div className={UTILS.FORM_GROUP}>
           <label htmlFor="content" className={'label'}>
             Descripción
           </label>
@@ -87,36 +73,28 @@ class HeroVideoSection extends BaseBlock {
             placeholder={__('Descripción')}
           />
         </div>
-        <div className="row mt-2">
-          <div className="col-md-6">
-            <div className="input__group">
-              <label htmlFor="linkText" className={'label'}>
-                Texto en el botón
-              </label>
-              <PlainText
-                value={attributes.linkText}
-                id={'linkText'}
-                onChange={content => setAttributes({ linkText: content })}
-                placeholder={__('ej: conocer más')}
-              />
-            </div>
-          </div>
-          <div className="col-md-6">
-            <div className="input__group">
-              <label htmlFor="linkUrl" className={'label'}>
-                link del botón
-              </label>
-              <PlainText
-                value={attributes.linkUrl}
-                id={'linkUrl'}
-                onChange={content => setAttributes({ linkUrl: content })}
-                placeholder={__('ej: /tiros-de-arrastre')}
-              />
-            </div>
-          </div>
+        <div className={UTILS.FORM_GROUP}>
+          <label htmlFor="linkText" className={'label'}>
+            Texto en el botón
+          </label>
+          <PlainText
+            value={attributes.linkText}
+            id={'linkText'}
+            onChange={content => setAttributes({ linkText: content })}
+            placeholder={__('ej: conocer más')}
+          />
         </div>
-        {this.renderInspector(params)}
-      </div>
+        <div className={UTILS.FORM_GROUP}>
+          <label htmlFor="linkUrl" className={'label'}>
+            link del botón
+          </label>
+          <LinkControl
+            value={attributes.urlObject}
+            onChange={content => setAttributes({ urlObject: content })}
+          />
+        </div>
+        {this.renderInspector({ attributes, setAttributes })}
+      </ContainerBlock>
     );
   };
 
@@ -133,7 +111,7 @@ class HeroVideoSection extends BaseBlock {
           <label htmlFor="isDarkText">Aplicar textos oscuros</label>
         </div>
 
-        <div className="input__group">
+        <div className={UTILS.FORM_GROUP}>
           <label htmlFor="headline">Seleccionar tipo de encabezado (título)</label>
           <SelectControl
             id={'headline'}
@@ -152,7 +130,7 @@ class HeroVideoSection extends BaseBlock {
           />
         </div>
 
-        <div className="input__group">
+        <div className={UTILS.FORM_GROUP}>
           <label htmlFor="title" className={'label'}>
             Id de la siguiente sección
           </label>
@@ -188,8 +166,8 @@ class HeroVideoSection extends BaseBlock {
             <RichText.Content tagName={'p'} value={attributes.content} />
           ) : null}
 
-          {!!attributes.linkText && !!attributes.linkUrl ? (
-            <a href={attributes.linkUrl} className="mdc-button mdc-button--raised">
+          {!!attributes.linkText && !!attributes.urlObject ? (
+            <a href={attributes.urlObject?.url} className="mdc-button mdc-button--raised">
               {attributes.linkText}
             </a>
           ) : null}

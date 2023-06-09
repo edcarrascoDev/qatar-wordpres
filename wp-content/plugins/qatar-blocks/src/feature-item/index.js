@@ -1,14 +1,20 @@
 import BaseBlock from '../base-block';
-import getImageButton from '../common/get-image-button';
 
-const { __ } = wp.i18n;
+import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
-import { InspectorControls, PlainText, RichText, MediaUpload } from '@wordpress/block-editor';
+import {
+  InspectorControls,
+  PlainText,
+  RichText,
+  MediaPlaceholder,
+  __experimentalLinkControl as LinkControl,
+} from '@wordpress/block-editor';
 import { PanelRow, PanelBody, SelectControl } from '@wordpress/components';
+import { ImagePreview, UTILS } from '../utils';
+import { ContainerBlock } from '../container-block';
 
 class FeatureItem extends BaseBlock {
   title = __('Item');
-  category = 'qatar';
   parent = ['qatar/features-container'];
   supports = {
     align: ['full'],
@@ -32,45 +38,25 @@ class FeatureItem extends BaseBlock {
     linkText: {
       default: 'Ver más',
     },
-    linkUrl: {},
+    urlObject: {},
   };
-
-  constructor() {
-    super();
-  }
-
-  selectImage(media, params) {
-    const { setAttributes } = params;
-    setAttributes({
-      imageId: media.id,
-      imageUrl: media.url,
-      imageAlt: media.alt,
-    });
-  }
 
   edit = params => {
     const { attributes, setAttributes, className } = params;
     return (
-      <div>
+      <ContainerBlock title={this.title}>
         <div className={className}>
-          <div className="input__group">
-            <label className={'label'}>Imagen de fondo</label>
-            <MediaUpload
-              onSelect={media => this.selectImage(media, params)}
-              type={'image'}
-              value={attributes.imageId}
-              render={({ open }) =>
-                getImageButton(
-                  {
-                    imageUrl: attributes.imageUrl,
-                    placeholder: __('Selecciona una imagen'),
-                  },
-                  open,
-                )
-              }
+          <div className={UTILS.FORM_GROUP}>
+            <span className={'label'}>Imagen de fondo</span>
+            <MediaPlaceholder
+              onSelect={el => setAttributes({ imageUrl: el.url, imageAlt: el.alt })}
+              allowedTypes={['image']}
+              multiple={false}
+              mediaPreview={<ImagePreview url={attributes.imageUrl} />}
+              labels={{ title: '', instructions: '' }}
             />
           </div>
-          <div className="input__group">
+          <div className={UTILS.FORM_GROUP}>
             <label htmlFor="title" className={'label'}>
               Título
             </label>
@@ -81,7 +67,7 @@ class FeatureItem extends BaseBlock {
               placeholder={__('Título')}
             />
           </div>
-          <div className="input__group">
+          <div className={UTILS.FORM_GROUP}>
             <label htmlFor="content" className={'label'}>
               Descripción
             </label>
@@ -94,7 +80,8 @@ class FeatureItem extends BaseBlock {
               placeholder={__('Descripción')}
             />
           </div>
-          <div className="input__group">
+
+          <div className={UTILS.FORM_GROUP}>
             <label htmlFor="linkText" className={'label'}>
               Texto en el botón
             </label>
@@ -106,20 +93,18 @@ class FeatureItem extends BaseBlock {
             />
           </div>
 
-          <div className="input__group">
+          <div className={UTILS.FORM_GROUP}>
             <label htmlFor="linkUrl" className={'label'}>
               link del botón
             </label>
-            <PlainText
-              value={attributes.linkUrl}
-              id={'linkUrl'}
-              onChange={content => setAttributes({ linkUrl: content })}
-              placeholder={__('ej: /tiros-de-arrastre')}
+            <LinkControl
+              value={attributes.urlObject}
+              onChange={content => setAttributes({ urlObject: content })}
             />
           </div>
         </div>
         {this.renderInspector(params)}
-      </div>
+      </ContainerBlock>
     );
   };
 
@@ -127,7 +112,7 @@ class FeatureItem extends BaseBlock {
     <InspectorControls>
       <PanelBody title={'Otros Ajustes'}>
         <PanelRow>
-          <div className="input__group">
+          <div className={UTILS.FORM_GROUP}>
             <label htmlFor="headline">Seleccionar tipo de encabezado (título)</label>
             <SelectControl
               id={'headline'}
@@ -164,7 +149,7 @@ class FeatureItem extends BaseBlock {
           />
           <RichText.Content tagName={'p'} value={attributes.content} />
 
-          <a href={attributes.linkUrl} className="link link--light">
+          <a href={attributes.urlObject?.url} className="link link--light">
             {attributes.linkText}
           </a>
         </div>

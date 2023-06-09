@@ -1,19 +1,15 @@
 import BaseBlock from '../base-block';
-const { __ } = wp.i18n;
+import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
 import { InspectorControls, InnerBlocks } from '@wordpress/block-editor';
 import { PanelBody, FormToggle } from '@wordpress/components';
-const { select } = wp.data;
+import { select } from '@wordpress/data';
+import { UTILS } from '../utils';
 
 const ALLOWED_BLOCKS = ['qatar/hero-section-slide'];
 
 class HeroSection extends BaseBlock {
   title = __('Sección principal');
-  category = 'qatar';
-  supports = {
-    align: ['full'],
-  };
-
   attributes = {
     isExtended: {
       default: false,
@@ -21,26 +17,16 @@ class HeroSection extends BaseBlock {
     numberOfItems: {},
   };
 
-  constructor() {
-    super();
-  }
-
-  edit = params => {
-    const { attributes } = params;
-    const { isExtended } = attributes;
-
-    const classes = `hero ${isExtended ? 'hero--extended' : ''}`;
-    return (
-      <div className={classes}>
-        <InnerBlocks
-          template={[ALLOWED_BLOCKS]}
-          allowedBlocks={ALLOWED_BLOCKS}
-          templateLock={false}
-        />
-        {this.renderInspector(params)}
-      </div>
-    );
-  };
+  edit = params => (
+    <div className={UTILS.MAIN_CONTAINER}>
+      <InnerBlocks
+        template={[ALLOWED_BLOCKS]}
+        allowedBlocks={ALLOWED_BLOCKS}
+        templateLock={false}
+      />
+      {this.renderInspector(params)}
+    </div>
+  );
 
   renderInspector = ({ attributes, setAttributes, clientId }) => {
     /**

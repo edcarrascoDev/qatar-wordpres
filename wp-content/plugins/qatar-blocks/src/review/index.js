@@ -1,10 +1,15 @@
 import BaseBlock from '../base-block';
-import getImageButton from '../common/get-image-button';
 
-const { __ } = wp.i18n;
+import { __ } from '@wordpress/i18n';
 
 import { registerBlockType } from '@wordpress/blocks';
-import { InspectorControls, PlainText, RichText, MediaUpload } from '@wordpress/block-editor';
+import {
+  InspectorControls,
+  PlainText,
+  RichText,
+  MediaPlaceholder,
+  __experimentalLinkControl as LinkControl,
+} from '@wordpress/block-editor';
 import {
   PanelRow,
   PanelBody,
@@ -12,15 +17,11 @@ import {
   RadioControl,
   FormToggle,
 } from '@wordpress/components';
-
+import { ContainerBlock } from '../container-block';
+import { ImagePreview, UTILS } from '../utils';
 class Review extends BaseBlock {
   title = __('Review');
-  category = 'qatar';
   parent = ['qatar/single-container'];
-  supports = {
-    align: ['full'],
-  };
-
   attributes = {
     title: {},
     content: {},
@@ -30,7 +31,7 @@ class Review extends BaseBlock {
     linkText: {
       default: 'ver reviews',
     },
-    linkUrl: {},
+    urlObject: {},
     rating: {},
     imageUrl: {},
     imageId: {},
@@ -43,22 +44,12 @@ class Review extends BaseBlock {
     },
     buttonClasses: {},
   };
-
-  selectImage(media, params) {
-    const { setAttributes } = params;
-    setAttributes({
-      imageUrl: media.url,
-      imageId: media.id,
-      imageName: media.filename,
-    });
-  }
-
   edit = params => {
-    const { attributes, setAttributes, className } = params;
+    const { attributes, setAttributes } = params;
 
     return (
-      <div className={className}>
-        <div className="input__group">
+      <ContainerBlock>
+        <div className={UTILS.FORM_GROUP}>
           <label htmlFor="title" className={'label'}>
             Calificación promedio
           </label>
@@ -69,7 +60,7 @@ class Review extends BaseBlock {
             placeholder={__('ej: 4.8')}
           />
         </div>
-        <div className="input__group">
+        <div className={UTILS.FORM_GROUP}>
           <label htmlFor="title" className={'label'}>
             Título
           </label>
@@ -80,7 +71,7 @@ class Review extends BaseBlock {
             placeholder={__('Título')}
           />
         </div>
-        <div className="input__group">
+        <div className={UTILS.FORM_GROUP}>
           <label htmlFor="content" className={'label'}>
             Descripción
           </label>
@@ -94,7 +85,7 @@ class Review extends BaseBlock {
           />
         </div>
 
-        <div className="input__group">
+        <div className={UTILS.FORM_GROUP}>
           <label htmlFor="linkText" className={'label'}>
             Texto en el botón
           </label>
@@ -106,34 +97,23 @@ class Review extends BaseBlock {
           />
         </div>
 
-        <div className="input__group">
-          <label htmlFor="linkText" className={'label'}>
-            link
-          </label>
-          <PlainText
-            value={attributes.linkUrl}
-            id={'linkUrl'}
-            onChange={content => setAttributes({ linkUrl: content })}
-            placeholder={__('ej: https://...')}
+        <div className={UTILS.FORM_GROUP}>
+          <label className={'label'}>link</label>
+          <LinkControl
+            value={attributes.urlObject}
+            onChange={content => setAttributes({ urlObject: content })}
           />
         </div>
 
-        <MediaUpload
-          onSelect={media => this.selectImage(media, params)}
-          type={'image'}
-          value={attributes.imageId}
-          render={({ open }) =>
-            getImageButton(
-              {
-                imageUrl: attributes.imageUrl,
-                placeholder: __('Selecciona una imagen'),
-              },
-              open,
-            )
-          }
+        <MediaPlaceholder
+          onSelect={el => setAttributes({ imageUrl: el.url, imageAlt: el.alt })}
+          allowedTypes={['image']}
+          multiple={false}
+          mediaPreview={<ImagePreview url={attributes.imageUrl} />}
+          labels={{ title: '', instructions: '' }}
         />
         {this.renderInspector(params)}
-      </div>
+      </ContainerBlock>
     );
   };
 
@@ -153,7 +133,7 @@ class Review extends BaseBlock {
         </PanelRow>
 
         <PanelRow>
-          <div className="input__group">
+          <div className={UTILS.FORM_GROUP}>
             <label htmlFor="headline">Seleccionar tipo de encabezado (título)</label>
             <SelectControl
               id={'headline'}
@@ -191,7 +171,7 @@ class Review extends BaseBlock {
 
       <PanelBody title={'Otros Ajustes'}>
         <PanelRow>
-          <div className="input__group">
+          <div className={UTILS.FORM_GROUP}>
             <label htmlFor="buttonClasses">Classes para el Botón</label>
             <PlainText
               value={attributes.buttonClasses}
@@ -245,7 +225,7 @@ class Review extends BaseBlock {
             </div>
 
             <a
-              href={attributes.linkUrl}
+              href={attributes.urlObject?.url}
               target={'_blank'}
               className={`mdc-button ${buttonClasses}`}
               rel="noopener noreferrer"

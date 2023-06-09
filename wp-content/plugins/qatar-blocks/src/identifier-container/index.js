@@ -1,30 +1,23 @@
 import BaseBlock from '../base-block';
 
-const { __ } = wp.i18n;
+import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
 import { PlainText } from '@wordpress/block-editor';
+import { ContainerBlock } from '../container-block';
 
 class IdentifierContainer extends BaseBlock {
   title = __('Identifier container');
   category = 'qatar';
-  supports = {
-    align: ['full'],
-  };
-
   attributes = {
     identifier: {},
   };
 
-  constructor() {
-    super();
-  }
-
   edit = params => {
     const { attributes, setAttributes, className } = params;
     return (
-      <>
+      <ContainerBlock title={this.title}>
         <div className={className}>
-          <div className="input__group">
+          <div className={UTILS.FORM_GROUP}>
             <label htmlFor="identifier" className={'label'}>
               Identificador
             </label>
@@ -37,7 +30,7 @@ class IdentifierContainer extends BaseBlock {
             <small>No usar espacios</small>
           </div>
         </div>
-      </>
+      </ContainerBlock>
     );
   };
 

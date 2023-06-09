@@ -1,25 +1,17 @@
 import BaseBlock from '../base-block';
-const { __ } = wp.i18n;
+import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
 import { InnerBlocks } from '@wordpress/block-editor';
-const { select } = wp.data;
+import { select } from '@wordpress/data';
+import { UTILS } from '../utils';
 
 const ALLOWED_BLOCKS = ['qatar/feature-item'];
 
 class FeaturesContainer extends BaseBlock {
   title = __('Sección de destacados');
-  category = 'qatar';
-  supports = {
-    align: ['full'],
-  };
-
   attributes = {
     numberOfItems: {},
   };
-
-  constructor() {
-    super();
-  }
 
   edit = params => {
     const { clientId, attributes, setAttributes } = params;
@@ -30,16 +22,11 @@ class FeaturesContainer extends BaseBlock {
     setAttributes({ numberOfItems: parentBlock.innerBlocks.length });
 
     return (
-      <div className={'three-columns'}>
+      <div className={UTILS.MAIN_CONTAINER}>
         <InnerBlocks
           template={[ALLOWED_BLOCKS, ALLOWED_BLOCKS, ALLOWED_BLOCKS]}
           allowedBlocks={ALLOWED_BLOCKS}
           templateLock={attributes.numberOfItems > 3 ? 'insert' : false}
-          renderAppender={() => (
-            <button className="bespoke-appender" type="button">
-              Some Special Appender
-            </button>
-          )}
         />
       </div>
     );

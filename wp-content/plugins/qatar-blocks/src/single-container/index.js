@@ -1,5 +1,5 @@
 import BaseBlock from '../base-block';
-const { __ } = wp.i18n;
+import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
 import { InspectorControls, PlainText, InnerBlocks } from '@wordpress/block-editor';
 import { PanelRow, PanelBody, ColorPicker, FormToggle } from '@wordpress/components';

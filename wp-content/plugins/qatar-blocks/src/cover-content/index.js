@@ -1,6 +1,6 @@
 import BaseBlock from '../base-block';
 
-const { __ } = wp.i18n;
+import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
 import {
   InspectorControls,
@@ -57,31 +57,25 @@ class CoverContent extends BaseBlock {
               placeholder={__('Descripción')}
             />
           </div>
-          <div className="row mt-2">
-            <div className="col-md-6">
-              <div className={UTILS.FORM_GROUP}>
-                <label htmlFor="linkText" className={'label'}>
-                  Texto en el botón
-                </label>
-                <PlainText
-                  value={attributes.linkText}
-                  id={'linkText'}
-                  onChange={content => setAttributes({ linkText: content })}
-                  placeholder={__('ej: conocer más')}
-                />
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className={UTILS.FORM_GROUP}>
-                <label htmlFor="linkUrl" className={'label'}>
-                  link del botón
-                </label>
-                <LinkControl
-                  value={attributes.urlObject}
-                  onChange={content => setAttributes({ urlObject: content })}
-                />
-              </div>
-            </div>
+          <div className={UTILS.FORM_GROUP}>
+            <label htmlFor="linkText" className={'label'}>
+              Texto en el botón
+            </label>
+            <PlainText
+              value={attributes.linkText}
+              id={'linkText'}
+              onChange={content => setAttributes({ linkText: content })}
+              placeholder={__('ej: conocer más')}
+            />
+          </div>
+          <div className={UTILS.FORM_GROUP}>
+            <label htmlFor="linkUrl" className={'label'}>
+              link del botón
+            </label>
+            <LinkControl
+              value={attributes.urlObject}
+              onChange={content => setAttributes({ urlObject: content })}
+            />
           </div>
         </div>
         {this.renderInspector({ attributes, setAttributes })}
