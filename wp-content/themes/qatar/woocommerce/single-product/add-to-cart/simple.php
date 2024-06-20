@@ -10,20 +10,20 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see https://docs.woocommerce.com/document/template-structure/
- * @package WooCommerce/Templates
- * @version 3.4.0
+ * @see https://woocommerce.com/document/template-structure/
+ * @package WooCommerce\Templates
+ * @version 7.0.1
  */
 
-defined('ABSPATH') || exit;
+defined( 'ABSPATH' ) || exit;
 
 global $product;
 
-if (!$product->is_purchasable()) {
+if ( ! $product->is_purchasable() ) {
     return;
 }
 
-echo wc_get_stock_html($product); // WPCS: XSS ok.
+echo wc_get_stock_html( $product ); // WPCS: XSS ok.
 
 $input_value = isset($_POST['quantity']) ? wc_stock_amount(wp_unslash($_POST['quantity'])) : $product->get_min_purchase_quantity();
 

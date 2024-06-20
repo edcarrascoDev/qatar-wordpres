@@ -10,16 +10,16 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see     https://docs.woocommerce.com/document/template-structure/
- * @package WooCommerce/Templates
- * @version 3.5.1
+ * @see     https://woocommerce.com/document/template-structure/
+ * @package WooCommerce\Templates
+ * @version 7.8.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
 // Note: `wc_get_gallery_image_html` was added in WC 3.3.2 and did not exist prior. This check protects against theme overrides being used on older versions of WC.
 if ( ! function_exists( 'wc_get_gallery_image_html' ) ) {
-	return;
+    return;
 }
 
 global $product;
@@ -27,13 +27,13 @@ global $product;
 $columns           = apply_filters( 'woocommerce_product_thumbnails_columns', 4 );
 $post_thumbnail_id = $product->get_image_id();
 $wrapper_classes   = apply_filters(
-	'woocommerce_single_product_image_gallery_classes',
-	array(
-		'product-gallery',
-		'product-gallery--' . ( $product->get_image_id() ? 'with-images' : 'without-images' ),
-		'product-gallery--columns-' . absint( $columns ),
-		'images',
-	)
+    'woocommerce_single_product_image_gallery_classes',
+    array(
+        'woocommerce-product-gallery',
+        'woocommerce-product-gallery--' . ( $post_thumbnail_id ? 'with-images' : 'without-images' ),
+        'woocommerce-product-gallery--columns-' . absint( $columns ),
+        'images',
+    )
 );
 $attachment_ids = $product->get_gallery_image_ids();
 ?>

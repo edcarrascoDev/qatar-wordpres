@@ -1,138 +1,135 @@
 .hero {
-    position: relative;
+  position: relative;
 
-    .swiper-slide {
-        width: 100%;
+  .swiper-button {
+    &-next, &-prev {
+      opacity: 0;
+      transition: all ease-in-out 250ms;
+    }
+  }
+
+  &__content {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+
+    p {
+      color: $light-color;
+      font-size: $font-size-medium;
     }
 
-    .swiper-button {
-        &-next, &-prev {
-            opacity: 0;
-            transition: all ease-in-out 250ms;
-        }
+    .headline, p {
+      text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+    }
+  }
+
+  &__background {
+    video, img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      max-height: 875px;
+      object-fit: cover;
+      object-position: center;
     }
 
-    &__content {
+    video {
+      height: 80vh;
+    }
+
+    &--dark {
+      &::before {
+        content: '';
         position: absolute;
-        top: 50%;
-        z-index: 2;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: $primary-color;
+        opacity: 0.7;
+        z-index: 1;
+      }
 
-        p {
-            color: $light-color;
-            font-size: $font-size-medium;
-        }
-        .headline, p {
-            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
-        }
+      video {
+        filter: brightness(0.5);
+      }
     }
 
-    &__background {
-        video, img {
-            display: block;
-            width: 100%;
-            height: 100vh;
-            max-height: 100%;
-            object-fit: cover;
-            object-position: center;
+    &:not(&--dark) {
+      ~ .hero {
+        &__content {
+          padding: 20px 30px;
+          background: rgba(0, 0, 0, 0.3);
         }
-
-        video {
-            height: 80vh;
-        }
-
-        &--dark {
-            &::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: $primary-color;
-                opacity: 0.7;
-                z-index: 1;
-            }
-
-            video {
-                filter: brightness(0.5);
-            }
-        }
-
-        &:not(&--dark) {
-            ~ .hero {
-                &__content {
-                    padding: 20px 30px;
-                    background: rgba(0, 0, 0, 0.3);
-                }
-            }
-        }
+      }
     }
+  }
 
-    &:hover {
-        .swiper-button {
-            &-next, &-prev {
-                opacity: 0.8;
-            }
-        }
+  &:hover {
+    .swiper-button {
+      &-next, &-prev {
+        opacity: 0.8;
+      }
     }
+  }
 
-    &:not(&--video) {
-        .hero {
-            &__content {
-                left: calcRem(120px);
-                max-width: calcRem(450px);
-            }
-        }
+  &:not(&--video) {
+    .hero {
+      &__content {
+        left: calcRem(120px);
+        max-width: calcRem(450px);
+      }
     }
+  }
 
-    &:not(&--extended) {
-        .hero {
-            &__content {
-                > p, > .mdc-button {
-                    display: none;
-                }
-            }
-
-            &__background {
-                img {
-                    height: 30vh;
-                }
-            }
+  &:not(&--extended) {
+    .hero {
+      &__content {
+        > p, > .mdc-button {
+          display: none;
         }
-    }
+      }
 
+      &__background {
+        img {
+          height: 30vh;
+        }
+      }
+    }
+  }
+
+  &--video {
+    .hero {
+      &__content {
+        text-align: center;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+
+  @include media-breakpoint-up(sm) {
     &--video {
-        .hero {
-            &__content {
-                text-align: center;
-                left: 50%;
-                transform: translate(-50%, -50%);
-            }
+      .hero {
+        &__content {
+          .headline {
+            font-size: 4.5rem;
+          }
         }
+      }
     }
+  }
 
-    @include media-breakpoint-up(sm) {
-        &--video {
-            .hero {
-                &__content {
-                    .headline {
-                        font-size: 4.5rem;
-                    }
-                }
-            }
+  @include media-breakpoint-down(sm) {
+    &:not(&--video) {
+      .hero {
+        &__content {
+          top: auto;
+          left: 0;
+          bottom: 0;
+          padding: 2rem;
         }
+      }
     }
-
-    @include media-breakpoint-down(sm) {
-        &:not(&--video) {
-            .hero {
-                &__content {
-                    top: auto;
-                    left: 0;
-                    bottom: 0;
-                    padding: 2rem;
-                }
-            }
-        }
-    }
+  }
 }

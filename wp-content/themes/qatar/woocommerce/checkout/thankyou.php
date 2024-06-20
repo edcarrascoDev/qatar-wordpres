@@ -10,13 +10,14 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see https://docs.woocommerce.com/document/template-structure/
- * @package WooCommerce/Templates
- * @version 3.7.0
+ * @see https://woocommerce.com/document/template-structure/
+ * @package WooCommerce\Templates
+ * @version 8.1.0
+ *
+ * @var WC_Order $order
  */
 
-defined('ABSPATH') || exit;
-$order = $order ? $order : wc_get_order(basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)))
+defined( 'ABSPATH' ) || exit;
 ?>
 
 <div class="container">
@@ -98,32 +99,7 @@ $order = $order ? $order : wc_get_order(basename(parse_url($_SERVER['REQUEST_URI
             <?php do_action('woocommerce_thankyou', $order->get_id()); ?>
 
         <?php else : ?>
-
-            <div class="order__notice order__notice--success">
-                <i class="icon icon--checkmark-circle-success"></i>
-                <p class="mt-40"><?php echo apply_filters(
-                        'woocommerce_thankyou_order_received_text',
-                        esc_html__('Thank you. Your order has been received.', 'woocommerce'),
-                        $order
-                    ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <br>
-                    Puedes seguir mirando algunos de nuestros productos o si tienes dudas del proceso de tu
-                    compra puedes contactarnos.
-                </p>
-            </div>
-
-            <div class="order__actions">
-                <a href="<?php echo get_permalink(wc_get_page_id( 'shop' ));?>" class="mdc-button mdc-button--raised">
-                    Seguir comprando
-                </a>
-                <a
-                        href="<?php echo Theme_Manager::get_instance()->get_theme_page_link('contact_us_page') ?>"
-                        class="mdc-button mdc-button--raised mdc-button mdc-button--secondary"
-                >
-                    Contáctanos
-                </a>
-            </div>
-
-
+            <?php wc_get_template( 'checkout/order-received.php', array( 'order' => false ) ); ?>
         <?php endif; ?>
 
     </div>

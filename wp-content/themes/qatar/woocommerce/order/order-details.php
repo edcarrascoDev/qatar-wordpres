@@ -10,30 +10,35 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see     https://docs.woocommerce.com/document/template-structure/
- * @package WooCommerce/Templates
- * @version 3.7.0
+ * @see     https://woocommerce.com/document/template-structure/
+ * @package WooCommerce\Templates
+ * @version 9.0.0
+ *
+ * @var bool $show_downloads Controls whether the downloads table should be rendered.
  */
 
-defined('ABSPATH') || exit;
+// phpcs:disable WooCommerce.Commenting.CommentHooks.MissingHookComment
 
-$order = wc_get_order($order_id); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.OverrideProhibited
+defined( 'ABSPATH' ) || exit;
 
-if (!$order) {
+$order = wc_get_order( $order_id ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+
+if ( ! $order ) {
     return;
 }
 
-$order_items = $order->get_items(apply_filters('woocommerce_purchase_order_item_types', 'line_item'));
-$show_purchase_note = $order->has_status(apply_filters('woocommerce_purchase_note_order_statuses', array('completed', 'processing')));
-$show_customer_details = is_user_logged_in() && $order->get_user_id() === get_current_user_id();
-$downloads = $order->get_downloadable_items();
-$show_downloads = $order->has_downloadable_item() && $order->is_download_permitted();
+$order_items        = $order->get_items( apply_filters( 'woocommerce_purchase_order_item_types', 'line_item' ) );
+$show_purchase_note = $order->has_status( apply_filters( 'woocommerce_purchase_note_order_statuses', array( 'completed', 'processing' ) ) );
+$downloads          = $order->get_downloadable_items();
 
-if ($show_downloads) {
+// We make sure the order belongs to the user. This will also be true if the user is a guest, and the order belongs to a guest (userID === 0).
+$show_customer_details = $order->get_user_id() === get_current_user_id();
+
+if ( $show_downloads ) {
     wc_get_template(
         'order/order-downloads.php',
         array(
-            'downloads' => $downloads,
+            'downloads'  => $downloads,
             'show_title' => true,
         )
     );
@@ -47,25 +52,25 @@ if ($show_downloads) {
         <div class="table table--order-details ">
             <div class="table__body">
                 <?php
-                do_action('woocommerce_order_details_before_order_table_items', $order);
+                do_action( 'woocommerce_order_details_before_order_table_items', $order );
 
-                foreach ($order_items as $item_id => $item) {
+                foreach ( $order_items as $item_id => $item ) {
                     $product = $item->get_product();
 
                     wc_get_template(
                         'order/order-details-item.php',
                         array(
-                            'order' => $order,
-                            'item_id' => $item_id,
-                            'item' => $item,
+                            'order'              => $order,
+                            'item_id'            => $item_id,
+                            'item'               => $item,
                             'show_purchase_note' => $show_purchase_note,
-                            'purchase_note' => $product ? $product->get_purchase_note() : '',
-                            'product' => $product,
+                            'purchase_note'      => $product ? $product->get_purchase_note() : '',
+                            'product'            => $product,
                         )
                     );
                 }
 
-                do_action('woocommerce_order_details_after_order_table_items', $order);
+                do_action( 'woocommerce_order_details_after_order_table_items', $order );
                 ?>
 
                 <?php
@@ -96,6 +101,14 @@ if ($show_downloads) {
     </section>
 
 <?php
-if ($show_customer_details) {
-    wc_get_template('order/order-details-customer.php', array('order' => $order));
+/**
+ * Action hook fired after the order details.
+ *
+ * @since 4.4.0
+ * @param WC_Order $order Order data.
+ */
+do_action( 'woocommerce_after_order_details', $order );
+
+if ( $show_customer_details ) {
+    wc_get_template( 'order/order-details-customer.php', array( 'order' => $order ) );
 }

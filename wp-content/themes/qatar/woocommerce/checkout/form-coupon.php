@@ -10,15 +10,15 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see https://docs.woocommerce.com/document/template-structure/
- * @package WooCommerce/Templates
- * @version 3.4.4
+ * @see https://woocommerce.com/document/template-structure/
+ * @package WooCommerce\Templates
+ * @version 7.0.1
  */
 
 defined( 'ABSPATH' ) || exit;
 
 if ( ! wc_coupons_enabled() ) { // @codingStandardsIgnoreLine.
-	return;
+    return;
 }
 
 ?>
@@ -50,7 +50,7 @@ if ( ! wc_coupons_enabled() ) { // @codingStandardsIgnoreLine.
                 <div class="form__group">
                     <button
                             type="submit"
-                            class="mdc-button mdc-button--raised"
+                            class="mdc-button mdc-button--raised <?php echo esc_attr( wc_wp_theme_get_element_class_name( 'button' ) ? ' ' . wc_wp_theme_get_element_class_name( 'button' ) : '' ); ?>""
                             name="apply_coupon"
                             value="<?php esc_attr_e( 'Apply coupon', 'woocommerce' ); ?>"
                     >
