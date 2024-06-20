@@ -1,90 +1,92 @@
 /* global wc_orders_params */
-jQuery(function($) {
-  if (typeof wc_orders_params === 'undefined') {
-    return false;
-  }
+jQuery( function( $ ) {
 
-  /**
-   * WCOrdersTable class.
-   */
-  var WCOrdersTable = function() {
-    $(document)
-      .on(
-        'click',
-        '.post-type-shop_order .wp-list-table tbody td, .woocommerce_page_wc-orders .wp-list-table.orders tbody td',
-        this.onRowClick,
-      )
-      .on('click', '.order-preview:not(.disabled)', this.onPreview);
-  };
+	if ( typeof wc_orders_params === 'undefined' ) {
+		return false;
+	}
 
-  /**
-   * Click a row.
-   */
-  WCOrdersTable.prototype.onRowClick = function(e) {
-    if ($(e.target).filter('a, a *, .no-link, .no-link *, button, button *').length) {
-      return true;
-    }
+	/**
+	 * WCOrdersTable class.
+	 */
+	var WCOrdersTable = function() {
+		$( document )
+			.on(
+				'click',
+				'.post-type-shop_order .wp-list-table tbody td, .woocommerce_page_wc-orders .wp-list-table.orders tbody td',
+				this.onRowClick
+			)
+			.on( 'click', '.order-preview:not(.disabled)', this.onPreview );
+	};
 
-    if (window.getSelection && window.getSelection().toString().length) {
-      return true;
-    }
+	/**
+	 * Click a row.
+	 */
+	WCOrdersTable.prototype.onRowClick = function( e ) {
+		if ( $( e.target ).filter( 'a, a *, .no-link, .no-link *, button, button *' ).length ) {
+			return true;
+		}
 
-    var $row = $(this).closest('tr'),
-      href = $row.find('a.order-view').attr('href');
+		if ( window.getSelection && window.getSelection().toString().length ) {
+			return true;
+		}
 
-    if (href && href.length) {
-      e.preventDefault();
+		var $row = $( this ).closest( 'tr' ),
+			href = $row.find( 'a.order-view' ).attr( 'href' );
 
-      if (e.metaKey || e.ctrlKey) {
-        window.open(href, '_blank');
-      } else {
-        window.location = href;
-      }
-    }
-  };
+		if ( href && href.length ) {
+			e.preventDefault();
 
-  /**
-   * Preview an order.
-   */
-  WCOrdersTable.prototype.onPreview = function() {
-    var $previewButton = $(this),
-      $order_id = $previewButton.data('orderId');
+			if ( e.metaKey || e.ctrlKey ) {
+				window.open( href, '_blank' );
+			} else {
+				window.location = href;
+			}
+		}
+	};
 
-    if ($previewButton.data('order-data')) {
-      $(this).WCBackboneModal({
-        template: 'wc-modal-view-order',
-        variable: $previewButton.data('orderData'),
-      });
-    } else {
-      $previewButton.addClass('disabled');
+	/**
+	 * Preview an order.
+	 */
+	WCOrdersTable.prototype.onPreview = function() {
+		var $previewButton    = $( this ),
+			$order_id         = $previewButton.data( 'orderId' );
 
-      $.ajax({
-        url: wc_orders_params.ajax_url,
-        data: {
-          order_id: $order_id,
-          action: 'woocommerce_get_order_details',
-          security: wc_orders_params.preview_nonce,
-        },
-        type: 'GET',
-        success: function(response) {
-          $('.order-preview').removeClass('disabled');
+		if ( $previewButton.data( 'order-data' ) ) {
+			$( this ).WCBackboneModal({
+				template: 'wc-modal-view-order',
+				variable : $previewButton.data( 'orderData' )
+			});
+		} else {
+			$previewButton.addClass( 'disabled' );
 
-          if (response.success) {
-            $previewButton.data('orderData', response.data);
+			$.ajax({
+				url:     wc_orders_params.ajax_url,
+				data:    {
+					order_id: $order_id,
+					action  : 'woocommerce_get_order_details',
+					security: wc_orders_params.preview_nonce
+				},
+				type:    'GET',
+				success: function( response ) {
+					$( '.order-preview' ).removeClass( 'disabled' );
 
-            $(this).WCBackboneModal({
-              template: 'wc-modal-view-order',
-              variable: response.data,
-            });
-          }
-        },
-      });
-    }
-    return false;
-  };
+					if ( response.success ) {
+						$previewButton.data( 'orderData', response.data );
 
-  /**
-   * Init WCOrdersTable.
-   */
-  new WCOrdersTable();
-});
+						$( this ).WCBackboneModal({
+							template: 'wc-modal-view-order',
+							variable : response.data
+						});
+					}
+				}
+			});
+		}
+		return false;
+
+	};
+
+	/**
+	 * Init WCOrdersTable.
+	 */
+	new WCOrdersTable();
+} );

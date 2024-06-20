@@ -188,6 +188,15 @@ class Theme_Manager {
         );
         wp_enqueue_style('theme-style');
 
+        //Woocommerce Global Styles
+        wp_register_style(
+            'woocommerce-style',
+            $this->get_theme_url('assets/css/woocommerce.css'),
+            null,
+            '2021-06-17'
+        );
+        wp_enqueue_style('woocommerce-style');
+
         wp_register_style(
             'new-theme-style',
             $this->get_theme_url('frontend/dist/main.css'),
@@ -219,6 +228,11 @@ class Theme_Manager {
             '7.0.0',
         );
         wp_enqueue_style('swiper-css');
+
+        if ($this->is_empty_cart_page()) {
+            wp_enqueue_style('empty-cart-styles', $this->get_theme_url('/assets/css/empty-cart.css'));
+            wp_enqueue_style('empty-cart-styles');
+        }
     }
 
     /**
@@ -517,6 +531,16 @@ class Theme_Manager {
         return "text/html";
     }
 
+
+
+    function is_empty_cart_page() {
+        if (is_cart() && WC()->cart->is_empty()) {
+            return true;
+        }
+        return false;
+    }
+
+
     /**
      * Sets up theme defaults and registers support for various WordPress features.
      *
@@ -601,7 +625,6 @@ class Theme_Manager {
 
         add_filter('woocommerce_enqueue_styles', '__return_empty_array');
 
-        add_filter('style_loader_tag', [$this, 'add_stylesheet_attributes'], 10, 2);
         add_filter('script_loader_tag', [$this, 'defer_parsing_of_js'], 10);;
     }
 }

@@ -28,7 +28,7 @@ class ReactJs_Templates
          */
         wp_register_script(
             'qatar-reactjs',
-            $this->get_reactjs_url('js/public.min.js'),
+            $this->get_reactjs_url('dist/public.min.js'),
             null,
             '2022-01-27',
             true

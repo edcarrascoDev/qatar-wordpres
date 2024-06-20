@@ -1,0 +1,21 @@
+.empty-cart {
+    min-height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.empty-cart__message .cart-empty {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-block: 1rem;
+}
+
+.empty-cart__image {
+    width: 300px;
+    max-width: 100%;
+    margin-inline: auto;
+    img {
+        max-width: 100%;
+    }
+}

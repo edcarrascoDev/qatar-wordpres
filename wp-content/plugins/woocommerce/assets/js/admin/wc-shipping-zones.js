@@ -1,295 +1,278 @@
 /* global shippingZonesLocalizeScript, ajaxurl */
-(function($, data, wp, ajaxurl) {
-  $(function() {
-    var $table = $('.wc-shipping-zones'),
-      $tbody = $('.wc-shipping-zone-rows'),
-      $save_button = $('.wc-shipping-zone-save'),
-      $row_template = wp.template('wc-shipping-zone-row'),
-      $blank_template = wp.template('wc-shipping-zone-row-blank'),
-      // Backbone model
-      ShippingZone = Backbone.Model.extend({
-        changes: {},
-        logChanges: function(changedRows) {
-          var changes = this.changes || {};
+( function( $, data, wp, ajaxurl ) {
+	$( function() {
+		var $table          = $( '.wc-shipping-zones' ),
+			$tbody          = $( '.wc-shipping-zone-rows' ),
+			$save_button    = $( '.wc-shipping-zone-save' ),
+			$row_template   = wp.template( 'wc-shipping-zone-row' ),
+			$blank_template = wp.template( 'wc-shipping-zone-row-blank' ),
 
-          _.each(changedRows, function(row, id) {
-            changes[id] = _.extend(changes[id] || { zone_id: id }, row);
-          });
+			// Backbone model
+			ShippingZone       = Backbone.Model.extend({
+				changes: {},
+				logChanges: function( changedRows ) {
+					var changes = this.changes || {};
 
-          this.changes = changes;
-          this.trigger('change:zones');
-        },
-        discardChanges: function(id) {
-          var changes = this.changes || {},
-            set_position = null,
-            zones = _.indexBy(this.get('zones'), 'zone_id');
+					_.each( changedRows, function( row, id ) {
+						changes[ id ] = _.extend( changes[ id ] || { zone_id : id }, row );
+					} );
 
-          // Find current set position if it has moved since last save
-          if (changes[id] && changes[id].zone_order !== undefined) {
-            set_position = changes[id].zone_order;
-          }
+					this.changes = changes;
+					this.trigger( 'change:zones' );
+				},
+				discardChanges: function( id ) {
+					var changes      = this.changes || {},
+						set_position = null,
+						zones        = _.indexBy( this.get( 'zones' ), 'zone_id' );
 
-          // Delete all changes
-          delete changes[id];
+					// Find current set position if it has moved since last save
+					if ( changes[ id ] && changes[ id ].zone_order !== undefined ) {
+						set_position = changes[ id ].zone_order;
+					}
 
-          // If the position was set, and this zone does exist in DB, set the position again so the changes are not lost.
-          if (set_position !== null && zones[id] && zones[id].zone_order !== set_position) {
-            changes[id] = _.extend(changes[id] || {}, { zone_id: id, zone_order: set_position });
-          }
+					// Delete all changes
+					delete changes[ id ];
 
-          this.changes = changes;
+					// If the position was set, and this zone does exist in DB, set the position again so the changes are not lost.
+					if ( set_position !== null && zones[ id ] && zones[ id ].zone_order !== set_position ) {
+						changes[ id ] = _.extend( changes[ id ] || {}, { zone_id : id, zone_order : set_position } );
+					}
 
-          // No changes? Disable save button.
-          if (0 === _.size(this.changes)) {
-            shippingZoneView.clearUnloadConfirmation();
-          }
-        },
-        save: function() {
-          if (_.size(this.changes)) {
-            $.post(
-              ajaxurl +
-                (ajaxurl.indexOf('?') > 0 ? '&' : '?') +
-                'action=woocommerce_shipping_zones_save_changes',
-              {
-                wc_shipping_zones_nonce: data.wc_shipping_zones_nonce,
-                changes: this.changes,
-              },
-              this.onSaveResponse,
-              'json',
-            );
-          } else {
-            shippingZone.trigger('saved:zones');
-          }
-        },
-        onSaveResponse: function(response, textStatus) {
-          if ('success' === textStatus) {
-            if (response.success) {
-              shippingZone.set('zones', response.data.zones);
-              shippingZone.trigger('change:zones');
-              shippingZone.changes = {};
-              shippingZone.trigger('saved:zones');
-            } else {
-              window.alert(data.strings.save_failed);
-            }
-          }
-        },
-      }),
-      // Backbone view
-      ShippingZoneView = Backbone.View.extend({
-        rowTemplate: $row_template,
-        initialize: function() {
-          this.listenTo(this.model, 'change:zones', this.setUnloadConfirmation);
-          this.listenTo(this.model, 'saved:zones', this.clearUnloadConfirmation);
-          this.listenTo(this.model, 'saved:zones', this.render);
-          $tbody.on('change', { view: this }, this.updateModelOnChange);
-          $tbody.on('sortupdate', { view: this }, this.updateModelOnSort);
-          $(window).on('beforeunload', { view: this }, this.unloadConfirmation);
-          $(document.body).on('click', '.wc-shipping-zone-add', { view: this }, this.onAddNewRow);
-        },
-        onAddNewRow: function() {
-          var $link = $(this);
-          window.location.href = $link.attr('href');
-        },
-        block: function() {
-          $(this.el).block({
-            message: null,
-            overlayCSS: {
-              background: '#fff',
-              opacity: 0.6,
-            },
-          });
-        },
-        unblock: function() {
-          $(this.el).unblock();
-        },
-        render: function() {
-          var zones = _.indexBy(this.model.get('zones'), 'zone_id'),
-            view = this;
+					this.changes = changes;
 
-          view.$el.empty();
-          view.unblock();
+					// No changes? Disable save button.
+					if ( 0 === _.size( this.changes ) ) {
+						shippingZoneView.clearUnloadConfirmation();
+					}
+				},
+				save: function() {
+					if ( _.size( this.changes ) ) {
+						$.post( ajaxurl + ( ajaxurl.indexOf( '?' ) > 0 ? '&' : '?' ) + 'action=woocommerce_shipping_zones_save_changes', {
+							wc_shipping_zones_nonce : data.wc_shipping_zones_nonce,
+							changes                 : this.changes
+						}, this.onSaveResponse, 'json' );
+					} else {
+						shippingZone.trigger( 'saved:zones' );
+					}
+				},
+				onSaveResponse: function( response, textStatus ) {
+					if ( 'success' === textStatus ) {
+						if ( response.success ) {
+							shippingZone.set( 'zones', response.data.zones );
+							shippingZone.trigger( 'change:zones' );
+							shippingZone.changes = {};
+							shippingZone.trigger( 'saved:zones' );
+						} else {
+							window.alert( data.strings.save_failed );
+						}
+					}
+				}
+			} ),
 
-          if (_.size(zones)) {
-            // Sort zones
-            zones = _(zones)
-              .chain()
-              .sortBy(function(zone) {
-                return parseInt(zone.zone_id, 10);
-              })
-              .sortBy(function(zone) {
-                return parseInt(zone.zone_order, 10);
-              })
-              .value();
+			// Backbone view
+			ShippingZoneView = Backbone.View.extend({
+				rowTemplate: $row_template,
+				initialize: function() {
+					this.listenTo( this.model, 'change:zones', this.setUnloadConfirmation );
+					this.listenTo( this.model, 'saved:zones', this.clearUnloadConfirmation );
+					this.listenTo( this.model, 'saved:zones', this.render );
+					$tbody.on( 'change', { view: this }, this.updateModelOnChange );
+					$tbody.on( 'sortupdate', { view: this }, this.updateModelOnSort );
+					$( window ).on( 'beforeunload', { view: this }, this.unloadConfirmation );
+					$( document.body ).on( 'click', '.wc-shipping-zone-add', { view: this }, this.onAddNewRow );
+				},
+				onAddNewRow: function() {
+					var $link = $( this );
+					window.location.href = $link.attr( 'href' );
+				},
+				block: function() {
+					$( this.el ).block({
+						message: null,
+						overlayCSS: {
+							background: '#fff',
+							opacity: 0.6
+						}
+					});
+				},
+				unblock: function() {
+					$( this.el ).unblock();
+				},
+				render: function() {
+					var zones = _.indexBy( this.model.get( 'zones' ), 'zone_id' ),
+						view  = this;
 
-            // Populate $tbody with the current zones
-            $.each(zones, function(id, rowData) {
-              view.renderRow(rowData);
-            });
-          } else {
-            view.$el.append($blank_template);
-          }
+					view.$el.empty();
+					view.unblock();
 
-          view.initRows();
-        },
-        renderRow: function(rowData) {
-          var view = this;
-          view.$el.append(view.rowTemplate(rowData));
-          view.initRow(rowData);
-        },
-        initRow: function(rowData) {
-          var view = this;
-          var $tr = view.$el.find('tr[data-id="' + rowData.zone_id + '"]');
+					if ( _.size( zones ) ) {
+						// Sort zones
+						zones = _( zones )
+							.chain()
+							.sortBy( function ( zone ) { return parseInt( zone.zone_id, 10 ); } )
+							.sortBy( function ( zone ) { return parseInt( zone.zone_order, 10 ); } )
+							.value();
 
-          // List shipping methods
-          view.renderShippingMethods(rowData.zone_id, rowData.shipping_methods);
-          $tr.find('.wc-shipping-zone-delete').on('click', { view: this }, this.onDeleteRow);
-        },
-        initRows: function() {
-          const isEven = 0 !== $('tbody.wc-shipping-zone-rows tr').length % 2;
-          const tfoot = $('tfoot.wc-shipping-zone-rows-tfoot');
+						// Populate $tbody with the current zones
+						$.each( zones, function( id, rowData ) {
+							view.renderRow( rowData );
+						} );
+					} else {
+						view.$el.append( $blank_template );
+					}
 
-          // Stripe
-          if (isEven) {
-            tfoot.find('tr').addClass('even');
-          } else {
-            tfoot.find('tr').removeClass('even');
-          }
-          // Tooltips
-          $('#tiptip_holder').removeAttr('style');
-          $('#tiptip_arrow').removeAttr('style');
-          $('.tips').tipTip({ attribute: 'data-tip', fadeIn: 50, fadeOut: 50, delay: 50 });
-        },
-        renderShippingMethods: function(zone_id, shipping_methods) {
-          var $tr = $('.wc-shipping-zones tr[data-id="' + zone_id + '"]');
-          var $method_list = $tr.find('.wc-shipping-zone-methods ul');
+					view.initRows();
+				},
+				renderRow: function( rowData ) {
+					var view = this;
+					view.$el.append( view.rowTemplate( rowData ) );
+					view.initRow( rowData );
+				},
+				initRow: function( rowData ) {
+					var view = this;
+					var $tr = view.$el.find( 'tr[data-id="' + rowData.zone_id + '"]');
 
-          $method_list.find('.wc-shipping-zone-method').remove();
+					// List shipping methods
+					view.renderShippingMethods( rowData.zone_id, rowData.shipping_methods );
+					$tr.find( '.wc-shipping-zone-delete' ).on( 'click', { view: this }, this.onDeleteRow );
+				},
+				initRows: function() {
+					const isEven = 0 !== ( $( 'tbody.wc-shipping-zone-rows tr' ).length % 2 );
+					const tfoot = $( 'tfoot.wc-shipping-zone-rows-tfoot' );
 
-          if (_.size(shipping_methods)) {
-            shipping_methods = _.sortBy(shipping_methods, function(method) {
-              return parseInt(method.method_order, 10);
-            });
+					// Stripe
+					if ( isEven ) {
+						tfoot.find( 'tr' ).addClass( 'even' );
+					} else {
+						tfoot.find( 'tr' ).removeClass( 'even' );
+					}
+					// Tooltips
+					$( '#tiptip_holder' ).removeAttr( 'style' );
+					$( '#tiptip_arrow' ).removeAttr( 'style' );
+					$( '.tips' ).tipTip({ 'attribute': 'data-tip', 'fadeIn': 50, 'fadeOut': 50, 'delay': 50 });
+				},
+				renderShippingMethods: function( zone_id, shipping_methods ) {
+					var $tr          = $( '.wc-shipping-zones tr[data-id="' + zone_id + '"]');
+					var $method_list = $tr.find('.wc-shipping-zone-methods ul');
 
-            _.each(shipping_methods, function(shipping_method) {
-              var class_name = 'method_disabled';
+					$method_list.find( '.wc-shipping-zone-method' ).remove();
 
-              if ('yes' === shipping_method.enabled) {
-                class_name = 'method_enabled';
-              }
+					if ( _.size( shipping_methods ) ) {
+						shipping_methods = _.sortBy( shipping_methods, function( method ) {
+							return parseInt( method.method_order, 10 );
+						} );
 
-              $method_list.append(
-                '<li class="wc-shipping-zone-method ' +
-                  class_name +
-                  '">' +
-                  shipping_method.title +
-                  '</li>',
-              );
-            });
-          } else {
-            $method_list.append(
-              '<li class="wc-shipping-zone-method">' +
-                data.strings.no_shipping_methods_offered +
-                '</li>',
-            );
-          }
-        },
-        onDeleteRow: function(event) {
-          var view = event.data.view,
-            model = view.model,
-            zones = _.indexBy(model.get('zones'), 'zone_id'),
-            changes = {},
-            row = $(this).closest('tr'),
-            zone_id = row.data('id');
+						_.each( shipping_methods, function( shipping_method ) {
+							var class_name = 'method_disabled';
 
-          event.preventDefault();
+							if ( 'yes' === shipping_method.enabled ) {
+								class_name = 'method_enabled';
+							}
 
-          if (window.confirm(data.strings.delete_confirmation_msg)) {
-            if (zones[zone_id]) {
-              delete zones[zone_id];
-              changes[zone_id] = _.extend(changes[zone_id] || {}, { deleted: 'deleted' });
-              model.set('zones', zones);
-              model.logChanges(changes);
-              event.data.view.block();
-              event.data.view.model.save();
-            }
-          }
-        },
-        setUnloadConfirmation: function() {
-          this.needsUnloadConfirm = true;
-          $save_button.prop('disabled', false);
-        },
-        clearUnloadConfirmation: function() {
-          this.needsUnloadConfirm = false;
-          $save_button.prop('disabled', true);
-        },
-        unloadConfirmation: function(event) {
-          if (event.data.view.needsUnloadConfirm) {
-            event.returnValue = data.strings.unload_confirmation_msg;
-            window.event.returnValue = data.strings.unload_confirmation_msg;
-            return data.strings.unload_confirmation_msg;
-          }
-        },
-        updateModelOnChange: function(event) {
-          var model = event.data.view.model,
-            $target = $(event.target),
-            zone_id = $target.closest('tr').data('id'),
-            attribute = $target.data('attribute'),
-            value = $target.val(),
-            zones = _.indexBy(model.get('zones'), 'zone_id'),
-            changes = {};
+							$method_list.append(
+								'<li class="wc-shipping-zone-method ' + class_name + '">' + shipping_method.title + '</li>'
+							);
+						} );
+					} else {
+						$method_list.append( '<li class="wc-shipping-zone-method">' + data.strings.no_shipping_methods_offered + '</li>' );
+					}
+				},
+				onDeleteRow: function( event ) {
+					var view    = event.data.view,
+						model   = view.model,
+						zones   = _.indexBy( model.get( 'zones' ), 'zone_id' ),
+						changes = {},
+						row     = $( this ).closest('tr'),
+						zone_id = row.data('id');
 
-          if (!zones[zone_id] || zones[zone_id][attribute] !== value) {
-            changes[zone_id] = {};
-            changes[zone_id][attribute] = value;
-          }
+					event.preventDefault();
 
-          model.logChanges(changes);
-        },
-        updateModelOnSort: function(event) {
-          var view = event.data.view,
-            model = view.model,
-            zones = _.indexBy(model.get('zones'), 'zone_id'),
-            rows = $('tbody.wc-shipping-zone-rows tr'),
-            changes = {};
+					if ( window.confirm( data.strings.delete_confirmation_msg ) ) {
+						if ( zones[ zone_id ] ) {
+							delete zones[ zone_id ];
+							changes[ zone_id ] = _.extend( changes[ zone_id ] || {}, { deleted : 'deleted' } );
+							model.set( 'zones', zones );
+							model.logChanges( changes );
+							event.data.view.block();
+							event.data.view.model.save();
+						}
+					}
+				},
+				setUnloadConfirmation: function() {
+					this.needsUnloadConfirm = true;
+					$save_button.prop( 'disabled', false );
+				},
+				clearUnloadConfirmation: function() {
+					this.needsUnloadConfirm = false;
+					$save_button.prop( 'disabled', true );
+				},
+				unloadConfirmation: function( event ) {
+					if ( event.data.view.needsUnloadConfirm ) {
+						event.returnValue = data.strings.unload_confirmation_msg;
+						window.event.returnValue = data.strings.unload_confirmation_msg;
+						return data.strings.unload_confirmation_msg;
+					}
+				},
+				updateModelOnChange: function( event ) {
+					var model     = event.data.view.model,
+						$target   = $( event.target ),
+						zone_id   = $target.closest( 'tr' ).data( 'id' ),
+						attribute = $target.data( 'attribute' ),
+						value     = $target.val(),
+						zones   = _.indexBy( model.get( 'zones' ), 'zone_id' ),
+						changes = {};
 
-          // Update sorted row position
-          _.each(rows, function(row) {
-            var zone_id = $(row).data('id'),
-              old_position = null,
-              new_position = parseInt($(row).index(), 10);
+					if ( ! zones[ zone_id ] || zones[ zone_id ][ attribute ] !== value ) {
+						changes[ zone_id ] = {};
+						changes[ zone_id ][ attribute ] = value;
+					}
 
-            if (zones[zone_id]) {
-              old_position = parseInt(zones[zone_id].zone_order, 10);
-            }
+					model.logChanges( changes );
+				},
+				updateModelOnSort: function( event ) {
+					var view    = event.data.view,
+						model   = view.model,
+						zones   = _.indexBy( model.get( 'zones' ), 'zone_id' ),
+						rows    = $( 'tbody.wc-shipping-zone-rows tr' ),
+						changes = {};
 
-            if (old_position !== new_position) {
-              changes[zone_id] = _.extend(changes[zone_id] || {}, { zone_order: new_position });
-            }
-          });
+					// Update sorted row position
+					_.each( rows, function( row ) {
+						var zone_id = $( row ).data( 'id' ),
+							old_position = null,
+							new_position = parseInt( $( row ).index(), 10 );
 
-          if (_.size(changes)) {
-            model.logChanges(changes);
-            event.data.view.block();
-            event.data.view.model.save();
-          }
-        },
-      }),
-      shippingZone = new ShippingZone({
-        zones: data.zones,
-      }),
-      shippingZoneView = new ShippingZoneView({
-        model: shippingZone,
-        el: $tbody,
-      });
+						if ( zones[ zone_id ] ) {
+							old_position = parseInt( zones[ zone_id ].zone_order, 10 );
+						}
 
-    shippingZoneView.render();
+						if ( old_position !== new_position ) {
+							changes[ zone_id ] = _.extend( changes[ zone_id ] || {}, { zone_order : new_position } );
+						}
+					} );
 
-    $tbody.sortable({
-      items: 'tr',
-      cursor: 'move',
-      axis: 'y',
-      handle: 'td.wc-shipping-zone-sort',
-      scrollSensitivity: 40,
-    });
-  });
-})(jQuery, shippingZonesLocalizeScript, wp, ajaxurl);
+					if ( _.size( changes ) ) {
+						model.logChanges( changes );
+						event.data.view.block();
+						event.data.view.model.save();
+					}
+				}
+			} ),
+			shippingZone = new ShippingZone({
+				zones: data.zones
+			} ),
+			shippingZoneView = new ShippingZoneView({
+				model:    shippingZone,
+				el:       $tbody
+			} );
+
+		shippingZoneView.render();
+
+		$tbody.sortable({
+			items: 'tr',
+			cursor: 'move',
+			axis: 'y',
+			handle: 'td.wc-shipping-zone-sort',
+			scrollSensitivity: 40
+		});
+	});
+})( jQuery, shippingZonesLocalizeScript, wp, ajaxurl );

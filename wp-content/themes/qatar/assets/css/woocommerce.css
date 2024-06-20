@@ -1,0 +1,6 @@
+.woocommerce-notices-wrapper {
+    .woocommerce-message {
+        padding: .9rem 2rem;
+        background: #eee;
+    }
+}

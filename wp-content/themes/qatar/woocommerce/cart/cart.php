@@ -16,20 +16,21 @@
  */
 
 defined('ABSPATH') || exit;
-
-do_action('woocommerce_before_cart'); ?>
+?>
 <div class="container">
   <div class="cart">
     <h2 class="headline headline--h3">Carro de compras</h2>
     <div class="cart__container">
       <form
-          class="cart__table"
-          action="<?php echo esc_url(wc_get_cart_url()); ?>"
-          method="post"
+        class="cart__table"
+        action="<?php echo esc_url(wc_get_cart_url()); ?>"
+        method="post"
       >
           <?php do_action('woocommerce_before_cart_table'); ?>
         <div class="cart__list-items">
-            <?php do_action('woocommerce_before_cart_contents'); ?>
+            <?php do_action('woocommerce_before_cart_contents');
+            do_action('woocommerce_before_cart');
+            ?>
 
             <?php
             foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
@@ -49,7 +50,7 @@ do_action('woocommerce_before_cart'); ?>
                     $product_permalink = apply_filters('woocommerce_cart_item_permalink', $_product->is_visible() ? $_product->get_permalink($cart_item) : '', $cart_item, $cart_item_key);
                     ?>
                   <div
-                      class="cart__item <?php echo esc_attr(apply_filters('woocommerce_cart_item_class', 'cart_item', $cart_item, $cart_item_key)); ?>">
+                    class="cart__item <?php echo esc_attr(apply_filters('woocommerce_cart_item_class', 'cart_item', $cart_item, $cart_item_key)); ?>">
 
                     <div class="cart__product-thumbnail">
                         <?php
@@ -209,11 +210,11 @@ do_action('woocommerce_before_cart'); ?>
                 <div class="form__group">
                   <div class="mdc-text-field">
                     <input
-                        type="text"
-                        name="coupon_code"
-                        class="mdc-text-field__input"
-                        id="coupon_code"
-                        placeholder="<?php esc_attr_e('Coupon code', 'woocommerce'); ?>"
+                      type="text"
+                      name="coupon_code"
+                      class="mdc-text-field__input"
+                      id="coupon_code"
+                      placeholder="<?php esc_attr_e('Coupon code', 'woocommerce'); ?>"
                     />
                     <label for="coupon_code" class="mdc-floating-label">
                         <?php esc_html_e('Coupon', 'woocommerce'); ?>
