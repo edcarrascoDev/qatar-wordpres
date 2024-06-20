@@ -79,11 +79,11 @@ class Theme_Manager {
 
     function add_woo_sidebar() {
 
-        if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
-            if( is_woocommerce() ) {
-                remove_action( 'genesis_sidebar', 'genesis_do_sidebar' );
-                remove_action( 'genesis_sidebar_alt', 'genesis_do_sidebar_alt' );
-                add_action( 'genesis_sidebar', 'wpstudio_woo_sidebar' );
+        if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+            if (is_woocommerce()) {
+                remove_action('genesis_sidebar', 'genesis_do_sidebar');
+                remove_action('genesis_sidebar_alt', 'genesis_do_sidebar_alt');
+                add_action('genesis_sidebar', 'wpstudio_woo_sidebar');
             }
         }
 
@@ -93,13 +93,13 @@ class Theme_Manager {
     function register_sidebar() {
         register_sidebar(
             array(
-                'id'            => 'woocommerce_sidebar',
-                'name'          => __( 'Sidebar primario', THEME_LOCALE ),
-                'description'   => __( 'Este sidebar será usado para woocommerce.' ),
+                'id' => 'woocommerce_sidebar',
+                'name' => __('Sidebar primario', THEME_LOCALE),
+                'description' => __('Este sidebar será usado para woocommerce.'),
                 'before_widget' => '<aside id="%1$s" class="widget %2$s">',
-                'after_widget'  => '</aside>',
-                'before_title'  => '<h3 class="headline headline--h5">',
-                'after_title'   => '</h3>',
+                'after_widget' => '</aside>',
+                'before_title' => '<h3 class="headline headline--h5">',
+                'after_title' => '</h3>',
             )
         );
     }
@@ -108,13 +108,13 @@ class Theme_Manager {
     function register_shop_sidebar() {
         register_sidebar(
             array(
-                'id'            => 'shop',
-                'name'          => __( 'Sidebar woocommerce', THEME_LOCALE ),
-                'description'   => __( 'Este sidebar será usado para woocommerce.' ),
+                'id' => 'shop',
+                'name' => __('Sidebar woocommerce', THEME_LOCALE),
+                'description' => __('Este sidebar será usado para woocommerce.'),
                 'before_widget' => '<aside id="%1$s" class="widget %2$s">',
-                'after_widget'  => '</aside>',
-                'before_title'  => '<h3 class="headline headline--h5">',
-                'after_title'   => '</h3>',
+                'after_widget' => '</aside>',
+                'before_title' => '<h3 class="headline headline--h5">',
+                'after_title' => '</h3>',
             )
         );
     }
@@ -125,19 +125,20 @@ class Theme_Manager {
     private function theme_hooks() {
         add_action('after_setup_theme', [$this, 'theme_setup']);
 
-        add_action( 'widgets_init', [$this, 'register_sidebar'] );
-        add_action( 'widgets_init', [$this, 'register_shop_sidebar'] );
+        add_action('widgets_init', [$this, 'register_sidebar']);
+        add_action('widgets_init', [$this, 'register_shop_sidebar']);
 
         add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_scripts']);
         add_action('wp_enqueue_scripts', [$this, 'enqueue_front_scripts']);
         add_action('wp_default_scripts', [$this, 'remove_jquery']);
 
-        add_action( 'init',  [$this, 'create_brands_hierarchical_taxonomy'], 0 );
-        add_action( 'rest_api_init', [$this, 'register_rest_field_for_custom_taxonomy_brands'] );
+        add_action('init', [$this, 'create_brands_hierarchical_taxonomy'], 0);
+        add_action('init', [$this, 'create_trailers_post_type'], 10);
+        add_action('rest_api_init', [$this, 'register_rest_field_for_custom_taxonomy_brands']);
     }
 
     /**
-     * Add Styles and Scripts used in the Wordpress Admin
+     * Add Styles and Scripts used in the WordPress Admin
      */
     public function enqueue_admin_scripts() {
         wp_register_style('theme-admin-style', $this->get_theme_url('assets/css/admin-styles.css'));
@@ -174,10 +175,10 @@ class Theme_Manager {
      */
     private function enqueue_styles() {
         wp_enqueue_style('main-theme-style', get_stylesheet_uri());
-        wp_dequeue_style( 'wp-block-library' );
-        wp_dequeue_style( 'wp-block-library-theme' );
-        wp_dequeue_style( 'wc-block-style' );
-        wp_dequeue_style( 'storefront-gutenberg-blocks' );
+        wp_dequeue_style('wp-block-library');
+        wp_dequeue_style('wp-block-library-theme');
+        wp_dequeue_style('wc-block-style');
+        wp_dequeue_style('storefront-gutenberg-blocks');
 
         wp_register_style(
             'theme-style',
@@ -186,6 +187,14 @@ class Theme_Manager {
             '2021-06-17'
         );
         wp_enqueue_style('theme-style');
+
+        wp_register_style(
+            'new-theme-style',
+            $this->get_theme_url('frontend/dist/main.css'),
+            null,
+            '2024-06-19'
+        );
+        wp_enqueue_style('new-theme-style');
 
         wp_register_style(
             'google-font-ubuntu',
@@ -221,8 +230,8 @@ class Theme_Manager {
          */
         wp_deregister_script('jquery');
 
-        wp_deregister_script( 'wp-embed' );
-        wp_deregister_script( 'wp-emoji-release' );
+        wp_deregister_script('wp-embed');
+        wp_deregister_script('wp-emoji-release');
 
         /**
          * Main Theme Script
@@ -260,6 +269,24 @@ class Theme_Manager {
         wp_enqueue_script('swiper-js');
     }
 
+    public function create_trailers_post_type() {
+
+        register_post_type('trailers',
+            array(
+                'labels' => array(
+                    'name' => __('Remolques'),
+                    'singular_name' => __('Remolque')
+                ),
+                'has_archive' => true,
+                'public' => true,
+                'rewrite' => array('slug' => 'trailer'),
+                'show_in_rest' => true,
+                'menu_icon' => 'dashicons-car',
+                'supports' => array('title', 'editor', 'author', 'thumbnail', 'excerpt')
+            )
+        );
+    }
+
     function add_stylesheet_attributes($html) {
         return str_replace(
             "rel='stylesheet'",
@@ -267,11 +294,11 @@ class Theme_Manager {
         );
     }
 
-    function defer_parsing_of_js( $url ) {
-        if ( is_user_logged_in() ) return $url; //don't break WP Admin
-        if ( FALSE === strpos( $url, '.js' ) ) return $url;
-        if ( strpos( $url, 'jquery.js' ) ) return $url;
-        return str_replace( ' src', ' defer src', $url );
+    function defer_parsing_of_js($url) {
+        if (is_user_logged_in()) return $url; //don't break WP Admin
+        if (FALSE === strpos($url, '.js')) return $url;
+        if (strpos($url, 'jquery.js')) return $url;
+        return str_replace(' src', ' defer src', $url);
     }
 
     /**
@@ -292,41 +319,41 @@ class Theme_Manager {
     function create_brands_hierarchical_taxonomy() {
 
         $labels = [
-            'name' => _x( 'Brands', 'taxonomy general name' ),
-            'singular_name' => _x( 'Marca', 'taxonomy singular name' ),
-            'search_items' =>  __( 'Buscar Marcas' ),
-            'all_items' => __( 'Todas las marcas' ),
-            'parent_item' => __( 'Marca principal' ),
-            'parent_item_colon' => __( 'Marca principal:' ),
-            'edit_item' => __( 'Editar Marca' ),
-            'update_item' => __( 'Actualizar Marca' ),
-            'add_new_item' => __( 'Agregar Nueva Marca' ),
-            'new_item_name' => __( 'Nuevo Nombre de la marca' ),
-            'menu_name' => __( 'Marcas' ),
+            'name' => _x('Brands', 'taxonomy general name'),
+            'singular_name' => _x('Marca', 'taxonomy singular name'),
+            'search_items' => __('Buscar Marcas'),
+            'all_items' => __('Todas las marcas'),
+            'parent_item' => __('Marca principal'),
+            'parent_item_colon' => __('Marca principal:'),
+            'edit_item' => __('Editar Marca'),
+            'update_item' => __('Actualizar Marca'),
+            'add_new_item' => __('Agregar Nueva Marca'),
+            'new_item_name' => __('Nuevo Nombre de la marca'),
+            'menu_name' => __('Marcas'),
         ];
 
         $capabilities = [
-            'manage_terms'               => 'manage_woocommerce',
-            'edit_terms'                 => 'manage_woocommerce',
-            'delete_terms'               => 'manage_woocommerce',
-            'assign_terms'               => 'manage_woocommerce',
+            'manage_terms' => 'manage_woocommerce',
+            'edit_terms' => 'manage_woocommerce',
+            'delete_terms' => 'manage_woocommerce',
+            'assign_terms' => 'manage_woocommerce',
         ];
 
 
         $args = [
-            'labels'                     => $labels,
-            'show_in_rest'               => true,
-            'hierarchical'               => true,
-            'public'                     => true,
-            'show_ui'                    => true,
-            'show_admin_column'          => false,
-            'show_in_nav_menus'          => true,
-            'show_tagcloud'              => true,
-            'capabilities'               => $capabilities,
+            'labels' => $labels,
+            'show_in_rest' => true,
+            'hierarchical' => true,
+            'public' => true,
+            'show_ui' => true,
+            'show_admin_column' => false,
+            'show_in_nav_menus' => true,
+            'show_tagcloud' => true,
+            'capabilities' => $capabilities,
         ];
 
-        register_taxonomy( 'brands', ['product'], $args );
-        register_taxonomy_for_object_type( 'brands', 'product' );
+        register_taxonomy('brands', ['product'], $args);
+        register_taxonomy_for_object_type('brands', 'product');
 
     }
 
@@ -337,8 +364,8 @@ class Theme_Manager {
     function register_rest_field_for_custom_taxonomy_brands() {
 
         register_rest_field('product', "brands", array(
-            'get_callback'    => [$this, 'product_get_callback'],
-            'update_callback'    => [$this, 'product_update_callback'],
+            'get_callback' => [$this, 'product_get_callback'],
+            'update_callback' => [$this, 'product_update_callback'],
             'schema' => null,
         ));
 
@@ -357,12 +384,12 @@ class Theme_Manager {
     function product_get_callback($post, $attr, $request, $object_type) {
         $terms = [];
 
-        foreach (wp_get_post_terms( $post[ 'id' ],'brands') as $term) {
+        foreach (wp_get_post_terms($post['id'], 'brands') as $term) {
             $terms[] = [
-                'id'        => $term->term_id,
-                'name'      => $term->name,
-                'slug'      => $term->slug,
-                'image_src'  => get_taxonomy_image($term->term_id)
+                'id' => $term->term_id,
+                'name' => $term->name,
+                'slug' => $term->slug,
+                'image_src' => get_taxonomy_image($term->term_id)
             ];
         }
 
@@ -370,7 +397,7 @@ class Theme_Manager {
     }
 
     public function get_taxonomy_image_by_post_id($post_id) {
-        $term = wp_get_post_terms( $post_id,'brands')[0];
+        $term = wp_get_post_terms($post_id, 'brands')[0];
 
         return get_taxonomy_image($term->term_id);
     }
@@ -385,7 +412,7 @@ class Theme_Manager {
      */
     function product_update_callback($values, $post, $attr, $request, $object_type) {
         $postId = $post->get_id();
-        wp_set_object_terms( $postId, $values , 'brands');
+        wp_set_object_terms($postId, $values, 'brands');
     }
 
     public function get_social_network_url($social_network) {
@@ -397,8 +424,7 @@ class Theme_Manager {
      * @return array
      */
 
-    public function get_footer_locations()
-    {
+    public function get_footer_locations() {
         $locations_raw = $this->get_theme_option('footer_location');
         $locations = [];
 
@@ -560,7 +586,7 @@ class Theme_Manager {
 
         add_filter('woocommerce_enqueue_styles', '__return_empty_array');
 
-        add_filter( 'style_loader_tag', [$this, 'add_stylesheet_attributes'], 10, 2 );
-        add_filter( 'script_loader_tag', [$this, 'defer_parsing_of_js'], 10 );;
+        add_filter('style_loader_tag', [$this, 'add_stylesheet_attributes'], 10, 2);
+        add_filter('script_loader_tag', [$this, 'defer_parsing_of_js'], 10);;
     }
 }

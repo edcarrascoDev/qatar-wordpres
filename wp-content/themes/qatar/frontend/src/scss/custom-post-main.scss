@@ -1,0 +1,18 @@
+@import "./utilities";
+
+.custom-post-main {
+  background-color: $primary-color;
+  background-position: center;
+  background-size: cover;
+
+  &__wrapper {
+    @include media-breakpoint-up(md) {
+      max-width: 50%;
+    }
+  }
+
+  &__subtitle {
+    color: $text-darker-on-primary-color;
+    margin-bottom: .6rem;
+  }
+}

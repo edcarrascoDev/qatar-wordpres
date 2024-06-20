@@ -1,0 +1,46 @@
+@import "./utilities";
+
+.two-col-text-img {
+
+  @include media-breakpoint-up(sm) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 3rem;
+  }
+
+  &--inverse {
+    @include media-breakpoint-up(sm) {
+      flex-direction: row-reverse;
+    }
+  }
+
+  &__image {
+    text-align: center;
+    @include media-breakpoint-up(sm) {
+      flex: 1 1 50%;
+      > a {
+        display: none;
+      }
+    }
+
+    img {
+      width: 100%;
+      max-width: 100%;
+      @include media-breakpoint-down(sm) {
+        margin-bottom: 2rem;
+      }
+    }
+  }
+
+  &__description {
+    @include media-breakpoint-up(sm) {
+      flex: 1 1 50%;
+    }
+    @include media-breakpoint-down(sm) {
+      > a {
+        display: none;
+      }
+    }
+  }
+}

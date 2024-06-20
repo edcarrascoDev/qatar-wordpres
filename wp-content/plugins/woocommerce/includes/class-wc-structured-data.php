@@ -2,7 +2,7 @@
 /**
  * Structured data's handler and generator using JSON-LD format.
  *
- * @package WooCommerce/Classes
+ * @package WooCommerce\Classes
  * @since   3.0.0
  * @version 3.0.0
  */
@@ -198,7 +198,7 @@ class WC_Structured_Data {
 		$markup = array(
 			'@type'       => 'Product',
 			'@id'         => $permalink . '#product', // Append '#product' to differentiate between this @id and the @id generated for the Breadcrumblist.
-			'name'        => $product->get_name(),
+			'name'        => wp_kses_post( $product->get_name() ),
 			'url'         => $permalink,
 			'description' => wp_strip_all_tags( do_shortcode( $product->get_short_description() ? $product->get_short_description() : $product->get_description() ) ),
 		);
@@ -216,7 +216,7 @@ class WC_Structured_Data {
 
 		if ( '' !== $product->get_price() ) {
 			// Assume prices will be valid until the end of next year, unless on sale and there is an end date.
-			$price_valid_until = date( 'Y-12-31', time() + YEAR_IN_SECONDS );
+			$price_valid_until = gmdate( 'Y-12-31', time() + YEAR_IN_SECONDS );
 
 			if ( $product->is_type( 'variable' ) ) {
 				$lowest  = $product->get_variation_price( 'min', false );
@@ -241,9 +241,39 @@ class WC_Structured_Data {
 						'offerCount' => count( $product->get_children() ),
 					);
 				}
+			} elseif ( $product->is_type( 'grouped' ) ) {
+				if ( $product->is_on_sale() && $product->get_date_on_sale_to() ) {
+					$price_valid_until = gmdate( 'Y-m-d', $product->get_date_on_sale_to()->getTimestamp() );
+				}
+
+				$tax_display_mode = get_option( 'woocommerce_tax_display_shop' );
+				$children         = array_filter( array_map( 'wc_get_product', $product->get_children() ), 'wc_products_array_filter_visible_grouped' );
+				$price_function   = 'incl' === $tax_display_mode ? 'wc_get_price_including_tax' : 'wc_get_price_excluding_tax';
+
+				foreach ( $children as $child ) {
+					if ( '' !== $child->get_price() ) {
+						$child_prices[] = $price_function( $child );
+					}
+				}
+				if ( empty( $child_prices ) ) {
+					$min_price = 0;
+				} else {
+					$min_price = min( $child_prices );
+				}
+
+				$markup_offer = array(
+					'@type'              => 'Offer',
+					'price'              => wc_format_decimal( $min_price, wc_get_price_decimals() ),
+					'priceValidUntil'    => $price_valid_until,
+					'priceSpecification' => array(
+						'price'                 => wc_format_decimal( $min_price, wc_get_price_decimals() ),
+						'priceCurrency'         => $currency,
+						'valueAddedTaxIncluded' => wc_prices_include_tax() ? 'true' : 'false',
+					),
+				);
 			} else {
 				if ( $product->is_on_sale() && $product->get_date_on_sale_to() ) {
-					$price_valid_until = date( 'Y-m-d', $product->get_date_on_sale_to()->getTimestamp() );
+					$price_valid_until = gmdate( 'Y-m-d', $product->get_date_on_sale_to()->getTimestamp() );
 				}
 				$markup_offer = array(
 					'@type'              => 'Offer',
@@ -257,9 +287,15 @@ class WC_Structured_Data {
 				);
 			}
 
+			if ( $product->is_in_stock() ) {
+				$stock_status_schema = ( 'onbackorder' === $product->get_stock_status() ) ? 'BackOrder' : 'InStock';
+			} else {
+				$stock_status_schema = 'OutOfStock';
+			}
+
 			$markup_offer += array(
 				'priceCurrency' => $currency,
-				'availability'  => 'http://schema.org/' . ( $product->is_in_stock() ? 'InStock' : 'OutOfStock' ),
+				'availability'  => 'http://schema.org/' . $stock_status_schema,
 				'url'           => $permalink,
 				'seller'        => array(
 					'@type' => 'Organization',
@@ -459,7 +495,7 @@ class WC_Structured_Data {
 				continue;
 			}
 
-			$product        = $order->get_product_from_item( $item );
+			$product        = $item->get_product();
 			$product_exists = is_object( $product );
 			$is_visible     = $product_exists && $product->is_visible();
 
@@ -472,12 +508,12 @@ class WC_Structured_Data {
 					'priceCurrency'    => $order->get_currency(),
 					'eligibleQuantity' => array(
 						'@type' => 'QuantitativeValue',
-						'value' => apply_filters( 'woocommerce_email_order_item_quantity', $item['qty'], $item ),
+						'value' => apply_filters( 'woocommerce_email_order_item_quantity', $item->get_quantity(), $item ),
 					),
 				),
 				'itemOffered'        => array(
 					'@type' => 'Product',
-					'name'  => apply_filters( 'woocommerce_order_item_name', $item['name'], $item, $is_visible ),
+					'name'  => wp_kses_post( apply_filters( 'woocommerce_order_item_name', $item->get_name(), $item, $is_visible ) ),
 					'sku'   => $product_exists ? $product->get_sku() : '',
 					'image' => $product_exists ? wp_get_attachment_image_url( $product->get_image_id() ) : '',
 					'url'   => $is_visible ? get_permalink( $product->get_id() ) : get_home_url(),

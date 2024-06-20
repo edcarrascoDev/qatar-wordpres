@@ -1,0 +1,21 @@
+{
+  "name": "creative-core-group-blocks",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "wp-scripts build",
+    "start": "wp-scripts start"
+  },
+  "author": "Edgar Carrasco",
+  "license": "MIT",
+  "devDependencies": {
+    "@wordpress/editor": "^12.21.0",
+    "@wordpress/scripts": "^24.6.0"
+  },
+  "dependencies": {
+    "@wordpress/block-editor": "^10.5.0",
+    "@wordpress/blocks": "^11.21.0",
+    "@wordpress/components": "^22.1.0"
+  }
+}

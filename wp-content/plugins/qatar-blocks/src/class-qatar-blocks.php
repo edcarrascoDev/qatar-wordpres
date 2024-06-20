@@ -97,7 +97,8 @@ class Qatar_Blocks {
 
 		$block_vars = [
 			'plugin_url' => plugins_url('', dirname(__FILE__)),
-			'i18n' => []
+			'i18n' => [],
+            'themeUri' => get_template_directory_uri()
 		];
 		wp_localize_script('qatar-block-script', 'salient_block_vars', $block_vars);
 

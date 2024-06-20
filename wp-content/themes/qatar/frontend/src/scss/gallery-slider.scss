@@ -1,0 +1,11 @@
+@import "./utilities";
+@import "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css";
+
+.gallery-slider {
+  &__item {
+    img {
+      height: 100%;
+      width: 100%;
+    }
+  }
+}

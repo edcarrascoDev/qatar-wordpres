@@ -1,0 +1,11 @@
+.background {
+  background: $white-color;
+
+  &--primary {
+    background-color: $primary-color;
+  }
+
+  &--grey {
+    background-color: $light-grey;
+  }
+}

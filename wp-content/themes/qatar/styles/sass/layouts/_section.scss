@@ -1,5 +1,6 @@
 .section {
     display: block;
+    height: max-content;
     padding: $padding-on-section;
 
     &--light {
