@@ -77,21 +77,13 @@ class Qatar_Blocks {
 		add_action('enqueue_block_editor_assets', [$this, 'enqueue_block_editor_assets']);
 	}
 
-	public function enqueue_block_assets() {
-		wp_enqueue_style(
-			'qatar-blocks-style',
-			plugins_url('dist/blocks.style.build.css', dirname(__FILE__)),
-			['wp-block']
-		);
-	}
-
 	public function enqueue_block_editor_assets() {
 
 		wp_enqueue_script(
 			'qatar-block-script',
-			plugins_url('dist/blocks.build.js', dirname(__FILE__)),
+			plugins_url('build/index.js', dirname(__FILE__)),
 			['wp-blocks', 'wp-i18n', 'wp-element', 'wp-components'],
-			'2018-08-30',
+			'2023-06-01',
 			true
 		);
 
@@ -104,9 +96,9 @@ class Qatar_Blocks {
 
 		wp_enqueue_style(
 			'qatar-blocks-editor-style',
-			plugins_url('dist/blocks.build.css', dirname(__FILE__)),
+			plugins_url('build/index.css', dirname(__FILE__)),
 			['wp-edit-blocks'],
-			'2018-08-27'
+            '2023-06-01'
 		);
 	}
 

@@ -1,218 +1,192 @@
 import BaseBlock from '../base-block';
-import getFileButton from '../common/get-file-button';
 
-const { __ } = wp.i18n;
+import { __ } from '@wordpress/i18n';
 
-const { registerBlockType } = wp.blocks;
-const { InspectorControls, PlainText, RichText, MediaUpload } = wp.blockEditor;
-const { PanelRow, PanelBody, SelectControl, RadioControl, FormToggle } = wp.components;
+import { registerBlockType } from '@wordpress/blocks';
+import { InspectorControls, PlainText, RichText, MediaPlaceholder } from '@wordpress/block-editor';
+import {
+  PanelRow,
+  PanelBody,
+  SelectControl,
+  RadioControl,
+  FormToggle,
+} from '@wordpress/components';
+import { ContainerBlock } from '../container-block';
+import { ImagePreview, UTILS } from '../utils';
 
 class Portfolio extends BaseBlock {
-    title = __('sección de pdf');
-    category = 'qatar';
-    parent = ['qatar/single-container'];
-    supports = {
-        align: ['full'],
-    };
+  title = __('sección de pdf');
+  parent = ['qatar/single-container'];
+  attributes = {
+    title: {},
+    content: {},
+    headline: {
+      default: 'h3',
+    },
+    linkText: {
+      default: 'descargar',
+    },
+    fileUrl: {},
+    fileId: {},
+    fileName: {},
+    isLightText: {
+      default: false,
+    },
+    textAligned: {
+      default: 'center',
+    },
+    buttonClasses: {},
+  };
+  edit = params => {
+    const { attributes, setAttributes, className } = params;
 
-    attributes = {
-        title: {},
-        content: {},
-        headline: {
-            default: 'h3',
-        },
-        linkText: {
-            default: 'descargar',
-        },
-        fileUrl: {},
-        fileId: {},
-        fileName: {},
-        isLightText: {
-            default: false,
-        },
-        textAligned: {
-            default: 'center',
-        },
-        buttonClasses: {},
-    };
+    return (
+      <ContainerBlock title={this.title}>
+        <div className={UTILS.FORM_GROUP}>
+          <label htmlFor="title" className={'label'}>
+            Título
+          </label>
+          <PlainText
+            value={attributes.title}
+            id={'title'}
+            onChange={content => setAttributes({ title: content })}
+            placeholder={__('Título')}
+          />
+        </div>
+        <div className={UTILS.FORM_GROUP}>
+          <label htmlFor="content" className={'label'}>
+            Descripción
+          </label>
+          <RichText
+            id={'content'}
+            multine={'br'}
+            value={attributes.content}
+            tagName={'span'}
+            onChange={content => setAttributes({ content: content })}
+            placeholder={__('Descripción')}
+          />
+        </div>
 
-    selectFile(media, params) {
-        const { setAttributes } = params;
-        setAttributes({
-            fileUrl: media.url,
-            fileId: media.id,
-            fileName: media.filename,
-        });
-    }
+        <div className={UTILS.FORM_GROUP}>
+          <label htmlFor="linkText" className={'label'}>
+            Texto en el botón
+          </label>
+          <PlainText
+            value={attributes.linkText}
+            id={'linkText'}
+            onChange={content => setAttributes({ linkText: content })}
+            placeholder={__('ej: Descargar')}
+          />
+        </div>
 
-    edit(params) {
-        const { attributes, setAttributes, className } = params;
+        <MediaPlaceholder
+          onSelect={el => setAttributes({ fileUrl: el.url, fileId: el.id, fileName: el.filename })}
+          allowedTypes={['file']}
+          multiple={false}
+          mediaPreview={<span>{attributes.fileName}</span>}
+          labels={{ title: '', instructions: '' }}
+        />
+        {this.renderInspector(params)}
+      </ContainerBlock>
+    );
+  };
 
-        return (
-            <div className={className}>
-                <div className="input__group">
-                    <label htmlFor="title" className={'label'}>
-                        Título
-                    </label>
-                    <PlainText
-                        value={attributes.title}
-                        id={'title'}
-                        onChange={content => setAttributes({ title: content })}
-                        placeholder={__('Título')}
-                    />
-                </div>
-                <div className="input__group">
-                    <label htmlFor="content" className={'label'}>
-                        Descripción
-                    </label>
-                    <RichText
-                        id={'content'}
-                        multine={'br'}
-                        value={attributes.content}
-                        tagName={'span'}
-                        onChange={content => setAttributes({ content: content })}
-                        placeholder={__('Descripción')}
-                    />
-                </div>
+  renderInspector = ({ attributes, setAttributes }) => (
+    <InspectorControls>
+      <PanelBody title={'Ajuste de textos'}>
+        <PanelRow>
+          <div className="toggle">
+            <FormToggle
+              id={'isLightText'}
+              value={attributes.isLightText}
+              checked={attributes.isLightText}
+              onChange={() => setAttributes({ isLightText: !attributes.isLightText })}
+            />
+            <label htmlFor={'isLightText'}>Usar textos claros</label>
+          </div>
+        </PanelRow>
 
-                <div className="input__group">
-                    <label htmlFor="linkText" className={'label'}>
-                        Texto en el botón
-                    </label>
-                    <PlainText
-                        value={attributes.linkText}
-                        id={'linkText'}
-                        onChange={content => setAttributes({ linkText: content })}
-                        placeholder={__('ej: Descargar')}
-                    />
-                </div>
+        <PanelRow>
+          <div className={UTILS.FORM_GROUP}>
+            <label htmlFor="headline">Seleccionar tipo de encabezado (título)</label>
+            <SelectControl
+              id={'headline'}
+              value={attributes.headline}
+              options={[
+                { label: 'headline 1', value: 'h1' },
+                { label: 'headline 2', value: 'h2' },
+                { label: 'headline 3', value: 'h3' },
+                { label: 'headline 4', value: 'h4' },
+                { label: 'headline 5', value: 'h5' },
+                { label: 'headline 6', value: 'h6' },
+              ]}
+              onChange={value => {
+                setAttributes({ headline: value });
+              }}
+            />
+          </div>
+        </PanelRow>
 
-                <MediaUpload
-                    onSelect={media => this.selectFile(media, params)}
-                    type={'file'}
-                    value={attributes.fileId}
-                    allowedTypes={'application/pdf'}
-                    render={({ open }) =>
-                        getFileButton(
-                            {
-                                fileName: attributes.fileName,
-                                placeholder: __('Subir PDF'),
-                            },
-                            open,
-                        )
-                    }
-                />
-                {this.renderInspector(params)}
-            </div>
-        );
-    }
+        <PanelRow>
+          <RadioControl
+            label="Aliniamiento del texto"
+            selected={attributes.textAligned}
+            options={[
+              { label: 'Centro', value: 'center' },
+              { label: 'Izquiera', value: 'left' },
+              { label: 'Derecha', value: 'right' },
+            ]}
+            onChange={option => {
+              setAttributes({ textAligned: option });
+            }}
+          />
+        </PanelRow>
+      </PanelBody>
 
-    renderInspector(params) {
-        const { attributes, setAttributes } = params;
+      <PanelBody title={'Otros Ajustes'}>
+        <PanelRow>
+          <div className={UTILS.FORM_GROUP}>
+            <label htmlFor="buttonClasses">Classes para el Botón</label>
+            <PlainText
+              value={attributes.buttonClasses}
+              id={'buttonClasses'}
+              onChange={content => setAttributes({ buttonClasses: content })}
+              placeholder={__('ej: mdc-button--secondary')}
+            />
+          </div>
+        </PanelRow>
+      </PanelBody>
+    </InspectorControls>
+  );
 
-        return (
-            <InspectorControls>
-                <PanelBody title={'Ajuste de textos'}>
-                    <PanelRow>
-                        <div className="toggle">
-                            <FormToggle
-                                id={'isLightText'}
-                                value={attributes.isLightText}
-                                checked={attributes.isLightText}
-                                onChange={() =>
-                                    setAttributes({ isLightText: !attributes.isLightText })
-                                }
-                            />
-                            <label htmlFor={'isLightText'}>Usar textos claros</label>
-                        </div>
-                    </PanelRow>
+  save = params => {
+    const { attributes } = params;
+    const { headline, buttonClasses, isLightText, textAligned } = attributes;
 
-                    <PanelRow>
-                        <div className="input__group">
-                            <label htmlFor="headline">
-                                Seleccionar tipo de encabezado (título)
-                            </label>
-                            <SelectControl
-                                id={'headline'}
-                                value={attributes.headline}
-                                options={[
-                                    { label: 'headline 1', value: 'h1' },
-                                    { label: 'headline 2', value: 'h2' },
-                                    { label: 'headline 3', value: 'h3' },
-                                    { label: 'headline 4', value: 'h4' },
-                                    { label: 'headline 5', value: 'h5' },
-                                    { label: 'headline 6', value: 'h6' },
-                                ]}
-                                onChange={value => {
-                                    setAttributes({ headline: value });
-                                }}
-                            />
-                        </div>
-                    </PanelRow>
+    return (
+      <div className={`text-${textAligned}`}>
+        <RichText.Content
+          className={`headline headline--${headline} ${isLightText ? 'headline--light ' : ''}`}
+          tagName={headline}
+          value={attributes.title}
+        />
+        <RichText.Content
+          className={`${isLightText ? 'text-light' : ''}`}
+          tagName={'p'}
+          value={attributes.content}
+        />
 
-                    <PanelRow>
-                        <RadioControl
-                            label="Aliniamiento del texto"
-                            selected={attributes.textAligned}
-                            options={[
-                                { label: 'Centro', value: 'center' },
-                                { label: 'Izquiera', value: 'left' },
-                                { label: 'Derecha', value: 'right' },
-                            ]}
-                            onChange={option => {
-                                setAttributes({ textAligned: option });
-                            }}
-                        />
-                    </PanelRow>
-                </PanelBody>
-
-                <PanelBody title={'Otros Ajustes'}>
-                    <PanelRow>
-                        <div className="input__group">
-                            <label htmlFor="buttonClasses">Classes para el Botón</label>
-                            <PlainText
-                                value={attributes.buttonClasses}
-                                id={'buttonClasses'}
-                                onChange={content => setAttributes({ buttonClasses: content })}
-                                placeholder={__('ej: mdc-button--secondary')}
-                            />
-                        </div>
-                    </PanelRow>
-                </PanelBody>
-            </InspectorControls>
-        );
-    }
-
-    save(params) {
-        const { attributes } = params;
-        const { headline, buttonClasses, isLightText, textAligned } = attributes;
-
-        return (
-            <div className={`text-${textAligned}`}>
-                <RichText.Content
-                    className={`headline headline--${headline} ${
-                        isLightText ? 'headline--light ' : ''
-                    }`}
-                    tagName={headline}
-                    value={attributes.title}
-                />
-                <RichText.Content
-                    className={`${isLightText ? 'text-light' : ''}`}
-                    tagName={'p'}
-                    value={attributes.content}
-                />
-
-                <a
-                    href={attributes.fileUrl}
-                    target={'_blank'}
-                    className={`mdc-button ${buttonClasses}`}
-                    rel="noopener noreferrer"
-                >
-                    {attributes.linkText}
-                </a>
-            </div>
-        );
-    }
+        <a
+          href={attributes.fileUrl}
+          target={'_blank'}
+          className={`mdc-button ${buttonClasses}`}
+          rel="noopener noreferrer"
+        >
+          {attributes.linkText}
+        </a>
+      </div>
+    );
+  };
 }
 
 registerBlockType('qatar/portfolio', new Portfolio());

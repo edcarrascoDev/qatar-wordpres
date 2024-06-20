@@ -1,51 +1,43 @@
 import BaseBlock from '../base-block';
 
-const { __ } = wp.i18n;
-const { registerBlockType } = wp.blocks;
-const { PlainText } = wp.blockEditor;
-const { Fragment } = wp.element;
+import { __ } from '@wordpress/i18n';
+import { registerBlockType } from '@wordpress/blocks';
+import { PlainText } from '@wordpress/block-editor';
+import { ContainerBlock } from '../container-block';
 
 class IdentifierContainer extends BaseBlock {
-    title = __('Identifier container');
-    category = 'qatar';
-    supports = {
-        align: ['full'],
-    };
+  title = __('Identifier container');
+  category = 'qatar';
+  attributes = {
+    identifier: {},
+  };
 
-    attributes = {
-        identifier: {},
-    };
+  edit = params => {
+    const { attributes, setAttributes, className } = params;
+    return (
+      <ContainerBlock title={this.title}>
+        <div className={className}>
+          <div className={UTILS.FORM_GROUP}>
+            <label htmlFor="identifier" className={'label'}>
+              Identificador
+            </label>
+            <PlainText
+              value={attributes.identifier}
+              id={'identifier'}
+              onChange={content => setAttributes({ identifier: content })}
+              placeholder={__('ej: mainProductId')}
+            />
+            <small>No usar espacios</small>
+          </div>
+        </div>
+      </ContainerBlock>
+    );
+  };
 
-    constructor() {
-        super();
-    }
-
-    edit(params) {
-        const { attributes, setAttributes, className } = params;
-        return (
-            <Fragment>
-                <div className={className}>
-                    <div className="input__group">
-                        <label htmlFor="identifier" className={'label'}>
-                            Identificador
-                        </label>
-                        <PlainText
-                            value={attributes.identifier}
-                            id={'identifier'}
-                            onChange={content => setAttributes({ identifier: content })}
-                            placeholder={__('ej: mainProductId')}
-                        />
-                        <small>No usar espacios</small>
-                    </div>
-                </div>
-            </Fragment>
-        );
-    }
-
-    save(params) {
-        const { attributes } = params;
-        return <div id={attributes.identifier} />;
-    }
+  save = params => {
+    const { attributes } = params;
+    return <div id={attributes.identifier} />;
+  };
 }
 
 registerBlockType('qatar/identifier-container', new IdentifierContainer());
