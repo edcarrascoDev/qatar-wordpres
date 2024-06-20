@@ -2604,16 +2604,14 @@
                 );
               return { status: t.value, value: n };
             }
-            return this._def.schema
-              ._parseAsync({ data: a.data, path: a.path, parent: a })
-              .then(e =>
-                b(e)
-                  ? Promise.resolve(s.transform(e.value, r)).then(e => ({
-                      status: t.value,
-                      value: e,
-                    }))
-                  : e,
-              );
+            return this._def.schema._parseAsync({ data: a.data, path: a.path, parent: a }).then(e =>
+              b(e)
+                ? Promise.resolve(s.transform(e.value, r)).then(e => ({
+                    status: t.value,
+                    value: e,
+                  }))
+                : e,
+            );
           }
           n.assertNever(s);
         }

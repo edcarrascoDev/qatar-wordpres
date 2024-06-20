@@ -949,13 +949,11 @@
               );
               const l = (0, u.parse)(o?.content?.raw);
               if (
-                (r
-                  .dispatch(h.store)
-                  .editEntityRecord('postType', e.type, o.id, {
-                    content: i,
-                    blocks: l,
-                    source: 'theme',
-                  }),
+                (r.dispatch(h.store).editEntityRecord('postType', e.type, o.id, {
+                  content: i,
+                  blocks: l,
+                  source: 'theme',
+                }),
                 t)
               ) {
                 const t = () => {

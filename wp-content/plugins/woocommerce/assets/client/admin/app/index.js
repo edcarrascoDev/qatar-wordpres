@@ -6932,10 +6932,12 @@
                                   installText: (0, s.__)('Install and enable', 'woocommerce'),
                                   learnMoreLink: e.learn_more_link,
                                   onLearnMore: () => {
-                                    (0,
-                                    m.recordEvent)('tasklist_shipping_label_printing_learn_more', {
-                                      plugin: e.slug,
-                                    });
+                                    (0, m.recordEvent)(
+                                      'tasklist_shipping_label_printing_learn_more',
+                                      {
+                                        plugin: e.slug,
+                                      },
+                                    );
                                   },
                                   pluginSlugs: o,
                                   installButtonVariant: 'secondary',

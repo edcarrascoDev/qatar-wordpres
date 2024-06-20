@@ -5308,7 +5308,8 @@
         if (
           evt &&
           evt.target &&
-          evt.target.nodeName !== 'OPTION' && evt.target.nodeName !== 'OPTGROUP'
+          evt.target.nodeName !== 'OPTION' &&
+          evt.target.nodeName !== 'OPTGROUP'
         ) {
           return;
         }

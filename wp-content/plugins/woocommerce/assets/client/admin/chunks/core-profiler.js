@@ -989,18 +989,19 @@
             { currencySymbols: i = {}, localeInfo: n = {} } = (0, se.O3)('onboarding', {}),
             r = d()().getDataForCountry(t, n, i);
           if (0 !== Object.keys(r).length)
-            return (0, u.dispatch)(
-              M.SETTINGS_STORE_NAME,
-            ).updateAndPersistSettingsForGroup('general', {
-              general: {
-                ...o,
-                woocommerce_currency: r.code,
-                woocommerce_currency_pos: r.symbolPosition,
-                woocommerce_price_thousand_sep: r.thousandSeparator,
-                woocommerce_price_decimal_sep: r.decimalSeparator,
-                woocommerce_price_num_decimals: r.precision,
+            return (0, u.dispatch)(M.SETTINGS_STORE_NAME).updateAndPersistSettingsForGroup(
+              'general',
+              {
+                general: {
+                  ...o,
+                  woocommerce_currency: r.code,
+                  woocommerce_currency_pos: r.symbolPosition,
+                  woocommerce_price_thousand_sep: r.thousandSeparator,
+                  woocommerce_price_decimal_sep: r.decimalSeparator,
+                  woocommerce_price_num_decimals: r.precision,
+                },
               },
-            });
+            );
         },
         fe = (0, n.assign)({
           businessInfo: (e, o) => ({ ...e.businessInfo, location: o.payload.storeLocation }),

@@ -677,20 +677,24 @@
                         o
                       );
                     })(e, s);
-                  (0,
-                  u.recordEvent)('storeprofiler_store_business_features_installed_and_activated', {
-                    success: !0,
-                    total_time: (0, H.Jm)(o),
-                    ...r,
-                  }),
+                  (0, u.recordEvent)(
+                    'storeprofiler_store_business_features_installed_and_activated',
+                    {
+                      success: !0,
+                      total_time: (0, H.Jm)(o),
+                      ...r,
+                    },
+                  ),
                     (0, y.a)(s);
                 })
                 .catch(e => {
-                  throw ((0,
-                  u.recordEvent)('storeprofiler_store_business_features_installed_and_activated', {
-                    success: !1,
-                    failed_extensions: Object.keys(e.data || {}).map(e => (0, H.br)(e)),
-                  }),
+                  throw ((0, u.recordEvent)(
+                    'storeprofiler_store_business_features_installed_and_activated',
+                    {
+                      success: !1,
+                      failed_extensions: Object.keys(e.data || {}).map(e => (0, H.br)(e)),
+                    },
+                  ),
                   (0, y.a)(e),
                   new Error());
                 }),

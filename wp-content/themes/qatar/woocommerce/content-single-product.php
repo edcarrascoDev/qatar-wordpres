@@ -94,7 +94,7 @@ $image = wp_get_attachment_image_src($product->get_image_id(), 'single-post-thum
                  * @hooked woocommerce_show_product_sale_flash - 10
                  * @hooked woocommerce_show_product_images - 20
                  */
-                do_action('woocommerce_before_single_product_summary');
+                  do_action('woocommerce_before_single_product_summary');
                 ?>
 
                 <div class="single-product__specs">

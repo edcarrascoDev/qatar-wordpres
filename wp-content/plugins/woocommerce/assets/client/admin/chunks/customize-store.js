@@ -5281,8 +5281,7 @@
             ? (0, s.createElement)(No, (0, Wt.Z)({}, e, { forwardedRef: t }))
             : null;
         }),
-        Do = (0,
-        to.memo)(
+        Do = (0, to.memo)(
           ({
             renderedBlocks: e,
             settings: t,

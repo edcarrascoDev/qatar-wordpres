@@ -15,23 +15,31 @@
  * @version 3.3.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly.
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly.
 }
 
 global $post;
 
-$short_description = apply_filters( 'woocommerce_short_description', $post->post_excerpt );
+$short_description = apply_filters('woocommerce_short_description', $post->post_excerpt);
 
-if ( ! $short_description ) {
-	return;
+if (!$short_description) {
+    return;
 }
 
 ?>
 <div class="single-product__excerpt">
-	<?php echo $short_description; // WPCS: XSS ok. ?>
+    <?php echo $short_description; // WPCS: XSS ok. ?>
 </div>
 
-<div class="single-product__brand mb-45">
-    <img src="<?php echo Theme_Manager::get_instance()->get_taxonomy_image_by_post_id($post->ID); ?>" alt="">
-</div>
+<?php
+$image_url = Theme_Manager::get_instance()->get_taxonomy_image_by_post_id($post->ID);
+
+if (!empty($image_url)) :?>
+  <div class="single-product__brand mb-45">
+    <img src="<?php echo esc_url($image_url); ?>" alt="">
+  </div>
+<?php endif; ?>
+
+
+

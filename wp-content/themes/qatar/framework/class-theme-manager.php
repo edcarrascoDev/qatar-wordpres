@@ -319,7 +319,7 @@ class Theme_Manager {
     function create_brands_hierarchical_taxonomy() {
 
         $labels = [
-            'name' => _x('Brands', 'taxonomy general name'),
+            'name' => _x('Marcas', 'taxonomy general name'),
             'singular_name' => _x('Marca', 'taxonomy singular name'),
             'search_items' => __('Buscar Marcas'),
             'all_items' => __('Todas las marcas'),
@@ -397,9 +397,24 @@ class Theme_Manager {
     }
 
     public function get_taxonomy_image_by_post_id($post_id) {
-        $term = wp_get_post_terms($post_id, 'brands')[0];
+        $terms = wp_get_post_terms($post_id, 'brands');
 
-        return get_taxonomy_image($term->term_id);
+        if (empty($terms)) {
+            // No terms found for the post
+            return ''; // or handle as appropriate for your case
+        }
+
+        $term = $terms[0];
+
+        // Check if the term has an image set
+        $image_url = get_taxonomy_image($term->term_id);
+
+        if (empty($image_url) || is_wp_error($image_url)) {
+            // If no image found or error occurred, handle it gracefully
+            return ''; // or provide a default image URL or message
+        }
+
+        return $image_url;
     }
 
     /**
