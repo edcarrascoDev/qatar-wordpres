@@ -23,7 +23,7 @@ a.mdc-button {
     font-size: calcRem(13px);
     height: $button-height;
     border-radius: 0;
-    letter-spacing: calcRem(3px);
+    letter-spacing: 1px;
 
     &--outlined {
         &.mdc-button {
@@ -50,7 +50,7 @@ a.mdc-button {
     }
 
     @include media-breakpoint-up(sm) {
-        min-width: calcRem(230px);
+        min-width: 10rem;
     }
 
     @include media-breakpoint-down(sm) {

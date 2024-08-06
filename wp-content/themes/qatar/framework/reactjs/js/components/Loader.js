@@ -1,9 +1,5 @@
-import { connect } from 'react-redux';
-import SnackbarInfo from './snackbar/SnackbarInfo';
+import { Snackbar } from '../features/snackbar/Snackbar';
 
-const Loader = () => {
-  return <SnackbarInfo />;
+export const Loader = () => {
+  return <Snackbar />;
 };
-
-const mapStateToProps = (state) => ({});
-export default connect(mapStateToProps)(Loader);

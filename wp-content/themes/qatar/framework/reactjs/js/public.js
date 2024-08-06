@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { createRoot } from 'react-dom/client';
 
-import Loader from './components/Loader';
+import { Loader } from './components/Loader';
 
 import store from './store';
-import AddToCartForm from './components/add-to-cart-form/AddToCart';
 import Categories from './components/categories/Categories';
 import ContactUsForm from './components/contact-us-form/ContactUsForm';
 import ProductInquiryForm from './components/product-inquiry-form/ProductInquiryForm';
@@ -13,8 +13,9 @@ import ProductList from './components/product-list/ProductList';
 import ReviewForm from './components/review-form/ReviewForm';
 import RelatedProductList from './components/related-product-list/RelatedProductList';
 import FormFieldFilter from './components/form-field-filter/FormFieldFilter';
-import ProductPrice from './components/product/ProductPrice';
 import CustomCategoriesSlider from './components/categories/CustomCategoriesSlider';
+import { CartContainer } from './containers/CartContainer';
+import './features/product/Product';
 
 const componentContainersById = [
   'reactContactForm',
@@ -22,12 +23,11 @@ const componentContainersById = [
   'reactCategories',
   'reactCustomCategories',
   'reactProductDescription',
-  'reactProductPrice',
   'reactReviewForm',
   'reactProductList',
   'reactRelatedProductList',
   'reactUpsellsProductList',
-  'reactAddToCartForm',
+  'reactCart',
   'reactLoader',
 ];
 
@@ -42,29 +42,26 @@ componentContainersById.forEach((container) => {
       case 'reactCustomCategories':
         renderCustomCategories(htmlContainer);
         break;
-      case 'reactProductPrice':
-        renderProductPrice(htmlContainer);
-        break;
       case 'reactContactForm':
         renderContactUsForm(htmlContainer);
         break;
       case 'reactProductForm':
         renderProductForm(htmlContainer);
         break;
-      case 'reactReviewForm':
-        renderReviewForm(htmlContainer);
-        break;
+      // case 'reactReviewForm':
+      //   renderReviewForm(htmlContainer);
+      //   break;
       case 'reactProductList':
         renderProductList(htmlContainer);
         break;
-      case 'reactRelatedProductList':
-        renderRelatedProductList(htmlContainer);
-        break;
+      // case 'reactRelatedProductList':
+      //   renderRelatedProductList(htmlContainer);
+      //   break;
       case 'reactUpsellsProductList':
         renderUpsellsProductList(htmlContainer);
         break;
-      case 'reactAddToCartForm':
-        renderAddToCartForm(htmlContainer);
+      case 'reactCart':
+        renderCart(htmlContainer);
         break;
       case 'reactLoader':
         renderMainLoader(htmlContainer);
@@ -171,20 +168,13 @@ function renderUpsellsProductList(htmlElement) {
   ReactDOM.render(upsellsProductListRender, htmlElement);
 }
 
-function renderAddToCartForm(htmlElement) {
-  const addToCart = (
+function renderCart(htmlElement) {
+  const root = createRoot(htmlElement);
+  root.render(
     <Provider store={store}>
-      <AddToCartForm
-        productId={htmlElement.dataset.productId}
-        minValue={htmlElement.dataset.minValue}
-        maxValue={htmlElement.dataset.maxValue}
-        inputValue={htmlElement.dataset.inputValue}
-        productVariations={htmlElement.dataset.productVariations}
-        attributes={htmlElement.dataset.attributes}
-      />
-    </Provider>
+      <CartContainer />
+    </Provider>,
   );
-  ReactDOM.render(addToCart, htmlElement);
 }
 
 function renderFormFieldFilter(htmlElement) {
@@ -201,10 +191,10 @@ function renderFormFieldFilter(htmlElement) {
 }
 
 function renderMainLoader(htmlElement) {
-  const loader = (
+  const root = createRoot(htmlElement);
+  root.render(
     <Provider store={store}>
       <Loader />
-    </Provider>
+    </Provider>,
   );
-  ReactDOM.render(loader, htmlElement);
 }
