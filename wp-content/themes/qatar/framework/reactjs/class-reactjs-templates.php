@@ -37,7 +37,7 @@ class ReactJs_Templates
 
         $script_vars = [
             'cart_page' => wc_get_cart_url(),
-            'cocart_rest_url' => get_rest_url(null, 'cocart/v1'),
+            'cocart_rest_url' => get_rest_url(null, 'cocart/v2'),
             'consumer_base_code' => base64_encode($consumer_key . ':' . $consumer_secret),
             'not_available_image' => Theme_Manager::get_instance()->get_theme_option('not_available_image'),
             'products_per_page' => 9,

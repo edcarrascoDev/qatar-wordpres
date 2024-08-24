@@ -6,6 +6,7 @@ import { FormControl, InputLabel, MenuItem, Select, Skeleton } from '@mui/materi
 import { addItemToCart } from '../../../actions/addToCartActions';
 import { fetchProduct } from '../productThunks';
 import { setProductVariation } from '../productSlice';
+import { addToCart } from '../../cart/cartThunks';
 
 export const AddToCart = ({ minValue, maxValue, inputValue, productId }) => {
   const dispatch = useDispatch();
@@ -74,14 +75,15 @@ const AddToCartForm = ({ minValue, maxValue, inputValue, product, dispatch }) =>
         }}
         validationSchema={validationSchema}
         validateOnChange={true}
-        onSubmit={(values, { setSubmitting }) => {
+        onSubmit={async (values, { setSubmitting }) => {
+          addToCart({ id: values.variation_id, quantity: values.quantity });
           setTimeout(() => {
             alert(JSON.stringify(values, null, 2));
             setSubmitting(false);
           }, 400);
         }}
       >
-        {({ isValid, errors, touched, setFieldValue, values }) => {
+        {({ isValid, errors, touched, setFieldValue }) => {
           const hasError = (attribute, index) => {
             return !Boolean(selectedOptions[index]) && errors.variation_id && touched.variation_id;
           };
