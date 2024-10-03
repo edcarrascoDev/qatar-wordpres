@@ -14,8 +14,6 @@ import { registerBlockType } from '@wordpress/blocks';
 class TwoColumnTextWithMedia extends BaseBlock {
   title = 'Bloque de dos columnas texto|imagen';
 
-  parent = ['qatar-inc/section'];
-
   attributes = {
     imageUrl: {
       attribute: 'src',
@@ -64,7 +62,7 @@ class TwoColumnTextWithMedia extends BaseBlock {
           <ToggleControl
             label="Mostrar primero la Imagen"
             checked={attributes.imageOnLeft}
-            onChange={value => setAttributes({ imageOnLeft: value })}
+            onChange={(value) => setAttributes({ imageOnLeft: value })}
           />
         </div>
         <div className={UTILS.FORM_GROUP}>
@@ -76,7 +74,7 @@ class TwoColumnTextWithMedia extends BaseBlock {
               { label: 'Secundario (Naranja)', value: 'secondary' },
               { label: 'Blanco', value: 'on-primary' },
             ]}
-            onChange={value => setAttributes({ buttonClass: value })}
+            onChange={(value) => setAttributes({ buttonClass: value })}
             __nextHasNoMarginBottom
           />
         </div>
@@ -92,7 +90,7 @@ class TwoColumnTextWithMedia extends BaseBlock {
               { label: 'headline 5', value: 'h5' },
               { label: 'headline 6', value: 'h6' },
             ]}
-            onChange={value => {
+            onChange={(value) => {
               setAttributes({ headline: value });
             }}
             __nextHasNoMarginBottom
@@ -105,21 +103,21 @@ class TwoColumnTextWithMedia extends BaseBlock {
             <ToggleControl
               label="Mostrar textos blancos"
               checked={attributes.onDark}
-              onChange={value => setAttributes({ onDark: value })}
+              onChange={(value) => setAttributes({ onDark: value })}
             />
           </div>
           <div className={UTILS.FORM_GROUP}>
             <ToggleControl
               label="Cargar estilos durante la carga"
               checked={attributes.onLoad}
-              onChange={value => setAttributes({ onLoad: value })}
+              onChange={(value) => setAttributes({ onLoad: value })}
             />
           </div>
           <div className={UTILS.FORM_GROUP}>
             <span>Versión de estilos</span>
             <PlainText
               value={attributes.version}
-              onChange={version => setAttributes({ version })}
+              onChange={(version) => setAttributes({ version })}
             />
           </div>
         </BaseControl>
@@ -137,7 +135,7 @@ class TwoColumnTextWithMedia extends BaseBlock {
             value={attributes.title}
             multine={'br'}
             id={'title'}
-            onChange={content => setAttributes({ title: content })}
+            onChange={(content) => setAttributes({ title: content })}
             placeholder={'Título'}
           />
         </div>
@@ -148,7 +146,7 @@ class TwoColumnTextWithMedia extends BaseBlock {
             multine={'br'}
             value={attributes.content}
             tagName={'span'}
-            onChange={content => setAttributes({ content: content })}
+            onChange={(content) => setAttributes({ content: content })}
             placeholder={'Descripción'}
           />
         </div>
@@ -157,17 +155,17 @@ class TwoColumnTextWithMedia extends BaseBlock {
           <PlainText
             placehoder="Texto del Link"
             value={attributes.linkText}
-            onChange={linkText => setAttributes({ linkText })}
+            onChange={(linkText) => setAttributes({ linkText })}
           />
           <LinkControl
             value={attributes.urlObject}
-            onChange={content => setAttributes({ urlObject: content })}
+            onChange={(content) => setAttributes({ urlObject: content })}
           />
         </div>
         <div className={UTILS.FORM_GROUP}>
           <span>Imagen</span>
           <MediaPlaceholder
-            onSelect={media => this.selectImage({ setAttributes, media })}
+            onSelect={(media) => this.selectImage({ setAttributes, media })}
             allowedTypes={['image']}
             multiple={false}
             mediaPreview={<ImagePreview url={attributes.imageUrl} />}

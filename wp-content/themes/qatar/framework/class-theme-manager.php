@@ -3,6 +3,7 @@
 require_once 'reactjs/class-reactjs-templates.php';
 require_once 'class-qatar-genetics-api.php';
 require_once 'class-redux-core-options.php';
+require_once 'class-theme-graphql.php';
 require_once 'class-theme-rest-api.php';
 require_once 'class-theme-shortcode.php';
 require_once 'class-theme-woocommerce.php';
@@ -38,6 +39,7 @@ class Theme_Manager {
     private function initialize_helper_classes() {
         new ReactJs_Templates();
         new Redux_Core_Options($this->theme_locale);
+        new Theme_Graphql();
         new Theme_Rest_Api();
         new Theme_Shortcode();
         new Theme_Woocommerce();
@@ -76,19 +78,6 @@ class Theme_Manager {
     public function get_address_url($address) {
         return "https://www.google.com/maps/place/" . preg_replace('/\s+/', '+', $address);
     }
-
-    function add_woo_sidebar() {
-
-        if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
-            if (is_woocommerce()) {
-                remove_action('genesis_sidebar', 'genesis_do_sidebar');
-                remove_action('genesis_sidebar_alt', 'genesis_do_sidebar_alt');
-                add_action('genesis_sidebar', 'wpstudio_woo_sidebar');
-            }
-        }
-
-    }
-
 
     function register_sidebar() {
         register_sidebar(
@@ -134,6 +123,12 @@ class Theme_Manager {
 
         add_action('init', [$this, 'create_brands_hierarchical_taxonomy'], 0);
         add_action('init', [$this, 'create_trailers_post_type'], 10);
+        add_action('init', [$this, 'create_locations_post_type'], 10);
+        add_action('init', [$this, 'create_contact_post_type'], 10);
+        add_action('init', function() {
+            wp_mail('edgarcarrascob06@gmail.com', 'Prueba de correo', 'Este es un correo de prueba.');
+        });
+        add_action('manage_contacts_posts_custom_column', [$this, 'add_contact_column_content'], 10, 2);
         add_action('rest_api_init', [$this, 'register_rest_field_for_custom_taxonomy_brands']);
     }
 
@@ -204,6 +199,14 @@ class Theme_Manager {
             '2024-06-19'
         );
         wp_enqueue_style('new-theme-style');
+
+        wp_register_style(
+            'global-style',
+            $this->get_theme_url('assets/css/global.css'),
+            null,
+            '2024-06-19'
+        );
+        wp_enqueue_style('global-style');
 
         wp_register_style(
             'google-font-ubuntu',
@@ -283,6 +286,16 @@ class Theme_Manager {
         wp_enqueue_script('swiper-js');
     }
 
+    public function add_contact_column_content($column, $post_id) {
+        if ($column === 'email') {
+            echo esc_html(get_post_meta($post_id, 'email', true));
+        } elseif ($column === 'message') {
+            echo esc_html(get_post_meta($post_id, 'message', true));
+        } elseif ($column === 'phone') {
+            echo esc_html(get_post_meta($post_id, 'phone', true));
+        }
+    }
+
     public function create_trailers_post_type() {
 
         register_post_type('trailers',
@@ -296,15 +309,61 @@ class Theme_Manager {
                 'rewrite' => array('slug' => 'trailer'),
                 'show_in_rest' => true,
                 'menu_icon' => 'dashicons-car',
-                'supports' => array('title', 'editor', 'author', 'thumbnail', 'excerpt')
+                'supports' => array('title', 'editor', 'author', 'thumbnail', 'excerpt'),
+                'show_in_graphql' => true,
+                'graphql_single_name' => 'trailer',
+                'graphql_plural_name' => 'trailers',
+                'publicly_queryable' => true,
             )
         );
     }
 
-    function add_stylesheet_attributes($html) {
-        return str_replace(
-            "rel='stylesheet'",
-            "rel='stylesheet' media=\"print\" onload=\"this.media='all'\"", $html
+    public function create_contact_post_type() {
+
+        register_post_type('contacts',
+            array(
+                'labels' => [
+                    'name' => __('Contactos'),
+                    'singular_name' => __('Contacto'),
+                    'menu_name' => __('Contactos'),
+                    'add_new' => __('Añadir nuevo'),
+                    'add_new_item' => __('Añadir nuevo contacto'),
+                    'edit_item' => __('Editar contacto'),
+                    'new_item' => __('Nuevo contacto'),
+                    'view_item' => __('Ver contacto'),
+                    'search_items' => __('Buscar contactos'),
+                    'not_found' => __('No se encontraron contactos'),
+                    'not_found_in_trash' => __('No se encontraron contactos en la papelera'),
+                ],
+                'has_archive' => true,
+                'public' => true,
+                'rewrite' => ['slug' => 'contact'],
+                'show_in_rest' => true,
+                'menu_icon' => 'dashicons-feedback',
+                'supports' => ['title', 'editor'],
+            )
+        );
+    }
+
+
+    public function create_locations_post_type() {
+
+        register_post_type('locations',
+            array(
+                'labels' => array(
+                    'name' => __('Sedes'),
+                    'singular_name' => __('Sede')
+                ),
+                'has_archive' => true,
+                'public' => true,
+                'rewrite' => array('slug' => 'location'),
+                'show_in_rest' => true,
+                'menu_icon' => 'dashicons-location-alt',
+                'show_in_graphql' => true,
+                'graphql_single_name' => 'location',
+                'graphql_plural_name' => 'locations',
+                'publicly_queryable' => true,
+            )
         );
     }
 
@@ -363,6 +422,9 @@ class Theme_Manager {
             'show_admin_column' => false,
             'show_in_nav_menus' => true,
             'show_tagcloud' => true,
+            'show_in_graphql' => true,
+            'graphql_single_name' => 'brand',
+            'graphql_plural_name' => 'brands',
             'capabilities' => $capabilities,
         ];
 
@@ -540,6 +602,34 @@ class Theme_Manager {
         return false;
     }
 
+    /**
+     * add_filter
+     * @param $columns
+     * @return mixed
+     */
+    function add_contact_columns($columns) {
+        $columns['phone'] = 'Teléfono';
+        $columns['email'] = 'Correo electrónico';
+        $columns['message'] = 'Mensaje';
+        return $columns;
+    }
+
+    /**
+     * add_filter
+     * @param $auth_required
+     * @param $operation_name
+     * @param $query
+     * @param $variables
+     * @return false|mixed
+     */
+    function remove_authentication_for_specific_mutations( $auth_required, $operation_name, $query, $variables ) {
+        if ( $operation_name === 'createContact' || $operation_name === 'addToCart' ) {
+            return false;
+        }
+
+        return $auth_required;
+    }
+
 
     /**
      * Sets up theme defaults and registers support for various WordPress features.
@@ -626,5 +716,9 @@ class Theme_Manager {
         add_filter('woocommerce_enqueue_styles', '__return_empty_array');
 
         add_filter('script_loader_tag', [$this, 'defer_parsing_of_js'], 10);;
+
+        add_filter('manage_contacts_posts_columns', [$this, 'add_contact_columns'], 10);
+
+        add_filter( 'graphql_jwt_auth_required', [$this, 'remove_authentication_for_specific_mutations'], 10, 4 );
     }
 }

@@ -20,17 +20,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 global $product;
-$attachment_ids = $product->get_gallery_image_ids();
-
-$images_arr = [];
-for($i = 0, $j = count($attachment_ids); $i < $j;$i++ ){
-    $image_query = wp_get_attachment_image_src($attachment_ids[$i], 'full');
-    $img = new StdClass;
-    $img->url = $image_query[0];
-    $img->image_id = $attachment_ids[$i];
-    array_push($images_arr, $img);
-}
 ?>
-<div id="reactProductPrice"
-     data-default-product-gallery='<?php echo json_encode($images_arr) ?>'
-     data-default-product-price='<?php echo $product->get_price_html(); ?>'></div>
+<div class="single-product__price"><?php echo $product->get_price_html(); ?></div>

@@ -1,0 +1,30 @@
+.select label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: .8rem;
+}
+.select .reset_variations {
+    display: none;
+}
+.select-field {
+    cursor: pointer;
+    width: 100%;
+    height: 50px;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid #9d9ea2;
+    padding-inline: 0;
+    color: #343434;
+    font-size: 1rem;
+    transition: all 100ms ease-in-out;
+    font-family: "Montserrat", "Helvetica Neue Light", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+}
+.select-field:hover {
+    background: #eeeeef;
+    border-color: #000;
+}
+
+.select-field:focus,
+.select-field:focus-within {
+    outline-color: #20232d;
+}
