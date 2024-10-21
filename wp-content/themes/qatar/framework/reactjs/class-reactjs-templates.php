@@ -45,9 +45,7 @@ class ReactJs_Templates
             'receipts' => Theme_Manager::get_instance()->get_theme_option('contact_form_receipts'),
             'rest_url' => get_rest_url(null, 'qatar/v1'),
             'site_url' => get_site_url(),
-            'thank_you_page_url' => Theme_Manager::get_instance()->get_theme_page_link(
-                'thank_you_page'
-            ),
+            'thank_you_page_url' => "",
             'theme_url' => $this->theme_url,
             'wc_rest_url' => get_rest_url(null, 'wc/v3'),
         ];
