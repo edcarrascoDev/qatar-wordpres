@@ -61,75 +61,19 @@ class Theme_Manager {
         return false;
     }
 
-    public function get_theme_page_link($page) {
-        $page_id = $this->get_theme_option($page);
-        if ($page_id) {
-            return get_the_permalink($page_id);
-        }
-
-        return null;
-    }
-
-    public function format_phone($phone) {
-        $phone = str_replace(" ", "", $phone);
-        return "(" . substr($phone, 0, 3) . ")" . " " . substr($phone, 3, 3) . " " . substr($phone, 6);
-    }
-
-    public function get_address_url($address) {
-        return "https://www.google.com/maps/place/" . preg_replace('/\s+/', '+', $address);
-    }
-
-    function register_sidebar() {
-        register_sidebar(
-            array(
-                'id' => 'woocommerce_sidebar',
-                'name' => __('Sidebar primario', THEME_LOCALE),
-                'description' => __('Este sidebar será usado para woocommerce.'),
-                'before_widget' => '<aside id="%1$s" class="widget %2$s">',
-                'after_widget' => '</aside>',
-                'before_title' => '<h3 class="headline headline--h5">',
-                'after_title' => '</h3>',
-            )
-        );
-    }
-
-
-    function register_shop_sidebar() {
-        register_sidebar(
-            array(
-                'id' => 'shop',
-                'name' => __('Sidebar woocommerce', THEME_LOCALE),
-                'description' => __('Este sidebar será usado para woocommerce.'),
-                'before_widget' => '<aside id="%1$s" class="widget %2$s">',
-                'after_widget' => '</aside>',
-                'before_title' => '<h3 class="headline headline--h5">',
-                'after_title' => '</h3>',
-            )
-        );
-    }
-
-    /**
-     * Register Required Theme Hooks
-     */
     private function theme_hooks() {
         add_action('after_setup_theme', [$this, 'theme_setup']);
 
-        add_action('widgets_init', [$this, 'register_sidebar']);
-        add_action('widgets_init', [$this, 'register_shop_sidebar']);
-
         add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_scripts']);
         add_action('wp_enqueue_scripts', [$this, 'enqueue_front_scripts']);
-        add_action('wp_default_scripts', [$this, 'remove_jquery']);
 
         add_action('init', [$this, 'create_brands_hierarchical_taxonomy'], 0);
         add_action('init', [$this, 'create_trailers_post_type'], 10);
         add_action('init', [$this, 'create_locations_post_type'], 10);
         add_action('init', [$this, 'create_contact_post_type'], 10);
-        add_action('init', function() {
-            wp_mail('edgarcarrascob06@gmail.com', 'Prueba de correo', 'Este es un correo de prueba.');
-        });
         add_action('manage_contacts_posts_custom_column', [$this, 'add_contact_column_content'], 10, 2);
         add_action('rest_api_init', [$this, 'register_rest_field_for_custom_taxonomy_brands']);
+        add_action( 'woocommerce_admin_order_data_after_billing_address', [$this, "show_custom_billing_field_in_admin"], 10, 1 );
     }
 
     /**
@@ -231,11 +175,6 @@ class Theme_Manager {
             '7.0.0',
         );
         wp_enqueue_style('swiper-css');
-
-        if ($this->is_empty_cart_page()) {
-            wp_enqueue_style('empty-cart-styles', $this->get_theme_url('/assets/css/empty-cart.css'));
-            wp_enqueue_style('empty-cart-styles');
-        }
     }
 
     /**
@@ -284,6 +223,19 @@ class Theme_Manager {
             '7.0.0',
         );
         wp_enqueue_script('swiper-js');
+    }
+
+    /**
+     * add_action
+     * @param $order
+     * @return void
+     */
+    function show_custom_billing_field_in_admin( $order ){
+        $custom_field = $order->get_meta( 'documentId' );
+
+        if ( ! empty( $custom_field ) ) {
+            echo '<p><strong>' . __( 'NIT/Cédula' ) . ':</strong> ' . esc_html( $custom_field ) . '</p>';
+        }
     }
 
     public function add_contact_column_content($column, $post_id) {
@@ -372,16 +324,6 @@ class Theme_Manager {
         if (FALSE === strpos($url, '.js')) return $url;
         if (strpos($url, 'jquery.js')) return $url;
         return str_replace(' src', ' defer src', $url);
-    }
-
-    /**
-     * Remove Jquery Library
-     */
-    function remove_jquery() {
-        if (!is_admin() && isset($scripts->registered['jquery'])) {
-            $scripts->remove('jquery');
-            $scripts->add('jquery', false, array('jquery-core'), '1.2.1');
-        }
     }
 
     /**
@@ -506,36 +448,6 @@ class Theme_Manager {
         wp_set_object_terms($postId, $values, 'brands');
     }
 
-    public function get_social_network_url($social_network) {
-        return $this->get_theme_option($social_network);
-    }
-
-    /**
-     * Returns the footer options in array
-     * @return array
-     */
-
-    public function get_footer_locations() {
-        $locations_raw = $this->get_theme_option('footer_location');
-        $locations = [];
-
-        foreach ($locations_raw as $location) {
-            $exploded_value = explode('|', $location);
-            $locations[] = [
-                'name' => $exploded_value[0],
-                'address' => isset($exploded_value[1]) ? $exploded_value[1] : '',
-                'email' => isset($exploded_value[2]) ? $exploded_value[2] : '',
-                'open_hours' => isset($exploded_value[3]) ? $exploded_value[3] : '',
-                'phone_1' => isset($exploded_value[4]) ? $exploded_value[4] : '',
-                'phone_2' => isset($exploded_value[5]) ? $exploded_value[5] : '',
-                'facebook' => isset($exploded_value[6]) ? $exploded_value[6] : '',
-                'instagram' => isset($exploded_value[7]) ? $exploded_value[7] : '',
-            ];
-        }
-
-        return $locations;
-    }
-
     /**
      * Get Assets URL relative to the theme folder.
      *
@@ -548,41 +460,10 @@ class Theme_Manager {
     }
 
     /**
-     * Get Assets URL relative to the theme folder.
-     *
-     * @param $url
-     *
-     * @return string
-     */
-    private function get_theme_path($file) {
-        return "{$this->theme_path}/{$file}.php";
-    }
-
-    /**
      * @param $image_name
      */
     public function get_assets_image($image_name) {
         echo "{$this->get_theme_url('styles/assets/images')}/{$image_name}";
-    }
-
-    /**
-     * @param $file_name
-     */
-    public function get_shared_asset($file_name) {
-        echo "{$this->get_theme_url('styles/assets/images/shared')}/$file_name";
-    }
-
-    /**
-     * @param $classes
-     * @return array
-     */
-    public function custom_class_by_template($classes) {
-        global $template;
-
-        if (basename($template) === 'single-product.php' || basename($template) === 'no-hero-template.php') {
-            $classes[] = 'page--without-hero';
-        }
-        return $classes;
     }
 
 
@@ -591,15 +472,6 @@ class Theme_Manager {
      */
     function set_content_type() {
         return "text/html";
-    }
-
-
-
-    function is_empty_cart_page() {
-        if (is_cart() && WC()->cart->is_empty()) {
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -616,18 +488,16 @@ class Theme_Manager {
 
     /**
      * add_filter
-     * @param $auth_required
-     * @param $operation_name
-     * @param $query
-     * @param $variables
+     * @param $required
+     * @param $context
      * @return false|mixed
      */
-    function remove_authentication_for_specific_mutations( $auth_required, $operation_name, $query, $variables ) {
-        if ( $operation_name === 'createContact' || $operation_name === 'addToCart' ) {
+    function remove_graphql_require_authentication( $required, $context  )
+    {
+        if (isset($context['graphql_operation_name']) && 'createOrder' === $context['graphql_operation_name']) {
             return false;
         }
-
-        return $auth_required;
+        return $required;
     }
 
 
@@ -704,11 +574,6 @@ class Theme_Manager {
         add_theme_support('align-wide');
 
         /**
-         * Add specific class to template without hero
-         */
-        add_filter('body_class', [$this, 'custom_class_by_template']);
-
-        /**
          * Allow use html into mails
          */
         add_filter('wp_mail_content_type', [$this, 'set_content_type']);
@@ -719,6 +584,6 @@ class Theme_Manager {
 
         add_filter('manage_contacts_posts_columns', [$this, 'add_contact_columns'], 10);
 
-        add_filter( 'graphql_jwt_auth_required', [$this, 'remove_authentication_for_specific_mutations'], 10, 4 );
+        add_filter( 'woocommerce_graphql_requires_authentication', [$this, 'remove_graphql_require_authentication'], 10, 2 );
     }
 }
